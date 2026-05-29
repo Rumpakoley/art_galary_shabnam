@@ -5,11 +5,11 @@
 
 import { Painting, ArtistProfile } from './types';
 
-const oilCoastalCliff = '/src/assets/images/oil_coastal_cliff_1780040646808.png';
-const watercolorForest = '/src/assets/images/watercolor_forest_1780040664097.png';
-const abstractAcrylic = '/src/assets/images/abstract_acrylic_1780040680856.png';
-const stillLifePears = '/src/assets/images/still_life_pears_1780040699474.png';
-const artistPortrait = '/src/assets/images/artist_portrait.jpg';
+import oilCoastalCliff from './assets/images/oil_coastal_cliff_1780040646808.png';
+import watercolorForest from './assets/images/watercolor_forest_1780040664097.png';
+import abstractAcrylic from './assets/images/abstract_acrylic_1780040680856.png';
+import stillLifePears from './assets/images/still_life_pears_1780040699474.png';
+import artistPortrait from './assets/images/artist_portrait.jpg';
 
 export const INITIAL_PROFILE: ArtistProfile = {
   name: "Husne Shabnam",
