@@ -9,10 +9,10 @@ const oilCoastalCliff = '/src/assets/images/oil_coastal_cliff_1780040646808.png'
 const watercolorForest = '/src/assets/images/watercolor_forest_1780040664097.png';
 const abstractAcrylic = '/src/assets/images/abstract_acrylic_1780040680856.png';
 const stillLifePears = '/src/assets/images/still_life_pears_1780040699474.png';
-const artistPortrait = '/src/assets/images/artist_portrait_1780040737746.png';
+const artistPortrait = '/src/assets/images/artist_portrait.jpg';
 
 export const INITIAL_PROFILE: ArtistProfile = {
-  name: "Elara Vance",
+  name: "Husne Shabnam",
   title: "Contemporary Fine Artist",
   bio: "Elara Vance is an award-winning contemporary landscape and abstract artist active in the Pacific Northwest. Her paintings seek to capture the fleeting transitions of light, atmosphere, and form in nature. Balancing classical chiaroscuro oil techniques with fluid, experimental acrylics and fine watercolors, her work responds directly to the wild vistas, serene coastlines, and internal mindscapes of the modern world.",
   statement: "I believe that painting is a process of translating light into weight. Each canvas is a dialogue between the tactile density of pure pigments and the weightless, transparent quality of light. Whether framing a coastal cliff in thick, textured oils or layering washes of watercolor, my goal is to distill the energy of a place and invite the viewer to linger.",

@@ -120,7 +120,7 @@ export default function ArtistProfileSection({
         ) : (
           <div className="bg-stone-100/60 p-4 rounded-lg border border-stone-200/40 text-center space-y-2">
             <p className="font-sans text-[11px] text-stone-500 italic">
-              Are you the creator, <strong>Evelyn</strong>? Unlock the studio registry to upload and post new paintings.
+              Are you the creator, <strong>Shabnam</strong>? Unlock the studio registry to upload and post new paintings.
             </p>
             <button
               onClick={onToggleAdmin}
