@@ -19,7 +19,17 @@ export default function App() {
     const stored = localStorage.getItem('artist_paintings_archive');
     if (stored) {
       try {
-        return JSON.parse(stored);
+        const parsed = JSON.parse(stored) as Painting[];
+        // Migrate image URLs if they contain old dev paths (starting with /src/)
+        return parsed.map((p) => {
+          if (p.imageUrl && p.imageUrl.startsWith('/src/')) {
+            const original = INITIAL_PAINTINGS.find((orig) => orig.id === p.id);
+            if (original) {
+              return { ...p, imageUrl: original.imageUrl };
+            }
+          }
+          return p;
+        });
       } catch {
         return INITIAL_PAINTINGS;
       }
