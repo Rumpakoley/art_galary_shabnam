@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --color-artist-bg: #F9F7F2;
+  --color-artist-ink: #121212;
+  --color-artist-accent: #8C7B6A;
+  --color-gold-50: #fcf9f2;
+  --color-gold-100: #f5edd6;
+  --color-gold-600: #ab8c44;
+  --color-gold-700: #917433;
+  --color-gold-800: #6b5522;
+}
+
+/* Custom design styles for the Artistic Flair Theme */
+.outline-text {
+  -webkit-text-stroke: 1.5px var(--color-artist-ink, #121212);
+  color: transparent;
+}
+
+.vertical-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.frame-shadow {
+  box-shadow: 20px 20px 60px rgba(0,0,0,0.08);
+}
+
+/* Smooth custom scrollbars for our elegant galleries */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 115, 80, 0.15);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 115, 80, 0.3);
+}

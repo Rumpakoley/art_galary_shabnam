@@ -1,0 +1,6 @@
+{
+  "name": "Artist Painting Portfolio",
+  "description": "An elegant showcase and collection manager for fine art paintings, allowing artists to exhibit, sort, and post new artworks.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
