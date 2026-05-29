@@ -20,13 +20,11 @@ export default function App() {
     if (stored) {
       try {
         const parsed = JSON.parse(stored) as Painting[];
-        // Migrate image URLs if they contain old dev paths (starting with /src/)
+        // Always use the fresh image URL from INITIAL_PAINTINGS for default paintings to prevent caching/stale URL issues
         return parsed.map((p) => {
-          if (p.imageUrl && p.imageUrl.startsWith('/src/')) {
-            const original = INITIAL_PAINTINGS.find((orig) => orig.id === p.id);
-            if (original) {
-              return { ...p, imageUrl: original.imageUrl };
-            }
+          const original = INITIAL_PAINTINGS.find((orig) => orig.id === p.id);
+          if (original) {
+            return { ...p, imageUrl: original.imageUrl };
           }
           return p;
         });
