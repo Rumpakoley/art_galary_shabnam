@@ -65,8 +65,8 @@ export default function ArtistProfileSection({
         <div className="absolute -top-3 left-4 bg-stone-50 px-2.5 font-serif font-medium italic text-xs text-amber-700 select-none">
           Artist Statement
         </div>
-        <p className="font-serif italic text-stone-700 text-xs md:text-sm leading-relaxed text-justify">
-          "{profile.statement}"
+        <p className="font-serif italic text-stone-700 text-xs md:text-sm leading-relaxed text-justify whitespace-pre-line">
+          {profile.statement}
         </p>
       </div>
 
