@@ -20,14 +20,21 @@ export default function App() {
     if (stored) {
       try {
         const parsed = JSON.parse(stored) as Painting[];
-        // Always use the fresh image URL from INITIAL_PAINTINGS for default paintings to prevent caching/stale URL issues
-        return parsed.map((p) => {
+        // Sync and merge with INITIAL_PAINTINGS:
+        // 1. Update imageUrl for existing default paintings to prevent caching issues.
+        // 2. Add any newly introduced default paintings that are not yet in localStorage.
+        const parsedIds = new Set(parsed.map((p) => p.id));
+        const missingDefaults = INITIAL_PAINTINGS.filter((p) => !parsedIds.has(p.id));
+
+        const updatedParsed = parsed.map((p) => {
           const original = INITIAL_PAINTINGS.find((orig) => orig.id === p.id);
           if (original) {
             return { ...p, imageUrl: original.imageUrl };
           }
           return p;
         });
+
+        return [...updatedParsed, ...missingDefaults];
       } catch {
         return INITIAL_PAINTINGS;
       }
