@@ -10,6 +10,9 @@ import watercolorForest from './assets/images/watercolor_forest.jpg';
 import abstractAcrylic from './assets/images/abstract_acrylic.jpg';
 import stillLifePears from './assets/images/still_life_pears.jpg';
 import artistPortrait from './assets/images/artist_portrait.jpg';
+import painting5 from './assets/images/painting_5.jpg';
+import painting6 from './assets/images/painting_6.jpg';
+import painting7 from './assets/images/painting_7.jpg';
 
 export const INITIAL_PROFILE: ArtistProfile = {
   name: "Husne Shabnam",
@@ -73,5 +76,44 @@ export const INITIAL_PAINTINGS: Painting[] = [
     price: 1200,
     status: "Sold",
     createdAt: "2025-12-01T16:45:00Z"
+  },
+  {
+    id: "painting-5",
+    title: "Whispers of the Subconscious",
+    medium: "Ink & Charcoal on Paper",
+    category: "Abstract",
+    year: 2026,
+    dimensions: "18 x 24 inches",
+    description: "An intricate monochrome drawing created through pure intuitive hand movements. Soft ink textures morph into open-ended questions and familiar shapes.",
+    imageUrl: painting5,
+    price: 1600,
+    status: "Available",
+    createdAt: "2026-05-10T10:00:00Z"
+  },
+  {
+    id: "painting-6",
+    title: "Transformations of Silence",
+    medium: "Acrylic & Gold Leaf on Wood Panel",
+    category: "Abstract",
+    year: 2026,
+    dimensions: "30 x 40 inches",
+    description: "Atmospheric, deep sweeps of color overlaying delicate gold veining. Evolved freely without prior sketches, inviting the viewer into quiet reflection.",
+    imageUrl: painting6,
+    price: 3400,
+    status: "Available",
+    createdAt: "2026-05-20T11:30:00Z"
+  },
+  {
+    id: "painting-7",
+    title: "A Conversation with the Unknown",
+    medium: "Mixed Media & Oil on Canvas",
+    category: "Abstract",
+    year: 2026,
+    dimensions: "36 x 36 inches",
+    description: "Layers of dense pigments intersecting with free-form lines. A visual representation of the unseen process through which raw emotion takes shape.",
+    imageUrl: painting7,
+    price: 4500,
+    status: "Reserved",
+    createdAt: "2026-05-28T15:45:00Z"
   }
 ];
