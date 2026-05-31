@@ -13,6 +13,7 @@ import artistPortrait from './assets/images/artist_portrait.jpg';
 import painting5 from './assets/images/painting_5.jpg';
 import painting6 from './assets/images/painting_6.jpg';
 import painting7 from './assets/images/painting_7.jpg';
+import painting8 from './assets/images/painting_8.jpg';
 
 export const INITIAL_PROFILE: ArtistProfile = {
   name: "Husne Shabnam",
@@ -115,5 +116,18 @@ export const INITIAL_PAINTINGS: Painting[] = [
     price: 4500,
     status: "Reserved",
     createdAt: "2026-05-28T15:45:00Z"
+  },
+  {
+    id: "painting-8",
+    title: "Echoes of the Unseen",
+    medium: "Oil & Mixed Media on Canvas",
+    category: "Abstract",
+    year: 2026,
+    dimensions: "30 x 30 inches",
+    description: "An exploration of negative space and fluid transitions. Bold shapes overlay delicate details, representing the dialogue between what is hidden and what is revealed.",
+    imageUrl: painting8,
+    price: 3800,
+    status: "Available",
+    createdAt: "2026-05-30T09:00:00Z"
   }
 ];
