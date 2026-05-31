@@ -190,7 +190,7 @@ export default function App() {
         {/* Curatorial Header of Artistic Flair Theme */}
         <header id="gallery-masthead" className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 border-b border-stone-200/60 pb-8 mt-2">
           <div className="flex flex-col">
-            <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-stone-500 mb-2">Studio Gallery / Est. 2018</span>
+            <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-stone-500 mb-2">Studio Gallery / Est. 2026</span>
             <h1 className="serif text-5xl md:text-7xl lg:text-8xl font-black leading-none tracking-tighter text-stone-950 uppercase flex flex-wrap items-baseline gap-x-4">
               {nameParts[0]} <span className="outline-text">{nameParts.slice(1).join(' ')}</span>
             </h1>
