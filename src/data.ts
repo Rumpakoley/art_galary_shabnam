@@ -13,12 +13,12 @@ import artistPortrait from './assets/images/artist_portrait.jpg';
 
 export const INITIAL_PROFILE: ArtistProfile = {
   name: "Husne Shabnam",
-  title: "Contemporary Fine Artist",
-  bio: "Elara Vance is an award-winning contemporary landscape and abstract artist active in the Pacific Northwest. Her paintings seek to capture the fleeting transitions of light, atmosphere, and form in nature. Balancing classical chiaroscuro oil techniques with fluid, experimental acrylics and fine watercolors, her work responds directly to the wild vistas, serene coastlines, and internal mindscapes of the modern world.",
-  statement: "I believe that painting is a process of translating light into weight. Each canvas is a dialogue between the tactile density of pure pigments and the weightless, transparent quality of light. Whether framing a coastal cliff in thick, textured oils or layering washes of watercolor, my goal is to distill the energy of a place and invite the viewer to linger.",
+  title: "Surrealist Abstract Artist",
+  bio: "Art has been my first language long before I learned to introduce myself as an actor, yoga practitioner, coach, or storyteller. I began creating as a child—through theatre, movement, music, colors, words, and imagination. Over the years, every journey, every role I played, every city I lived in, every person I met, and every moment of silence found its way into my work. This website is a living archive of that journey. It is a space where abstract forms meet untold stories, where lines become emotions, and where imagination is allowed to exist without explanation.",
+  statement: "My work arrives as a conversation with the unknown. Every line, form, and texture appears through intuition rather than intention. I believe that art is not complete when it leaves the artist’s hand. It becomes complete when it meets the inner world of another human being.",
   avatarUrl: artistPortrait,
-  instagram: "@elaravancestudio",
-  email: "elara@vancestudio.com",
+  instagram: "@husne.shabnam",
+  email: "husneshabnam@gmail.com",
 };
 
 export const INITIAL_PAINTINGS: Painting[] = [

@@ -224,7 +224,7 @@ export default function App() {
           {/* Column 2: Elegant Decor Vertical Accent (1 col on lg only) */}
           <div className="lg:col-span-1 relative hidden lg:flex items-center justify-center border-r border-l border-stone-200/50 py-12 select-none">
             <div className="vertical-text text-[10px] uppercase tracking-[0.55em] text-stone-400 font-semibold font-sans whitespace-nowrap">
-              CURRENT EXHIBITION — OVER THE FLEETING LIGHT
+              CURRENT EXHIBITION — THE MORPHIQ
             </div>
           </div>
 
@@ -386,9 +386,9 @@ export default function App() {
 
       {/* Footer copyright */}
       <footer className="mt-20 border-t border-stone-200 bg-stone-50 py-10 text-center font-sans text-xs text-stone-500">
-        <p>© 2026 {artistProfile.name} Fine Arts. All rights reserved.</p>
+        <p>© 2026 {artistProfile.name}. All rights reserved.</p>
         <p className="text-[10px] text-stone-400 mt-1">
-          Catalog Raisonné Ledger System verified • Hand-assembled and curated in Pacific Northwest Studio
+          The Morphiq • A collection of messages from the unknown, waiting to find their meaning in you.
         </p>
       </footer>
 
