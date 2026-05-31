@@ -251,47 +251,71 @@ export default function App() {
               </div>
 
               {/* Filtering Controls Row */}
-              <div className="grid grid-cols-1 sm:grid-cols-12 gap-3.5">
-                
-                {/* Search query input (5 cols) */}
-                <div className="sm:col-span-5 relative">
+              <div className="space-y-4">
+                {/* Search query input */}
+                <div className="relative">
                   <Search className="absolute left-3 top-3 w-4 h-4 text-stone-400" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search by title, medium, details..."
-                    className="w-full font-sans text-xs pl-9 pr-4 py-2.5 bg-stone-50 border border-stone-200/60 focus:bg-white focus:border-amber-700 focus:outline-hidden rounded-md shadow-2xs transition-all"
+                    className="w-full font-sans text-xs pl-9 pr-4 py-2.5 bg-stone-50 border border-stone-200/60 focus:bg-white focus:border-amber-800 focus:outline-hidden rounded-md shadow-2xs transition-all"
                   />
                 </div>
 
-                {/* Medium bucket filter (3.5 cols) */}
-                <div className="sm:col-span-3.5 flex items-center gap-2">
-                  <span className="text-[10px] font-sans font-semibold text-stone-500 uppercase tracking-wider shrink-0">Medium</span>
-                  <select
-                    value={mediumFilter}
-                    onChange={(e) => setMediumFilter(e.target.value)}
-                    className="w-full font-sans text-xs bg-stone-50 border border-stone-200/60 focus:bg-white focus:border-amber-700 focus:outline-hidden p-2.5 rounded-md cursor-pointer"
-                  >
-                    {availableMediums.map((med) => (
-                      <option key={med} value={med}>{med}</option>
-                    ))}
-                  </select>
-                </div>
+                {/* Pill-based filters */}
+                <div className="flex flex-col gap-3">
+                  {/* Medium Filter Pills */}
+                  <div className="flex flex-col gap-1.5">
+                    <span className="text-[10px] font-sans font-bold text-stone-400 uppercase tracking-widest">Medium / Material</span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {availableMediums.map((med) => {
+                        const isActive = mediumFilter === med;
+                        return (
+                          <button
+                            key={med}
+                            onClick={() => setMediumFilter(med)}
+                            className={`px-3 py-1 rounded-full font-sans text-xs font-medium cursor-pointer transition-all duration-200 border ${
+                              isActive
+                                ? 'bg-stone-900 border-stone-900 text-amber-500 shadow-xs'
+                                : 'bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100 hover:text-stone-900'
+                            }`}
+                          >
+                            {med}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
 
-                {/* Status selector (3.5 cols) */}
-                <div className="sm:col-span-3.5 flex items-center gap-2">
-                  <span className="text-[10px] font-sans font-semibold text-stone-500 uppercase tracking-wider shrink-0">Status</span>
-                  <select
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                    className="w-full font-sans text-xs bg-stone-50 border border-stone-200/60 focus:bg-white focus:border-amber-700 focus:outline-hidden p-2.5 rounded-md cursor-pointer"
-                  >
-                    <option value="All">All Works</option>
-                    <option value="Available">Available</option>
-                    <option value="Sold">Sold / Private</option>
-                    <option value="Reserved">Reserved</option>
-                  </select>
+                  {/* Status Filter Pills */}
+                  <div className="flex flex-col gap-1.5">
+                    <span className="text-[10px] font-sans font-bold text-stone-400 uppercase tracking-widest">Availability Status</span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {[
+                        { value: 'All', label: 'All Works' },
+                        { value: 'Available', label: 'Available' },
+                        { value: 'Reserved', label: 'Reserved' },
+                        { value: 'Sold', label: 'Sold / Private' }
+                      ].map((status) => {
+                        const isActive = statusFilter === status.value;
+                        return (
+                          <button
+                            key={status.value}
+                            onClick={() => setStatusFilter(status.value)}
+                            className={`px-3 py-1 rounded-full font-sans text-xs font-medium cursor-pointer transition-all duration-200 border ${
+                              isActive
+                                ? 'bg-stone-900 border-stone-900 text-amber-500 shadow-xs'
+                                : 'bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100 hover:text-stone-900'
+                            }`}
+                          >
+                            {status.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
               </div>
 
