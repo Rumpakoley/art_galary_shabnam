@@ -55,7 +55,7 @@ export default function ArtistProfileSection({
         
         <div className="w-12 h-[1px] bg-amber-800/30 my-4" />
         
-        <p className="font-sans text-xs md:text-sm text-stone-600 leading-relaxed text-justify">
+        <p className="font-sans text-xs md:text-sm text-stone-600 leading-relaxed text-justify whitespace-pre-line">
           {profile.bio}
         </p>
       </div>
