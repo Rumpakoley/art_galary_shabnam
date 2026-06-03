@@ -44,16 +44,8 @@ export default function App() {
 
   const [artistProfile, setArtistProfile] = useState<ArtistProfile>(INITIAL_PROFILE);
   
-  // Gallery Theme: Default to 'dark' for premium museum spotlight look
-  const [theme, setTheme] = useState<'light' | 'dark' | 'funky'>(() => {
-    const stored = localStorage.getItem('artist_theme_preference');
-    return (stored as 'light' | 'dark' | 'funky') || 'dark';
-  });
-
-  // Sync theme changes to localStorage
-  useEffect(() => {
-    localStorage.setItem('artist_theme_preference', theme);
-  }, [theme]);
+  // Gallery Theme: Locked to 'dark' for premium museum spotlight look
+  const theme = 'dark';
   
   // Dashboard & UX Controls
   const [isAdmin, setIsAdmin] = useState(false);
@@ -298,12 +290,7 @@ export default function App() {
               theme === 'funky' ? 'hover:text-fuchsia-400 text-glow-neon' : 
               'hover:text-amber-800'
             }`}>Biography</a>
-            <button 
-              onClick={() => setTheme(t => t === 'dark' ? 'funky' : t === 'funky' ? 'light' : 'dark')}
-              className="opacity-70 hover:opacity-100 uppercase text-[10px] sm:text-[11px] font-semibold tracking-widest hover:text-amber-400 transition-colors cursor-pointer"
-            >
-              {theme === 'dark' ? '🌙 Obsidian' : theme === 'funky' ? '👾 Funky' : '☀️ Linen'}
-            </button>
+
             <button 
               onClick={handleToggleAdmin} 
               className="opacity-70 hover:opacity-100 uppercase text-[10px] sm:text-[11px] font-semibold tracking-widest hover:text-amber-400 transition-colors cursor-pointer"
