@@ -52,6 +52,7 @@ export default function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [selectedPainting, setSelectedPainting] = useState<Painting | null>(null);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  const [featuredIndex, setFeaturedIndex] = useState(0);
   
   // Success notification banner state (when a new work is posted)
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -76,6 +77,15 @@ export default function App() {
       return () => clearTimeout(timer);
     }
   }, [toastMessage]);
+
+  // Slideshow autoplay effect
+  useEffect(() => {
+    if (featuredList.length <= 1) return;
+    const interval = setInterval(() => {
+      setFeaturedIndex((prev) => (prev + 1) % featuredList.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [featuredList]);
 
   // Add painting to portfolio
   const handlePostPainting = (newPainting: Painting) => {
@@ -168,8 +178,13 @@ export default function App() {
 
   const nameParts = artistProfile.name.split(' ');
 
-  const featuredPainting = useMemo(() => {
-    return paintings.find((p) => p.id === 'painting-7') || paintings[0];
+  const featuredList = useMemo(() => {
+    const ids = ['painting-8', 'painting-7', 'painting-6', 'painting-5'];
+    const selected = ids.map(id => paintings.find(p => p.id === id)).filter(Boolean) as Painting[];
+    if (selected.length === 0) {
+      return paintings.slice(0, 4);
+    }
+    return selected;
   }, [paintings]);
 
   return (
@@ -376,58 +391,81 @@ export default function App() {
             </div>
 
             {/* Right Image column */}
-            <div className="md:col-span-5 flex flex-col justify-center items-center w-full">
-              {featuredPainting && (
-                <div className="flex flex-col items-center gap-3 w-full">
-                  <div 
-                    className={`relative group p-2 border rounded-2xl transition-all duration-500 hover:scale-[1.02] cursor-pointer shadow-2xl w-full max-w-[280px] sm:max-w-[320px] aspect-3/4 flex items-center justify-center ${
-                      theme === 'dark' ? 'bg-black/30 border-white/10 shadow-black/60' :
-                      theme === 'funky' ? 'holo-mount border-purple-955 shadow-[inset_0_2px_12px_rgba(255,255,255,0.4)] shadow-purple-955/30' :
-                      'bg-[#FCFAF5] border-stone-200 shadow-[inset_0_2px_6px_rgba(0,0,0,0.06)] p-3 rounded-md'
-                    }`}
-                    onClick={() => setSelectedPainting(featuredPainting)}
+            <div className="md:col-span-5 flex flex-col justify-center items-center w-full min-h-[380px] sm:min-h-[440px] relative">
+              <AnimatePresence mode="wait">
+                {featuredList[featuredIndex] && (
+                  <motion.div
+                    key={featuredList[featuredIndex].id}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.5, ease: 'easeInOut' }}
+                    className="flex flex-col items-center gap-3 w-full"
                   >
-                    {/* Beveled edge cut of the mat board */}
-                    {theme !== 'dark' && (
-                      <div className={`absolute inset-[10px] border pointer-events-none transition-colors duration-300 ${
-                        theme === 'funky' ? 'border-white/20' : 'border-stone-300/20'
-                      }`} />
-                    )}
-                    
-                    <img 
-                      src={featuredPainting.imageUrl} 
-                      alt={featuredPainting.title} 
-                      referrerPolicy="no-referrer"
-                      className={`w-full h-full object-cover shadow-md ${theme === 'dark' ? 'rounded-xl' : ''}`} 
-                    />
+                    <div 
+                      className={`relative group p-2 border rounded-2xl transition-all duration-500 hover:scale-[1.02] cursor-pointer shadow-2xl w-full max-w-[280px] sm:max-w-[320px] aspect-3/4 flex items-center justify-center ${
+                        theme === 'dark' ? 'bg-black/30 border-white/10 shadow-black/60' :
+                        theme === 'funky' ? 'holo-mount border-purple-955 shadow-[inset_0_2px_12px_rgba(255,255,255,0.4)] shadow-purple-955/30' :
+                        'bg-[#FCFAF5] border-stone-200 shadow-[inset_0_2px_6px_rgba(0,0,0,0.06)] p-3 rounded-md'
+                      }`}
+                      onClick={() => setSelectedPainting(featuredList[featuredIndex])}
+                    >
+                      {/* Beveled edge cut of the mat board */}
+                      {theme !== 'dark' && (
+                        <div className={`absolute inset-[10px] border pointer-events-none transition-colors duration-300 ${
+                          theme === 'funky' ? 'border-white/20' : 'border-stone-300/20'
+                        }`} />
+                      )}
+                      
+                      <img 
+                        src={featuredList[featuredIndex].imageUrl} 
+                        alt={featuredList[featuredIndex].title} 
+                        referrerPolicy="no-referrer"
+                        className={`w-full h-full object-cover shadow-md ${theme === 'dark' ? 'rounded-xl' : ''}`} 
+                      />
 
-                    {/* Badge showing it's the featured piece */}
-                    <span className={`absolute -top-2.5 -right-2.5 px-3 py-1 text-[8px] font-sans font-bold uppercase tracking-wider rounded-md border shadow-md ${
-                      theme === 'funky'
-                        ? 'bg-fuchsia-600 border-fuchsia-500 text-white shadow-[0_0_10px_rgba(236,72,153,0.5)]'
-                        : 'bg-amber-600 border-amber-500 text-white'
+                      {/* Badge showing it's the featured piece */}
+                      <span className={`absolute -top-2.5 -right-2.5 px-3 py-1 text-[8px] font-sans font-bold uppercase tracking-wider rounded-md border shadow-md ${
+                        theme === 'funky'
+                          ? 'bg-fuchsia-600 border-fuchsia-500 text-white shadow-[0_0_10px_rgba(236,72,153,0.5)]'
+                          : 'bg-amber-600 border-amber-500 text-white'
+                      }`}>
+                        Featured
+                      </span>
+                    </div>
+                    <span className={`font-serif text-[10px] tracking-[0.25em] uppercase select-none mt-1 ${
+                      theme === 'dark' ? 'text-stone-400' :
+                      theme === 'funky' ? 'text-fuchsia-400 text-glow-neon font-bold' :
+                      'text-stone-505'
                     }`}>
-                      Featured
+                      {featuredList[featuredIndex].title}
                     </span>
-                  </div>
-                  <span className={`font-serif text-[10px] tracking-[0.25em] uppercase select-none mt-1 ${
-                    theme === 'dark' ? 'text-stone-400' :
-                    theme === 'funky' ? 'text-fuchsia-400 text-glow-neon font-bold' :
-                    'text-stone-505'
-                  }`}>
-                    {featuredPainting.title}
-                  </span>
-                </div>
-              )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
-          
-          {/* Slides/Carousel navigation dots indicators at the bottom */}
-          <div className="flex justify-center items-center gap-1.5 mt-8 z-10 relative">
-            <span className={`w-1.5 h-1.5 rounded-full cursor-pointer ${theme === 'dark' ? 'bg-stone-500/30' : theme === 'funky' ? 'bg-purple-900/40' : 'bg-stone-350'}`} />
-            <span className={`w-1.5 h-1.5 rounded-full cursor-pointer ${theme === 'dark' ? 'bg-stone-500/30' : theme === 'funky' ? 'bg-purple-900/40' : 'bg-stone-350'}`} />
-            <span className={`w-1.5 h-1.5 rounded-full cursor-pointer ${theme === 'dark' ? 'bg-stone-100' : theme === 'funky' ? 'bg-fuchsia-500' : 'bg-stone-700'}`} />
-            <span className={`w-1.5 h-1.5 rounded-full cursor-pointer ${theme === 'dark' ? 'bg-stone-500/30' : theme === 'funky' ? 'bg-purple-900/40' : 'bg-stone-350'}`} />
+                {/* Slides/Carousel navigation dots indicators at the bottom */}
+          <div className="flex justify-center items-center gap-2 mt-8 z-10 relative">
+            {featuredList.map((_, idx) => {
+              const isActive = featuredIndex === idx;
+              return (
+                <button
+                  key={idx}
+                  onClick={() => setFeaturedIndex(idx)}
+                  aria-label={`Go to slide ${idx + 1}`}
+                  className={`w-2 h-2 rounded-full cursor-pointer transition-all duration-300 border-0 ${
+                    isActive
+                      ? theme === 'dark' ? 'bg-amber-400 w-4 shadow-[0_0_8px_rgba(245,158,11,0.6)]' :
+                        theme === 'funky' ? 'bg-fuchsia-500 w-4 shadow-[0_0_8px_rgba(236,72,153,0.6)]' :
+                        'bg-stone-800 w-4'
+                      : theme === 'dark' ? 'bg-stone-500/30 hover:bg-stone-500/50' :
+                        theme === 'funky' ? 'bg-purple-900/40 hover:bg-purple-900/60' :
+                        'bg-stone-300 hover:bg-stone-400'
+                  }`}
+                />
+              );
+            })}
           </div>
         </motion.section>
 
