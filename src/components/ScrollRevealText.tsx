@@ -11,12 +11,17 @@ interface ScrollRevealTextProps {
   className?: string;
 }
 
-export default function ScrollRevealText({ text, className = '' }: ScrollRevealTextProps): React.JSX.Element {
+export default function ScrollRevealText({ text, className = '' }: ScrollRevealTextProps): React.JSX.Element | null {
   const containerRef = useRef<HTMLSpanElement>(null);
+
+  // Defensive check to avoid runtime crashes if text is undefined/null or not a string
+  if (typeof text !== 'string' || !text.trim()) {
+    return null;
+  }
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start 0.9", "end 0.5"]
+    offset: ["start 90%", "end 50%"]
   });
 
   const tokens = text.split(/(\s+)/).filter(Boolean);
