@@ -6,6 +6,7 @@
 import { motion } from 'motion/react';
 import { ArtistProfile, Painting } from '../types';
 import { Mail, Instagram, FileText, Lock, Sparkles, AlertCircle } from 'lucide-react';
+import ScrollRevealText from './ScrollRevealText';
 
 interface ArtistProfileSectionProps {
   profile: ArtistProfile;
@@ -75,12 +76,12 @@ export default function ArtistProfileSection({
               'bg-amber-800/30'
             }`} />
             
-            <p className={`font-sans text-xs md:text-sm leading-relaxed text-justify whitespace-pre-line ${
+            <p className={`font-sans text-xs md:text-sm leading-relaxed text-justify ${
               theme === 'dark' ? 'text-stone-300/90' :
               theme === 'funky' ? 'text-purple-200/90' :
               'text-stone-605'
             }`}>
-              {profile.bio}
+              <ScrollRevealText text={profile.bio} />
             </p>
           </div>
         </div>
@@ -100,12 +101,12 @@ export default function ArtistProfileSection({
             }`}>
               Artist Statement
             </div>
-            <p className={`font-serif italic text-xs md:text-sm leading-relaxed text-justify whitespace-pre-line ${
+            <p className={`font-serif italic text-xs md:text-sm leading-relaxed text-justify ${
               theme === 'dark' ? 'text-stone-300' :
               theme === 'funky' ? 'text-purple-200/80' :
               'text-stone-705'
             }`}>
-              {profile.statement}
+              <ScrollRevealText text={profile.statement} />
             </p>
           </div>
 
