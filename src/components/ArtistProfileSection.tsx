@@ -13,7 +13,7 @@ interface ArtistProfileSectionProps {
   onOpenPostModal: () => void;
   isAdmin: boolean;
   onToggleAdmin: () => void;
-  theme?: 'light' | 'dark';
+  theme?: 'light' | 'dark' | 'funky';
 }
 
 export default function ArtistProfileSection({
@@ -32,14 +32,18 @@ export default function ArtistProfileSection({
   return (
     <div id="artist-profile-panel" className={`p-6 md:p-8 rounded-xl h-fit border transition-colors duration-300 lg:sticky lg:top-8 ${
       theme === 'dark'
-        ? 'bg-[#121110] border-stone-850/80 text-stone-200 shadow-md shadow-black/30'
+        ? 'bg-[#121110] border-stone-850/80 text-stone-200 shadow-md shadow-black/30' :
+      theme === 'funky'
+        ? 'bg-[#150d2c] border-purple-900/40 text-purple-200 shadow-lg shadow-purple-950/20'
         : 'bg-stone-50 border-stone-200/60 text-stone-900 shadow-xs'
     }`}>
       {/* Bio / Portrait section */}
       <div className="flex flex-col items-center text-center">
         {/* Sketch Portrait frame representing luxury framing */}
         <div className={`relative group p-2 border shadow-md rounded-md overflow-hidden aspect-square w-36 h-36 md:w-44 md:h-44 mb-5 transition-transform duration-500 hover:scale-[1.02] ${
-          theme === 'dark' ? 'bg-stone-950 border-stone-800' : 'bg-white border-stone-200/80'
+          theme === 'dark' ? 'bg-stone-950 border-stone-800' :
+          theme === 'funky' ? 'bg-[#0a0418] border-purple-800 shadow-[0_0_15px_rgba(236,72,153,0.2)]' :
+          'bg-white border-stone-200/80'
         }`}>
           <div className="absolute inset-0 pointer-events-none ring-1 ring-inset ring-black/10 shadow-[inset_0_2px_12px_rgba(0,0,0,0.06)]" />
           <img
@@ -51,16 +55,28 @@ export default function ArtistProfileSection({
         </div>
 
         <h2 className={`font-serif text-2xl md:text-3xl font-bold tracking-tight leading-none ${
-          theme === 'dark' ? 'text-stone-100' : 'text-stone-900'
+          theme === 'dark' ? 'text-stone-100' :
+          theme === 'funky' ? 'text-cyan-400 text-glow-cyan font-bold' :
+          'text-stone-900'
         }`}>
           {profile.name}
         </h2>
-        <p className={`font-serif italic text-xs sm:text-sm mt-1.5 ${theme === 'dark' ? 'text-stone-400' : 'text-stone-500'}`}>{profile.title}</p>
+        <p className={`font-serif italic text-xs sm:text-sm mt-1.5 ${
+          theme === 'dark' ? 'text-stone-400' :
+          theme === 'funky' ? 'text-purple-300' :
+          'text-stone-500'
+        }`}>{profile.title}</p>
         
-        <div className={`w-12 h-[1px] my-4 ${theme === 'dark' ? 'bg-amber-500/20' : 'bg-amber-800/30'}`} />
+        <div className={`w-12 h-[1px] my-4 ${
+          theme === 'dark' ? 'bg-amber-500/20' :
+          theme === 'funky' ? 'bg-fuchsia-500/30' :
+          'bg-amber-800/30'
+        }`} />
         
         <p className={`font-sans text-xs md:text-sm leading-relaxed text-justify whitespace-pre-line ${
-          theme === 'dark' ? 'text-stone-300' : 'text-stone-605'
+          theme === 'dark' ? 'text-stone-300' :
+          theme === 'funky' ? 'text-purple-200/90' :
+          'text-stone-605'
         }`}>
           {profile.bio}
         </p>
@@ -68,15 +84,21 @@ export default function ArtistProfileSection({
 
       {/* Artist Statement Section */}
       <div className={`relative p-5 border rounded-lg shadow-2xs transition-colors duration-300 mt-6 ${
-        theme === 'dark' ? 'bg-stone-950/40 border-stone-850' : 'bg-gold-50 border-gold-101'
+        theme === 'dark' ? 'bg-stone-950/40 border-stone-850' :
+        theme === 'funky' ? 'bg-purple-950/30 border-purple-900/60 shadow-[inset_0_2px_8px_rgba(0,0,0,0.4)]' :
+        'bg-gold-50 border-gold-101'
       }`}>
         <div className={`absolute -top-3 left-4 px-2.5 font-serif font-medium italic text-[11px] select-none transition-colors ${
-          theme === 'dark' ? 'bg-[#121110] text-amber-450' : 'bg-stone-50 text-amber-700'
+          theme === 'dark' ? 'bg-[#121110] text-amber-450' :
+          theme === 'funky' ? 'bg-[#150d2c] text-fuchsia-400 text-glow-neon font-semibold' :
+          'bg-stone-50 text-amber-700'
         }`}>
           Artist Statement
         </div>
         <p className={`font-serif italic text-xs md:text-sm leading-relaxed text-justify whitespace-pre-line ${
-          theme === 'dark' ? 'text-stone-300' : 'text-stone-705'
+          theme === 'dark' ? 'text-stone-300' :
+          theme === 'funky' ? 'text-purple-200/80' :
+          'text-stone-705'
         }`}>
           {profile.statement}
         </p>
@@ -84,29 +106,47 @@ export default function ArtistProfileSection({
 
       {/* Curatorial Ledger & Statistics */}
       <div className="space-y-3 pt-4">
-        <h3 className="font-sans text-[9px] font-bold tracking-widest uppercase flex items-center gap-1.5 opacity-60">
-          <FileText className="w-3.5 h-3.5" />
+        <h3 className={`font-sans text-[9px] font-bold tracking-widest uppercase flex items-center gap-1.5 ${theme === 'funky' ? 'text-fuchsia-400' : 'opacity-60'}`}>
+          <FileText className={`w-3.5 h-3.5 ${theme === 'funky' ? 'text-fuchsia-400' : ''}`} />
           Studio Registry Ledger
         </h3>
         
         <div className="grid grid-cols-2 gap-2 text-center font-sans text-xs">
           <div className={`p-3 border rounded-md ${
-            theme === 'dark' ? 'bg-stone-950/30 border-stone-850' : 'bg-white border-stone-200/40'
+            theme === 'dark' ? 'bg-stone-950/30 border-stone-850' :
+            theme === 'funky' ? 'bg-purple-950/30 border-purple-900/50 text-purple-200' :
+            'bg-white border-stone-200/40'
           }`}>
-            <span className={`block font-serif text-lg font-bold ${theme === 'dark' ? 'text-stone-100' : 'text-stone-900'}`}>{totalWorks}</span>
+            <span className={`block font-serif text-lg font-bold ${
+              theme === 'dark' ? 'text-stone-100' :
+              theme === 'funky' ? 'text-cyan-400 text-glow-cyan' :
+              'text-stone-900'
+            }`}>{totalWorks}</span>
             <span className="text-[9px] text-stone-500 uppercase tracking-wider">Archived</span>
           </div>
           <div className={`p-3 border rounded-md ${
-            theme === 'dark' ? 'bg-stone-950/30 border-stone-850' : 'bg-white border-stone-200/40'
+            theme === 'dark' ? 'bg-stone-950/30 border-stone-850' :
+            theme === 'funky' ? 'bg-purple-950/30 border-purple-900/50 text-purple-200' :
+            'bg-white border-stone-200/40'
           }`}>
-            <span className={`block font-serif text-lg font-bold ${theme === 'dark' ? 'text-amber-400 animate-pulse' : 'text-amber-800'}`}>{availableWorks}</span>
+            <span className={`block font-serif text-lg font-bold ${
+              theme === 'dark' ? 'text-amber-400 animate-pulse' :
+              theme === 'funky' ? 'text-fuchsia-400 text-glow-neon animate-pulse' :
+              'text-amber-800'
+            }`}>{availableWorks}</span>
             <span className="text-[9px] text-stone-500 uppercase tracking-wider">Available</span>
           </div>
           <div className={`p-3 border rounded-md col-span-2 flex items-center justify-between px-4 ${
-            theme === 'dark' ? 'bg-stone-950/30 border-stone-850' : 'bg-white border-stone-200/40'
+            theme === 'dark' ? 'bg-stone-950/30 border-stone-850' :
+            theme === 'funky' ? 'bg-purple-950/30 border-purple-900/50 text-purple-200' :
+            'bg-white border-stone-200/40'
           }`}>
             <span className="text-[9px] text-stone-500 uppercase tracking-wider text-left">Private collections</span>
-            <span className={`font-serif text-xs font-semibold ${theme === 'dark' ? 'text-stone-300' : 'text-stone-700'}`}>{soldWorks} works</span>
+            <span className={`font-serif text-xs font-semibold ${
+              theme === 'dark' ? 'text-stone-300' :
+              theme === 'funky' ? 'text-purple-300' :
+              'text-stone-700'
+            }`}>{soldWorks} works</span>
           </div>
         </div>
       </div>
@@ -117,14 +157,16 @@ export default function ArtistProfileSection({
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className={`inline-flex items-center gap-1 font-sans text-[10px] font-bold uppercase tracking-wider border px-2.5 py-0.5 rounded-sm ${
-                theme === 'dark' ? 'bg-amber-950/30 border-amber-900/30 text-amber-400' : 'bg-amber-50 border-amber-200 text-amber-800'
+                theme === 'dark' ? 'bg-amber-950/30 border-amber-900/30 text-amber-400' :
+                theme === 'funky' ? 'bg-purple-950/30 border-purple-800/40 text-fuchsia-400 text-glow-neon' :
+                'bg-amber-50 border-amber-200 text-amber-800'
               }`}>
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                <Sparkles className={`w-3.5 h-3.5 ${theme === 'funky' ? 'text-fuchsia-500' : 'text-amber-500'}`} />
                 Studio Registry Active
               </span>
               <button
                 onClick={onToggleAdmin}
-                className="text-stone-500 hover:text-stone-300 font-sans text-[11px] underline cursor-pointer"
+                className={`font-sans text-[11px] underline cursor-pointer ${theme === 'funky' ? 'text-purple-400 hover:text-purple-200' : 'text-stone-500 hover:text-stone-300'}`}
               >
                 Lock
               </button>
@@ -132,8 +174,10 @@ export default function ArtistProfileSection({
             
             <button
               onClick={onOpenPostModal}
-              className={`w-full font-sans text-[10px] font-bold tracking-widest uppercase py-3 px-4 rounded-md shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                theme === 'dark' ? 'bg-amber-500 hover:bg-amber-400 text-stone-950 shadow-black/40' : 'bg-stone-900 hover:bg-amber-900 text-white'
+              className={`w-full font-sans text-[10px] font-bold tracking-widest uppercase py-3 px-4 rounded-md shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer border-0 ${
+                theme === 'dark' ? 'bg-amber-500 hover:bg-amber-400 text-stone-950 shadow-black/40' :
+                theme === 'funky' ? 'bg-fuchsia-600 hover:bg-fuchsia-500 text-white shadow-[0_0_15px_rgba(236,72,153,0.3)] hover:shadow-[0_0_20px_rgba(236,72,153,0.5)]' :
+                'bg-stone-900 hover:bg-amber-900 text-white'
               }`}
             >
               <span>+ Post New Work</span>
@@ -141,7 +185,9 @@ export default function ArtistProfileSection({
           </div>
         ) : (
           <div className={`p-4 rounded-lg border text-center space-y-2.5 ${
-            theme === 'dark' ? 'bg-stone-950/30 border-stone-850' : 'bg-stone-100/60 border-stone-200/40'
+            theme === 'dark' ? 'bg-stone-950/30 border-stone-850' :
+            theme === 'funky' ? 'bg-purple-950/20 border-purple-900/40 text-purple-300' :
+            'bg-stone-100/60 border-stone-200/40'
           }`}>
             <p className="font-sans text-[10px] text-stone-500 italic leading-relaxed">
               Are you the creator, <strong>Shabnam</strong>? Unlock the studio registry to upload and post new paintings.
@@ -150,11 +196,13 @@ export default function ArtistProfileSection({
               onClick={onToggleAdmin}
               className={`inline-flex items-center gap-1.5 font-sans text-[10px] font-bold tracking-widest uppercase px-3.5 py-1.5 border rounded-md shadow-2xs transition-all cursor-pointer ${
                 theme === 'dark' 
-                  ? 'bg-stone-900 border-stone-800 text-stone-300 hover:bg-stone-800 hover:text-stone-100 hover:border-stone-750' 
+                  ? 'bg-stone-900 border-stone-800 text-stone-300 hover:bg-stone-800 hover:text-stone-100 hover:border-stone-750' :
+                theme === 'funky'
+                  ? 'bg-[#150d2c] border-purple-850 text-purple-200 hover:text-fuchsia-400 hover:bg-purple-950/60 hover:shadow-[0_0_10px_rgba(236,72,153,0.3)]'
                   : 'bg-white border-stone-200 text-stone-850 hover:text-amber-805 hover:bg-stone-50'
               }`}
             >
-              <Lock className="w-3 h-3 text-amber-500" />
+              <Lock className={`w-3 h-3 ${theme === 'funky' ? 'text-fuchsia-500' : 'text-amber-500'}`} />
               <span>Unlock Artist Studio</span>
             </button>
           </div>
@@ -162,7 +210,11 @@ export default function ArtistProfileSection({
       </div>
 
       {/* Contact Deck */}
-      <div className={`pt-4 border-t ${theme === 'dark' ? 'border-stone-850' : 'border-stone-150'}`}>
+      <div className={`pt-4 border-t ${
+        theme === 'dark' ? 'border-stone-850' :
+        theme === 'funky' ? 'border-purple-900/30' :
+        'border-stone-150'
+      }`}>
         <h4 className="font-sans text-[9px] font-bold text-stone-400 tracking-widest uppercase mb-3">
           Collector Contacts
         </h4>
@@ -170,7 +222,9 @@ export default function ArtistProfileSection({
           <a
             href={`mailto:${profile.email}`}
             className={`flex items-center gap-2.5 transition-colors py-1 cursor-pointer ${
-              theme === 'dark' ? 'hover:text-amber-400 text-stone-300' : 'hover:text-amber-800 text-stone-600'
+              theme === 'dark' ? 'hover:text-amber-400 text-stone-300' :
+              theme === 'funky' ? 'hover:text-cyan-400 text-purple-300' :
+              'hover:text-amber-800 text-stone-600'
             }`}
           >
             <Mail className="w-4 h-4 text-stone-400 shrink-0" />
@@ -181,7 +235,9 @@ export default function ArtistProfileSection({
             target="_blank"
             rel="noreferrer"
             className={`flex items-center gap-2.5 transition-colors py-1 cursor-pointer ${
-              theme === 'dark' ? 'hover:text-amber-400 text-stone-300' : 'hover:text-amber-800 text-stone-600'
+              theme === 'dark' ? 'hover:text-amber-400 text-stone-300' :
+              theme === 'funky' ? 'hover:text-cyan-400 text-purple-300' :
+              'hover:text-amber-800 text-stone-600'
             }`}
           >
             <Instagram className="w-4 h-4 text-stone-400 shrink-0" />

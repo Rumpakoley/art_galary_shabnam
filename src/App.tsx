@@ -45,9 +45,9 @@ export default function App() {
   const [artistProfile, setArtistProfile] = useState<ArtistProfile>(INITIAL_PROFILE);
   
   // Gallery Theme: Default to 'dark' for premium museum spotlight look
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+  const [theme, setTheme] = useState<'light' | 'dark' | 'funky'>(() => {
     const stored = localStorage.getItem('artist_theme_preference');
-    return (stored as 'light' | 'dark') || 'dark';
+    return (stored as 'light' | 'dark' | 'funky') || 'dark';
   });
 
   // Sync theme changes to localStorage
@@ -176,7 +176,11 @@ export default function App() {
   const nameParts = artistProfile.name.split(' ');
 
   return (
-    <div id="gallery-app-root" className={`min-h-screen transition-colors duration-300 selection:bg-amber-500/20 selection:text-amber-350 ${theme === 'dark' ? 'bg-[#0D0C0B] text-stone-200' : 'bg-artist-bg text-stone-900'}`}>
+    <div id="gallery-app-root" className={`min-h-screen transition-colors duration-300 selection:bg-amber-500/20 selection:text-amber-350 ${
+      theme === 'dark' ? 'bg-[#0D0C0B] text-stone-200' : 
+      theme === 'funky' ? 'bg-[#0a0418] text-purple-200' : 
+      'bg-artist-bg text-stone-900'
+    }`}>
       
       {/* Toast Notification */}
       <AnimatePresence>
@@ -186,10 +190,12 @@ export default function App() {
             animate={{ opacity: 1, y: 0, x: '-50%' }}
             exit={{ opacity: 0, y: -50, x: '-50%' }}
             className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 border px-5 py-3.5 rounded-lg shadow-xl flex items-center gap-3 max-w-sm md:max-w-md w-[90vw] ${
-              theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100' : 'bg-stone-900 border-stone-850 text-stone-100'
+              theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100' : 
+              theme === 'funky' ? 'bg-[#150d2c] border-purple-800 text-purple-100 shadow-[0_0_15px_rgba(236,72,153,0.3)]' : 
+              'bg-stone-900 border-stone-850 text-stone-100'
             }`}
           >
-            <CheckCircle2 className="w-5 h-5 text-amber-550 shrink-0" />
+            <CheckCircle2 className="w-5 h-5 text-amber-555 shrink-0" />
             <div className="flex-grow">
               <p className="font-sans text-xs font-semibold uppercase tracking-wider text-amber-500">Registry Updated</p>
               <p className="font-sans text-xs mt-0.5 leading-relaxed">{toastMessage}</p>
@@ -209,26 +215,44 @@ export default function App() {
         
         {/* Curatorial Header of Artistic Flair Theme */}
         <header id="gallery-masthead" className={`flex flex-col md:flex-row justify-between items-start md:items-end mb-12 border-b pb-8 mt-2 transition-colors duration-300 ${
-          theme === 'dark' ? 'border-stone-850 text-stone-100' : 'border-stone-200/60 text-stone-900'
+          theme === 'dark' ? 'border-stone-850 text-stone-100' : 
+          theme === 'funky' ? 'border-purple-950/60 text-purple-100' : 
+          'border-stone-200/60 text-stone-900'
         }`}>
           <div className="flex flex-col">
-            <span className={`text-[10px] uppercase tracking-[0.3em] font-semibold mb-2 ${theme === 'dark' ? 'text-stone-400' : 'text-stone-500'}`}>Studio Gallery / Est. 2026</span>
+            <span className={`text-[10px] uppercase tracking-[0.3em] font-semibold mb-2 ${
+              theme === 'dark' ? 'text-stone-400' : 
+              theme === 'funky' ? 'text-fuchsia-400 text-glow-neon font-bold' : 
+              'text-stone-505'
+            }`}>Studio Gallery / Est. 2026</span>
             <h1 className="serif text-5xl md:text-7xl lg:text-8xl font-black leading-none tracking-tighter uppercase flex flex-wrap items-baseline gap-x-4">
               {nameParts[0]} <span className="outline-text">{nameParts.slice(1).join(' ')}</span>
             </h1>
           </div>
-          <nav className={`flex flex-wrap gap-x-6 gap-y-2 text-[11px] uppercase tracking-widest font-semibold mt-4 md:mt-0 ${theme === 'dark' ? 'text-stone-300' : 'text-stone-800'}`}>
-            <a href="#gallery-controls-console" className={`border-b pb-1 transition-colors ${theme === 'dark' ? 'border-amber-500 text-amber-405 hover:text-amber-300' : 'border-black text-stone-900 hover:text-amber-800'}`}>Works</a>
-            <a href="#artist-profile-panel" className={`opacity-60 hover:opacity-100 transition-colors ${theme === 'dark' ? 'hover:text-amber-400' : 'hover:text-amber-800'}`}>Studio</a>
+          <nav className={`flex flex-wrap gap-x-6 gap-y-2 text-[11px] uppercase tracking-widest font-semibold mt-4 md:mt-0 ${
+            theme === 'dark' ? 'text-stone-300' : 
+            theme === 'funky' ? 'text-purple-305' : 
+            'text-stone-805'
+          }`}>
+            <a href="#gallery-controls-console" className={`border-b pb-1 transition-colors ${
+              theme === 'dark' ? 'border-amber-550 text-amber-405 hover:text-amber-300' : 
+              theme === 'funky' ? 'border-fuchsia-500 text-fuchsia-400 hover:text-fuchsia-300' : 
+              'border-black text-stone-900 hover:text-amber-800'
+            }`}>Works</a>
+            <a href="#artist-profile-panel" className={`opacity-70 hover:opacity-100 transition-colors ${
+              theme === 'dark' ? 'hover:text-amber-400' : 
+              theme === 'funky' ? 'hover:text-fuchsia-400 text-glow-neon' : 
+              'hover:text-amber-800'
+            }`}>Studio</a>
             <button 
-              onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
-              className="opacity-60 hover:opacity-100 uppercase text-[11px] font-semibold tracking-widest hover:text-amber-400 transition-colors cursor-pointer"
+              onClick={() => setTheme(t => t === 'dark' ? 'funky' : t === 'funky' ? 'light' : 'dark')}
+              className="opacity-70 hover:opacity-100 uppercase text-[11px] font-semibold tracking-widest hover:text-amber-400 transition-colors cursor-pointer"
             >
-              {theme === 'dark' ? '☀️ Linen Light' : '🌙 Obsidian Dark'}
+              {theme === 'dark' ? '🌙 Obsidian Dark' : theme === 'funky' ? '👾 Neon Funky' : '☀️ Linen Light'}
             </button>
             <button 
               onClick={handleToggleAdmin} 
-              className="opacity-60 hover:opacity-100 uppercase text-[11px] font-semibold tracking-widest hover:text-amber-400 transition-colors cursor-pointer"
+              className="opacity-70 hover:opacity-100 uppercase text-[11px] font-semibold tracking-widest hover:text-amber-400 transition-colors cursor-pointer"
             >
               {isAdmin ? '🔒 Lock Registry' : '🔓 Unlock Registry'}
             </button>
@@ -238,29 +262,51 @@ export default function App() {
         {/* Immersive Typographic Exhibition Banner */}
         <section className={`relative overflow-hidden mb-12 py-16 px-6 md:px-12 rounded-2xl border transition-all duration-300 flex flex-col justify-center items-center text-center shadow-xl ${
           theme === 'dark' 
-            ? 'bg-gradient-to-b from-[#161513] to-[#0F0E0D] border-stone-850 text-stone-100' 
+            ? 'bg-gradient-to-b from-[#161513] to-[#0F0E0D] border-stone-850 text-stone-100' :
+          theme === 'funky'
+            ? 'bg-gradient-to-br from-[#1b0840] via-[#10032c] to-[#060017] border-purple-900/50 text-purple-100 shadow-[0_10px_40px_rgba(127,0,255,0.2)]'
             : 'bg-white border-stone-200/80 text-stone-900'
         }`}>
           {/* Spotlight overlay */}
-          <div className={`absolute inset-0 pointer-events-none transition-opacity duration-500 ${theme === 'dark' ? 'opacity-100 museum-spotlight' : 'opacity-20'}`} />
+          <div className={`absolute inset-0 pointer-events-none transition-opacity duration-500 ${
+            theme === 'dark' ? 'opacity-100 museum-spotlight' : 
+            theme === 'funky' ? 'opacity-100 scanlines bg-gradient-to-r from-purple-800/10 via-fuchsia-700/10 to-cyan-500/10' : 
+            'opacity-20'
+          }`} />
           <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/canvas-paper.png')] canvas-grain" />
           
-          <span className={`text-[10px] uppercase tracking-[0.45em] font-bold mb-4 ${theme === 'dark' ? 'text-amber-400' : 'text-amber-800'}`}>
+          <span className={`text-[10px] uppercase tracking-[0.45em] font-bold mb-4 ${
+            theme === 'dark' ? 'text-amber-400' : 
+            theme === 'funky' ? 'text-fuchsia-400 text-glow-neon' : 
+            'text-amber-805'
+          }`}>
             Now Exhibiting
           </span>
           <h2 className="serif text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight uppercase max-w-4xl leading-tight">
-            THE <span className={theme === 'dark' ? 'text-amber-500 animate-pulse' : 'text-amber-800'}>MORPHIQ</span>
+            THE <span className={
+              theme === 'dark' ? 'text-amber-500 animate-pulse' : 
+              theme === 'funky' ? 'text-[#00ffff] text-glow-cyan' : 
+              'text-amber-800'
+            }>MORPHIQ</span>
           </h2>
-          <p className={`font-serif italic text-sm sm:text-base md:text-lg mt-3 max-w-xl ${theme === 'dark' ? 'text-stone-300' : 'text-stone-600'}`}>
+          <p className={`font-serif italic text-sm sm:text-base md:text-lg mt-3 max-w-xl ${
+            theme === 'dark' ? 'text-stone-300' : 
+            theme === 'funky' ? 'text-purple-300 font-medium' : 
+            'text-stone-605'
+          }`}>
             "A collection of messages from the unknown, waiting to find their meaning in you."
           </p>
-          <div className={`w-16 h-[1px] my-6 ${theme === 'dark' ? 'bg-amber-500/30' : 'bg-amber-800/20'}`} />
+          <div className={`w-16 h-[1px] my-6 ${
+            theme === 'dark' ? 'bg-amber-500/30' : 
+            theme === 'funky' ? 'bg-fuchsia-500/40 shadow-xs' : 
+            'bg-amber-800/20'
+          }`} />
           
           <div className="font-sans text-[10px] sm:text-xs uppercase tracking-[0.25em] font-semibold flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 opacity-80">
             <span>Husne Shabnam</span>
-            <span className="text-amber-500">•</span>
+            <span className={theme === 'funky' ? 'text-fuchsia-500' : 'text-amber-500'}>•</span>
             <span>Surrealist Abstract Canvases</span>
-            <span className="text-amber-500">•</span>
+            <span className={theme === 'funky' ? 'text-fuchsia-500' : 'text-amber-500'}>•</span>
             <span>Est. 2026</span>
           </div>
           
@@ -268,7 +314,9 @@ export default function App() {
             href="#gallery-controls-console" 
             className={`mt-8 px-6 py-2.5 border text-[10px] font-bold uppercase tracking-widest rounded-full transition-all duration-300 cursor-pointer shadow-xs ${
               theme === 'dark' 
-                ? 'border-amber-500/30 hover:border-amber-400 text-amber-400 hover:text-stone-950 hover:bg-amber-400' 
+                ? 'border-amber-500/30 hover:border-amber-400 text-amber-400 hover:text-stone-955 hover:bg-amber-400' :
+              theme === 'funky'
+                ? 'border-fuchsia-500/40 hover:border-fuchsia-400 text-fuchsia-400 hover:text-stone-955 hover:bg-fuchsia-400 shadow-[0_0_15px_rgba(236,72,153,0.25)]'
                 : 'border-amber-850/30 hover:border-amber-850 text-amber-850 hover:text-white hover:bg-amber-850'
             }`}
           >
@@ -293,9 +341,13 @@ export default function App() {
 
           {/* Column 2: Elegant Decor Vertical Accent (1 col on lg only) */}
           <div className={`lg:col-span-1 relative hidden lg:flex items-center justify-center border-r border-l py-12 select-none transition-colors duration-300 ${
-            theme === 'dark' ? 'border-stone-850/50 text-stone-400' : 'border-stone-200/50 text-stone-400'
+            theme === 'dark' ? 'border-stone-850/50 text-stone-400' : 
+            theme === 'funky' ? 'border-purple-900/25 text-purple-400' : 
+            'border-stone-200/50 text-stone-400'
           }`}>
-            <div className="vertical-text text-[10px] uppercase tracking-[0.55em] text-stone-400 font-semibold font-sans whitespace-nowrap">
+            <div className={`vertical-text text-[10px] uppercase tracking-[0.55em] font-semibold font-sans whitespace-nowrap ${
+              theme === 'funky' ? 'text-glow-neon text-fuchsia-400 font-bold' : ''
+            }`}>
               CURRENT EXHIBITION — THE MORPHIQ
             </div>
           </div>
@@ -305,15 +357,21 @@ export default function App() {
             
             {/* Elegant Filtering Console */}
             <div id="gallery-controls-console" className={`p-5 rounded-xl shadow-2xs space-y-4 border transition-all duration-300 ${
-              theme === 'dark' 
-                ? 'bg-[#121110] border-stone-850/80 text-stone-100' 
-                : 'bg-white border-stone-200/80 text-stone-900'
+              theme === 'dark' ? 'bg-[#121110] border-stone-850/80 text-stone-100' : 
+              theme === 'funky' ? 'bg-[#150d2c] border-purple-900/65 text-purple-100 shadow-[0_4px_20px_rgba(127,0,255,0.05)]' : 
+              'bg-white border-stone-200/80 text-stone-900'
             }`}>
               <div className={`flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b ${
-                theme === 'dark' ? 'border-stone-800' : 'border-stone-150'
+                theme === 'dark' ? 'border-stone-800' : 
+                theme === 'funky' ? 'border-purple-900/50' : 
+                'border-stone-150'
               }`}>
                 <h3 className="font-serif text-lg font-semibold flex items-center gap-2">
-                  <Sliders className={`w-4 h-4 ${theme === 'dark' ? 'text-amber-400' : 'text-amber-800/60'}`} />
+                  <Sliders className={`w-4 h-4 ${
+                    theme === 'dark' ? 'text-amber-400' : 
+                    theme === 'funky' ? 'text-fuchsia-400 font-bold' : 
+                    'text-amber-800/60'
+                  }`} />
                   <span>The Curatorial Collection ({filteredPaintings.length} works)</span>
                 </h3>
 

@@ -72,6 +72,57 @@
   background-position: 0 0, 2px 2px;
 }
 
+/* Funky Neon & Holographic features */
+.holo-mount {
+  background: linear-gradient(135deg, #00f2fe 0%, #4facfe 25%, #f093fb 50%, #f5576c 75%, #ffd1ff 100%);
+  background-size: 200% 200%;
+  animation: holo-sweep 8s ease infinite alternate;
+}
+@keyframes holo-sweep {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+.trippy-lava {
+  background: linear-gradient(45deg, #ff007f, #7f00ff, #00ffff, #ff007f);
+  background-size: 400% 400%;
+  animation: lava-flow 15s ease infinite;
+}
+@keyframes lava-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.text-glow-neon {
+  text-shadow: 0 0 5px rgba(236, 72, 153, 0.8), 0 0 15px rgba(236, 72, 153, 0.4);
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 5px rgba(6, 182, 212, 0.8), 0 0 15px rgba(6, 182, 212, 0.4);
+}
+
+.frame-shadow-funky {
+  box-shadow: 
+    0 0 15px rgba(236, 72, 153, 0.4),
+    0 0 35px rgba(6, 182, 212, 0.2),
+    0 15px 35px -5px rgba(0, 0, 0, 0.6);
+}
+
+/* scanlines for a retro monitor effect */
+.scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(
+    90deg, 
+    rgba(255, 0, 0, 0.06), 
+    rgba(0, 255, 0, 0.02), 
+    rgba(0, 0, 255, 0.06)
+  );
+  background-size: 100% 4px, 6px 100%;
+}
+
 /* Smooth custom scrollbars for our elegant galleries */
 ::-webkit-scrollbar {
   width: 6px;
