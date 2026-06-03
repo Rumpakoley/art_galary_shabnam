@@ -175,6 +175,10 @@ export default function App() {
 
   const nameParts = artistProfile.name.split(' ');
 
+  const featuredPainting = useMemo(() => {
+    return paintings.find((p) => p.id === 'painting-7') || paintings[0];
+  }, [paintings]);
+
   return (
     <div id="gallery-app-root" className={`min-h-screen transition-colors duration-300 selection:bg-amber-500/20 selection:text-amber-350 ${
       theme === 'dark' ? 'bg-[#0D0C0B] text-stone-200' : 
@@ -258,9 +262,8 @@ export default function App() {
             </button>
           </nav>
         </header>
-
-        {/* Immersive Typographic Exhibition Banner */}
-        <section className={`relative overflow-hidden mb-12 py-16 px-6 md:px-12 rounded-2xl border transition-all duration-300 flex flex-col justify-center items-center text-center shadow-xl ${
+             {/* Immersive Typographic Exhibition Banner */}
+        <section className={`relative overflow-hidden mb-12 py-12 px-6 md:px-12 rounded-2xl border transition-all duration-300 shadow-xl ${
           theme === 'dark' 
             ? 'bg-gradient-to-b from-[#161513] to-[#0F0E0D] border-stone-850 text-stone-100' :
           theme === 'funky'
@@ -275,53 +278,95 @@ export default function App() {
           }`} />
           <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/canvas-paper.png')] canvas-grain" />
           
-          <span className={`text-[10px] uppercase tracking-[0.45em] font-bold mb-4 ${
-            theme === 'dark' ? 'text-amber-400' : 
-            theme === 'funky' ? 'text-fuchsia-400 text-glow-neon' : 
-            'text-amber-805'
-          }`}>
-            Now Exhibiting
-          </span>
-          <h2 className="serif text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight uppercase max-w-4xl leading-tight">
-            THE <span className={
-              theme === 'dark' ? 'text-amber-500 animate-pulse' : 
-              theme === 'funky' ? 'text-[#00ffff] text-glow-cyan' : 
-              'text-amber-800'
-            }>MORPHIQ</span>
-          </h2>
-          <p className={`font-serif italic text-sm sm:text-base md:text-lg mt-3 max-w-xl ${
-            theme === 'dark' ? 'text-stone-300' : 
-            theme === 'funky' ? 'text-purple-300 font-medium' : 
-            'text-stone-605'
-          }`}>
-            "A collection of messages from the unknown, waiting to find their meaning in you."
-          </p>
-          <div className={`w-16 h-[1px] my-6 ${
-            theme === 'dark' ? 'bg-amber-500/30' : 
-            theme === 'funky' ? 'bg-fuchsia-500/40 shadow-xs' : 
-            'bg-amber-800/20'
-          }`} />
-          
-          <div className="font-sans text-[10px] sm:text-xs uppercase tracking-[0.25em] font-semibold flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 opacity-80">
-            <span>Husne Shabnam</span>
-            <span className={theme === 'funky' ? 'text-fuchsia-500' : 'text-amber-500'}>•</span>
-            <span>Surrealist Abstract Canvases</span>
-            <span className={theme === 'funky' ? 'text-fuchsia-500' : 'text-amber-500'}>•</span>
-            <span>Est. 2026</span>
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            {/* Left Content column */}
+            <div className="md:col-span-7 flex flex-col items-center md:items-start text-center md:text-left">
+              <span className={`text-[10px] uppercase tracking-[0.45em] font-bold mb-4 ${
+                theme === 'dark' ? 'text-amber-400' : 
+                theme === 'funky' ? 'text-fuchsia-400 text-glow-neon' : 
+                'text-amber-805'
+              }`}>
+                Now Exhibiting
+              </span>
+              <h2 className="serif text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight uppercase leading-tight">
+                THE <span className={
+                  theme === 'dark' ? 'text-amber-500 animate-pulse' : 
+                  theme === 'funky' ? 'text-[#00ffff] text-glow-cyan' : 
+                  'text-amber-800'
+                }>MORPHIQ</span>
+              </h2>
+              <p className={`font-serif italic text-sm sm:text-base md:text-lg mt-3 max-w-xl ${
+                theme === 'dark' ? 'text-stone-300' : 
+                theme === 'funky' ? 'text-purple-300 font-medium' : 
+                'text-stone-605'
+              }`}>
+                "A collection of messages from the unknown, waiting to find their meaning in you."
+              </p>
+              <div className={`w-16 h-[1px] my-6 ${
+                theme === 'dark' ? 'bg-amber-500/30' : 
+                theme === 'funky' ? 'bg-fuchsia-500/40 shadow-xs' : 
+                'bg-amber-800/20'
+              }`} />
+              
+              <div className="font-sans text-[10px] sm:text-xs uppercase tracking-[0.25em] font-semibold flex flex-wrap items-center justify-center md:justify-start gap-x-3 gap-y-1.5 opacity-80 mb-6">
+                <span>Husne Shabnam</span>
+                <span className={theme === 'funky' ? 'text-fuchsia-500' : 'text-amber-500'}>•</span>
+                <span>Surrealist Abstract Canvases</span>
+                <span className={theme === 'funky' ? 'text-fuchsia-500' : 'text-amber-500'}>•</span>
+                <span>Est. 2026</span>
+              </div>
+              
+              <a 
+                href="#gallery-controls-console" 
+                className={`px-6 py-2.5 border text-[10px] font-bold uppercase tracking-widest rounded-full transition-all duration-300 cursor-pointer shadow-xs ${
+                  theme === 'dark' 
+                    ? 'border-amber-500/30 hover:border-amber-400 text-amber-400 hover:text-stone-955 hover:bg-amber-400' :
+                  theme === 'funky'
+                    ? 'border-fuchsia-500/40 hover:border-fuchsia-400 text-fuchsia-400 hover:text-stone-955 hover:bg-fuchsia-400 shadow-[0_0_15px_rgba(236,72,153,0.25)]'
+                    : 'border-amber-850/30 hover:border-amber-850 text-amber-850 hover:text-white hover:bg-amber-850'
+                }`}
+              >
+                Enter Gallery Catalog ({paintings.length} works)
+              </a>
+            </div>
+
+            {/* Right Image column */}
+            <div className="md:col-span-5 flex justify-center items-center w-full">
+              {featuredPainting && (
+                <div 
+                  className={`relative group p-3 border rounded-md transition-transform duration-500 hover:scale-[1.02] cursor-pointer shadow-lg w-full max-w-[280px] sm:max-w-[320px] aspect-3/4 flex items-center justify-center ${
+                    theme === 'dark' ? 'bg-[#EFECE6] border-stone-950/80 shadow-[inset_0_2px_8px_rgba(0,0,0,0.15)] shadow-black/40' :
+                    theme === 'funky' ? 'holo-mount border-purple-955 shadow-[inset_0_2px_12px_rgba(255,255,255,0.4)] shadow-purple-955/30' :
+                    'bg-[#FCFAF5] border-stone-200 shadow-[inset_0_2px_6px_rgba(0,0,0,0.06)]'
+                  }`}
+                  onClick={() => setSelectedPainting(featuredPainting)}
+                >
+                  {/* Beveled edge cut of the mat board */}
+                  <div className={`absolute inset-[10px] border pointer-events-none transition-colors duration-300 ${
+                    theme === 'dark' ? 'border-stone-400/20' : 
+                    theme === 'funky' ? 'border-white/20' : 
+                    'border-stone-300/20'
+                  }`} />
+                  
+                  <img 
+                    src={featuredPainting.imageUrl} 
+                    alt={featuredPainting.title} 
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover shadow-xs" 
+                  />
+
+                  {/* Badge showing it's the featured piece */}
+                  <span className={`absolute -top-2.5 -right-2.5 px-3 py-1 text-[8px] font-sans font-bold uppercase tracking-wider rounded-md border shadow-md ${
+                    theme === 'funky'
+                      ? 'bg-fuchsia-600 border-fuchsia-500 text-white shadow-[0_0_10px_rgba(236,72,153,0.5)]'
+                      : 'bg-amber-600 border-amber-500 text-white'
+                  }`}>
+                    Featured Painting
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
-          
-          <a 
-            href="#gallery-controls-console" 
-            className={`mt-8 px-6 py-2.5 border text-[10px] font-bold uppercase tracking-widest rounded-full transition-all duration-300 cursor-pointer shadow-xs ${
-              theme === 'dark' 
-                ? 'border-amber-500/30 hover:border-amber-400 text-amber-400 hover:text-stone-955 hover:bg-amber-400' :
-              theme === 'funky'
-                ? 'border-fuchsia-500/40 hover:border-fuchsia-400 text-fuchsia-400 hover:text-stone-955 hover:bg-fuchsia-400 shadow-[0_0_15px_rgba(236,72,153,0.25)]'
-                : 'border-amber-850/30 hover:border-amber-850 text-amber-850 hover:text-white hover:bg-amber-850'
-            }`}
-          >
-            Enter Gallery Catalog ({paintings.length} works)
-          </a>
         </section>
 
         {/* Content columns */}
