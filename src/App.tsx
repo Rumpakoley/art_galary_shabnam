@@ -234,44 +234,50 @@ export default function App() {
           theme === 'funky' ? 'border-purple-955/60 text-purple-100' : 
           'border-stone-200/60 text-stone-900'
         }`}>
-          {theme === 'dark' ? (
-            /* Premium Header matching the reference */
-            <div className="flex items-center gap-3 w-full md:w-auto justify-center md:justify-start">
-              {/* Abstract logo emblem SVG */}
-              <div className="w-9 h-9 shrink-0 relative">
-                <svg viewBox="0 0 100 100" className="w-full h-full">
-                  <defs>
-                    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#22d3ee" />
-                      <stop offset="50%" stopColor="#8b5cf6" />
-                      <stop offset="100%" stopColor="#f59e0b" />
-                    </linearGradient>
-                  </defs>
-                  <circle cx="50" cy="50" r="45" fill="none" stroke="url(#logoGrad)" strokeWidth="6" className="opacity-40" />
-                  <path d="M30,50 Q45,25 55,75 T80,50" fill="none" stroke="url(#logoGrad)" strokeWidth="8" strokeLinecap="round" />
-                  <circle cx="50" cy="50" r="15" fill="url(#logoGrad)" className="opacity-80" />
-                </svg>
-              </div>
-              <div className="flex flex-col text-left">
-                <span className="font-serif text-lg font-black tracking-widest leading-none uppercase">
-                  {artistProfile.name}
-                </span>
-                <span className="text-[8px] font-sans font-bold tracking-[0.35em] text-stone-400 mt-1 uppercase">
-                  {artistProfile.title}
-                </span>
-              </div>
+          {/* Unified Logo & Artist Title */}
+          <div className="flex items-center gap-3 w-full md:w-auto justify-center md:justify-start">
+            {/* Abstract logo emblem SVG */}
+            <div className="w-9 h-9 shrink-0 relative">
+              <svg viewBox="0 0 100 100" className="w-full h-full">
+                <defs>
+                  <linearGradient id="logoGradHeader" x1="0%" y1="0%" x2="100%" y2="100%">
+                    {theme === 'funky' ? (
+                      <>
+                        <stop offset="0%" stopColor="#ec4899" />
+                        <stop offset="50%" stopColor="#8b5cf6" />
+                        <stop offset="100%" stopColor="#06b6d4" />
+                      </>
+                    ) : (
+                      <>
+                        <stop offset="0%" stopColor="#22d3ee" />
+                        <stop offset="50%" stopColor="#8b5cf6" />
+                        <stop offset="100%" stopColor="#f59e0b" />
+                      </>
+                    )}
+                  </linearGradient>
+                </defs>
+                <circle cx="50" cy="50" r="45" fill="none" stroke="url(#logoGradHeader)" strokeWidth="6" className="opacity-40" />
+                <path d="M30,50 Q45,25 55,75 T80,50" fill="none" stroke="url(#logoGradHeader)" strokeWidth="8" strokeLinecap="round" />
+                <circle cx="50" cy="50" r="15" fill="url(#logoGradHeader)" className="opacity-80" />
+              </svg>
             </div>
-          ) : (
-            <div className="flex flex-col">
-              <span className={`text-[10px] uppercase tracking-[0.3em] font-semibold mb-2 ${
-                theme === 'funky' ? 'text-fuchsia-400 text-glow-neon font-bold' : 
-                'text-stone-505'
-              }`}>Studio Gallery / Est. 2026</span>
-              <h1 className="serif text-5xl md:text-7xl lg:text-8xl font-black leading-none tracking-tighter uppercase flex flex-wrap items-baseline gap-x-4">
-                {nameParts[0]} <span className="outline-text">{nameParts.slice(1).join(' ')}</span>
-              </h1>
+            <div className="flex flex-col text-left">
+              <span className={`font-serif text-lg font-black tracking-widest leading-none uppercase ${
+                theme === 'funky' ? 'text-white text-glow-cyan' : ''
+              }`}>
+                {artistProfile.name}
+              </span>
+              <span className={`text-[8px] font-sans font-bold tracking-[0.35em] mt-1 uppercase ${
+                theme === 'dark' ? 'text-stone-400' :
+                theme === 'funky' ? 'text-fuchsia-400 text-glow-neon' :
+                'text-stone-500'
+              }`}>
+                {artistProfile.title}
+              </span>
             </div>
-          )}
+          </div>
+
+          {/* Unified Navigation Links */}
           <nav className={`flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[10px] sm:text-[11px] uppercase tracking-widest font-semibold mt-4 md:mt-0 ${
             theme === 'dark' ? 'text-stone-300' : 
             theme === 'funky' ? 'text-purple-305' : 
@@ -280,12 +286,12 @@ export default function App() {
             <a href="#gallery-controls-console" className={`pb-1 transition-colors ${
               theme === 'dark' ? 'border-b border-amber-500 text-stone-100 hover:text-amber-400' : 
               theme === 'funky' ? 'border-b border-fuchsia-500 text-fuchsia-400 hover:text-fuchsia-300' : 
-              'border-b border-black text-stone-900 hover:text-amber-800'
+              'border-b border-black text-stone-900 hover:text-amber-805'
             }`}>Gallery</a>
             <a href="#upcoming-exhibitions-section" className={`opacity-70 hover:opacity-100 transition-colors ${
               theme === 'dark' ? 'hover:text-amber-400' : 
               theme === 'funky' ? 'hover:text-fuchsia-400 text-glow-neon' : 
-              'hover:text-amber-805'
+              'hover:text-stone-500'
             }`}>Exhibitions</a>
             <a href="#artist-profile-panel" className={`opacity-70 hover:opacity-100 transition-colors ${
               theme === 'dark' ? 'hover:text-amber-400' : 
