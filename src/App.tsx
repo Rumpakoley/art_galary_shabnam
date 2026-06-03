@@ -221,11 +221,17 @@ export default function App() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         
         {/* Curatorial Header of Artistic Flair Theme */}
-        <header id="gallery-masthead" className={`relative z-10 flex flex-col md:flex-row justify-between items-center mb-12 border-b pb-6 mt-2 transition-colors duration-300 ${
-          theme === 'dark' ? 'border-white/10 text-stone-100' : 
-          theme === 'funky' ? 'border-purple-955/60 text-purple-100' : 
-          'border-stone-200/60 text-stone-900'
-        }`}>
+        <motion.header
+          id="gallery-masthead"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className={`relative z-10 flex flex-col md:flex-row justify-between items-center mb-12 border-b pb-6 mt-2 transition-colors duration-300 ${
+            theme === 'dark' ? 'border-white/10 text-stone-100' : 
+            theme === 'funky' ? 'border-purple-955/60 text-purple-100' : 
+            'border-stone-200/60 text-stone-900'
+          }`}
+        >
           {/* Unified Logo & Artist Title */}
           <div className="flex items-center gap-3 w-full md:w-auto justify-center md:justify-start">
             {/* Abstract logo emblem SVG */}
@@ -298,16 +304,22 @@ export default function App() {
               {isAdmin ? '🔒 Lock' : '🔓 Unlock'}
             </button>
           </nav>
-        </header>
+        </motion.header>
         
         {/* Immersive Typographic Exhibition Banner */}
-        <section className={`relative overflow-hidden mb-12 py-12 px-6 md:px-12 rounded-3xl border transition-all duration-300 shadow-xl ${
-          theme === 'dark' 
-            ? 'glass-panel text-stone-100 border-white/10' :
-          theme === 'funky'
-            ? 'bg-gradient-to-br from-[#1b0840] via-[#10032c] to-[#060017] border-purple-900/50 text-purple-100 shadow-[0_10px_40px_rgba(127,0,255,0.2)]'
-            : 'bg-white border-stone-200/80 text-stone-900'
-        }`}>
+        <motion.section
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className={`relative overflow-hidden mb-12 py-12 px-6 md:px-12 rounded-3xl border transition-all duration-300 shadow-xl ${
+            theme === 'dark' 
+              ? 'glass-panel text-stone-100 border-white/10' :
+            theme === 'funky'
+              ? 'bg-gradient-to-br from-[#1b0840] via-[#10032c] to-[#060017] border-purple-900/50 text-purple-100 shadow-[0_10px_40px_rgba(127,0,255,0.2)]'
+              : 'bg-white border-stone-200/80 text-stone-900'
+          }`}
+        >
           {/* Spotlight overlay */}
           <div className={`absolute inset-0 pointer-events-none transition-opacity duration-500 ${
             theme === 'dark' ? 'opacity-100 museum-spotlight' : 
@@ -416,13 +428,19 @@ export default function App() {
             <span className={`w-1.5 h-1.5 rounded-full cursor-pointer ${theme === 'dark' ? 'bg-stone-100' : theme === 'funky' ? 'bg-fuchsia-500' : 'bg-stone-700'}`} />
             <span className={`w-1.5 h-1.5 rounded-full cursor-pointer ${theme === 'dark' ? 'bg-stone-500/30' : theme === 'funky' ? 'bg-purple-900/40' : 'bg-stone-350'}`} />
           </div>
-        </section>
+        </motion.section>
 
         {/* Main Content Area */}
         <main className="relative z-10 space-y-12">
           
           {/* Section: Gallery Works & Curation Panel */}
-          <section className="space-y-8">
+          <motion.section
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="space-y-8"
+          >
             
             {/* Center-aligned section header for dark mode */}
             {theme === 'dark' && (
@@ -620,10 +638,17 @@ export default function App() {
                 </button>
               </motion.div>
             )}
-          </section>
+          </motion.section>
 
           {/* Bottom Section: Exhibitions & Profile */}
-          <section id="upcoming-exhibitions-section" className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8">
+          <motion.section
+            id="upcoming-exhibitions-section"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8"
+          >
             {/* Left Column: Upcoming Exhibitions (4 cols on lg) */}
             <div className={`lg:col-span-4 p-6 rounded-2xl border transition-colors ${
               theme === 'dark' ? 'glass-card text-stone-200' : 
@@ -663,7 +688,7 @@ export default function App() {
                 theme={theme}
               />
             </div>
-          </section>
+          </motion.section>
         </main>
       </div>
 

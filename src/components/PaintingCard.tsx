@@ -24,10 +24,11 @@ export default function PaintingCard({ painting, onViewDetails, theme = 'dark' }
     <motion.div
       id={`painting-card-${painting.id}`}
       layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
       exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className={`group relative flex flex-col p-3 transition-all duration-500 border ${
         theme === 'dark' 
           ? 'glass-card rounded-[1.25rem] text-stone-100 hover:-translate-y-1.5' :
