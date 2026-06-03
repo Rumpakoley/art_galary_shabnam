@@ -657,23 +657,41 @@ export default function App() {
               'bg-stone-50 border-stone-200/60 text-stone-900 shadow-xs'
             }`}>
               <h3 className={`font-serif text-lg font-bold uppercase tracking-wider mb-6 ${theme === 'dark' ? 'text-stone-100' : ''}`}>
-                Upcoming Exhibitions
+                <ScrollRevealText text="Upcoming Exhibitions" />
               </h3>
               <div className="space-y-6 text-left">
                 <div className={`pb-4 border-b ${theme === 'dark' ? 'border-white/10' : theme === 'funky' ? 'border-purple-900/30' : 'border-stone-200'}`}>
-                  <h4 className="font-serif font-black text-sm uppercase tracking-wide text-amber-500">Mindscapes</h4>
-                  <p className="font-sans text-xs text-stone-400 mt-1">NYC GALLERY</p>
-                  <p className="font-sans text-[10px] tracking-wider text-stone-500 uppercase mt-0.5">Oct 15 - Nov 10</p>
+                  <h4 className="font-serif font-black text-sm uppercase tracking-wide text-amber-500">
+                    <ScrollRevealText text="Mindscapes" />
+                  </h4>
+                  <p className="font-sans text-xs text-stone-400 mt-1">
+                    <ScrollRevealText text="NYC GALLERY" />
+                  </p>
+                  <p className="font-sans text-[10px] tracking-wider text-stone-500 uppercase mt-0.5">
+                    <ScrollRevealText text="Oct 15 - Nov 10" />
+                  </p>
                 </div>
                 <div className={`pb-4 border-b ${theme === 'dark' ? 'border-white/10' : theme === 'funky' ? 'border-purple-900/30' : 'border-stone-200'}`}>
-                  <h4 className="font-serif font-black text-sm uppercase tracking-wide text-amber-500">Transformations</h4>
-                  <p className="font-sans text-xs text-stone-400 mt-1">PARIS GALLERY</p>
-                  <p className="font-sans text-[10px] tracking-wider text-stone-500 uppercase mt-0.5">Dec 01 - Dec 15</p>
+                  <h4 className="font-serif font-black text-sm uppercase tracking-wide text-amber-500">
+                    <ScrollRevealText text="Transformations" />
+                  </h4>
+                  <p className="font-sans text-xs text-stone-400 mt-1">
+                    <ScrollRevealText text="PARIS GALLERY" />
+                  </p>
+                  <p className="font-sans text-[10px] tracking-wider text-stone-500 uppercase mt-0.5">
+                    <ScrollRevealText text="Dec 01 - Dec 15" />
+                  </p>
                 </div>
                 <div>
-                  <h4 className="font-serif font-black text-sm uppercase tracking-wide text-amber-500">Subconscious Waves</h4>
-                  <p className="font-sans text-xs text-stone-400 mt-1">TOKYO ART CENTER</p>
-                  <p className="font-sans text-[10px] tracking-wider text-stone-500 uppercase mt-0.5">Jan 20 - Feb 10</p>
+                  <h4 className="font-serif font-black text-sm uppercase tracking-wide text-amber-500">
+                    <ScrollRevealText text="Subconscious Waves" />
+                  </h4>
+                  <p className="font-sans text-xs text-stone-400 mt-1">
+                    <ScrollRevealText text="TOKYO ART CENTER" />
+                  </p>
+                  <p className="font-sans text-[10px] tracking-wider text-stone-500 uppercase mt-0.5">
+                    <ScrollRevealText text="Jan 20 - Feb 10" />
+                  </p>
                 </div>
               </div>
             </div>
