@@ -63,6 +63,15 @@ export default function App() {
   const [statusFilter, setStatusFilter] = useState('All');
   const [sortBy, setSortBy] = useState('newest'); // 'newest' | 'oldest' | 'price-asc' | 'price-desc'
 
+  const featuredList = useMemo(() => {
+    const ids = ['painting-8', 'painting-7', 'painting-6', 'painting-5'];
+    const selected = ids.map(id => paintings.find(p => p.id === id)).filter(Boolean) as Painting[];
+    if (selected.length === 0) {
+      return paintings.slice(0, 4);
+    }
+    return selected;
+  }, [paintings]);
+
   // Sync state changes to localStorage
   useEffect(() => {
     localStorage.setItem('artist_paintings_archive', JSON.stringify(paintings));
@@ -177,15 +186,6 @@ export default function App() {
   };
 
   const nameParts = artistProfile.name.split(' ');
-
-  const featuredList = useMemo(() => {
-    const ids = ['painting-8', 'painting-7', 'painting-6', 'painting-5'];
-    const selected = ids.map(id => paintings.find(p => p.id === id)).filter(Boolean) as Painting[];
-    if (selected.length === 0) {
-      return paintings.slice(0, 4);
-    }
-    return selected;
-  }, [paintings]);
 
   return (
     <div id="gallery-app-root" className={`min-h-screen transition-colors duration-300 selection:bg-amber-500/20 selection:text-amber-350 relative overflow-hidden ${
