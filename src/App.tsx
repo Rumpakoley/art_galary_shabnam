@@ -44,6 +44,17 @@ export default function App() {
 
   const [artistProfile, setArtistProfile] = useState<ArtistProfile>(INITIAL_PROFILE);
   
+  // Gallery Theme: Default to 'dark' for premium museum spotlight look
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const stored = localStorage.getItem('artist_theme_preference');
+    return (stored as 'light' | 'dark') || 'dark';
+  });
+
+  // Sync theme changes to localStorage
+  useEffect(() => {
+    localStorage.setItem('artist_theme_preference', theme);
+  }, [theme]);
+  
   // Dashboard & UX Controls
   const [isAdmin, setIsAdmin] = useState(false);
   const [selectedPainting, setSelectedPainting] = useState<Painting | null>(null);
@@ -165,7 +176,7 @@ export default function App() {
   const nameParts = artistProfile.name.split(' ');
 
   return (
-    <div id="gallery-app-root" className="min-h-screen bg-artist-bg text-stone-900 selection:bg-gold-100 selection:text-gold-800">
+    <div id="gallery-app-root" className={`min-h-screen transition-colors duration-300 selection:bg-amber-500/20 selection:text-amber-350 ${theme === 'dark' ? 'bg-[#0D0C0B] text-stone-200' : 'bg-artist-bg text-stone-900'}`}>
       
       {/* Toast Notification */}
       <AnimatePresence>
@@ -174,9 +185,11 @@ export default function App() {
             initial={{ opacity: 0, y: -50, x: '-50%' }}
             animate={{ opacity: 1, y: 0, x: '-50%' }}
             exit={{ opacity: 0, y: -50, x: '-50%' }}
-            className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-stone-900 border border-stone-850 text-stone-100 px-5 py-3.5 rounded-lg shadow-xl flex items-center gap-3 max-w-sm md:max-w-md w-[90vw]"
+            className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 border px-5 py-3.5 rounded-lg shadow-xl flex items-center gap-3 max-w-sm md:max-w-md w-[90vw] ${
+              theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100' : 'bg-stone-900 border-stone-850 text-stone-100'
+            }`}
           >
-            <CheckCircle2 className="w-5 h-5 text-amber-500 shrink-0" />
+            <CheckCircle2 className="w-5 h-5 text-amber-550 shrink-0" />
             <div className="flex-grow">
               <p className="font-sans text-xs font-semibold uppercase tracking-wider text-amber-500">Registry Updated</p>
               <p className="font-sans text-xs mt-0.5 leading-relaxed">{toastMessage}</p>
@@ -195,24 +208,73 @@ export default function App() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         
         {/* Curatorial Header of Artistic Flair Theme */}
-        <header id="gallery-masthead" className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 border-b border-stone-200/60 pb-8 mt-2">
+        <header id="gallery-masthead" className={`flex flex-col md:flex-row justify-between items-start md:items-end mb-12 border-b pb-8 mt-2 transition-colors duration-300 ${
+          theme === 'dark' ? 'border-stone-850 text-stone-100' : 'border-stone-200/60 text-stone-900'
+        }`}>
           <div className="flex flex-col">
-            <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-stone-500 mb-2">Studio Gallery / Est. 2026</span>
-            <h1 className="serif text-5xl md:text-7xl lg:text-8xl font-black leading-none tracking-tighter text-stone-950 uppercase flex flex-wrap items-baseline gap-x-4">
+            <span className={`text-[10px] uppercase tracking-[0.3em] font-semibold mb-2 ${theme === 'dark' ? 'text-stone-400' : 'text-stone-500'}`}>Studio Gallery / Est. 2026</span>
+            <h1 className="serif text-5xl md:text-7xl lg:text-8xl font-black leading-none tracking-tighter uppercase flex flex-wrap items-baseline gap-x-4">
               {nameParts[0]} <span className="outline-text">{nameParts.slice(1).join(' ')}</span>
             </h1>
           </div>
-          <nav className="flex flex-wrap gap-x-8 gap-y-2 text-[11px] uppercase tracking-widest font-semibold mt-4 md:mt-0 text-stone-800">
-            <a href="#gallery-controls-console" className="border-b border-black pb-1 hover:text-amber-800 transition-colors">Works</a>
-            <a href="#artist-profile-panel" className="opacity-60 hover:opacity-100 hover:text-amber-800 transition-colors">Studio</a>
+          <nav className={`flex flex-wrap gap-x-6 gap-y-2 text-[11px] uppercase tracking-widest font-semibold mt-4 md:mt-0 ${theme === 'dark' ? 'text-stone-300' : 'text-stone-800'}`}>
+            <a href="#gallery-controls-console" className={`border-b pb-1 transition-colors ${theme === 'dark' ? 'border-amber-500 text-amber-405 hover:text-amber-300' : 'border-black text-stone-900 hover:text-amber-800'}`}>Works</a>
+            <a href="#artist-profile-panel" className={`opacity-60 hover:opacity-100 transition-colors ${theme === 'dark' ? 'hover:text-amber-400' : 'hover:text-amber-800'}`}>Studio</a>
+            <button 
+              onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
+              className="opacity-60 hover:opacity-100 uppercase text-[11px] font-semibold tracking-widest hover:text-amber-400 transition-colors cursor-pointer"
+            >
+              {theme === 'dark' ? '☀️ Linen Light' : '🌙 Obsidian Dark'}
+            </button>
             <button 
               onClick={handleToggleAdmin} 
-              className="opacity-60 hover:opacity-100 uppercase text-[11px] font-semibold tracking-widest hover:text-amber-800 transition-colors cursor-pointer"
+              className="opacity-60 hover:opacity-100 uppercase text-[11px] font-semibold tracking-widest hover:text-amber-400 transition-colors cursor-pointer"
             >
               {isAdmin ? '🔒 Lock Registry' : '🔓 Unlock Registry'}
             </button>
           </nav>
         </header>
+
+        {/* Immersive Typographic Exhibition Banner */}
+        <section className={`relative overflow-hidden mb-12 py-16 px-6 md:px-12 rounded-2xl border transition-all duration-300 flex flex-col justify-center items-center text-center shadow-xl ${
+          theme === 'dark' 
+            ? 'bg-gradient-to-b from-[#161513] to-[#0F0E0D] border-stone-850 text-stone-100' 
+            : 'bg-white border-stone-200/80 text-stone-900'
+        }`}>
+          {/* Spotlight overlay */}
+          <div className={`absolute inset-0 pointer-events-none transition-opacity duration-500 ${theme === 'dark' ? 'opacity-100 museum-spotlight' : 'opacity-20'}`} />
+          <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/canvas-paper.png')] canvas-grain" />
+          
+          <span className={`text-[10px] uppercase tracking-[0.45em] font-bold mb-4 ${theme === 'dark' ? 'text-amber-400' : 'text-amber-800'}`}>
+            Now Exhibiting
+          </span>
+          <h2 className="serif text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight uppercase max-w-4xl leading-tight">
+            THE <span className={theme === 'dark' ? 'text-amber-500 animate-pulse' : 'text-amber-800'}>MORPHIQ</span>
+          </h2>
+          <p className={`font-serif italic text-sm sm:text-base md:text-lg mt-3 max-w-xl ${theme === 'dark' ? 'text-stone-300' : 'text-stone-600'}`}>
+            "A collection of messages from the unknown, waiting to find their meaning in you."
+          </p>
+          <div className={`w-16 h-[1px] my-6 ${theme === 'dark' ? 'bg-amber-500/30' : 'bg-amber-800/20'}`} />
+          
+          <div className="font-sans text-[10px] sm:text-xs uppercase tracking-[0.25em] font-semibold flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 opacity-80">
+            <span>Husne Shabnam</span>
+            <span className="text-amber-500">•</span>
+            <span>Surrealist Abstract Canvases</span>
+            <span className="text-amber-500">•</span>
+            <span>Est. 2026</span>
+          </div>
+          
+          <a 
+            href="#gallery-controls-console" 
+            className={`mt-8 px-6 py-2.5 border text-[10px] font-bold uppercase tracking-widest rounded-full transition-all duration-300 cursor-pointer shadow-xs ${
+              theme === 'dark' 
+                ? 'border-amber-500/30 hover:border-amber-400 text-amber-400 hover:text-stone-950 hover:bg-amber-400' 
+                : 'border-amber-850/30 hover:border-amber-850 text-amber-850 hover:text-white hover:bg-amber-850'
+            }`}
+          >
+            Enter Gallery Catalog ({paintings.length} works)
+          </a>
+        </section>
 
         {/* Content columns */}
         <main className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6">
@@ -225,11 +287,14 @@ export default function App() {
               onOpenPostModal={() => setIsPostModalOpen(true)}
               isAdmin={isAdmin}
               onToggleAdmin={handleToggleAdmin}
+              theme={theme}
             />
           </section>
 
           {/* Column 2: Elegant Decor Vertical Accent (1 col on lg only) */}
-          <div className="lg:col-span-1 relative hidden lg:flex items-center justify-center border-r border-l border-stone-200/50 py-12 select-none">
+          <div className={`lg:col-span-1 relative hidden lg:flex items-center justify-center border-r border-l py-12 select-none transition-colors duration-300 ${
+            theme === 'dark' ? 'border-stone-850/50 text-stone-400' : 'border-stone-200/50 text-stone-400'
+          }`}>
             <div className="vertical-text text-[10px] uppercase tracking-[0.55em] text-stone-400 font-semibold font-sans whitespace-nowrap">
               CURRENT EXHIBITION — THE MORPHIQ
             </div>
@@ -239,10 +304,16 @@ export default function App() {
           <section className="lg:col-span-8 lg:order-2 order-1 space-y-6">
             
             {/* Elegant Filtering Console */}
-            <div id="gallery-controls-console" className="bg-white border border-stone-200/80 p-5 rounded-xl shadow-2xs space-y-4">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-stone-150">
-                <h3 className="font-serif text-lg font-semibold text-stone-900 flex items-center gap-2">
-                  <Sliders className="w-4 h-4 text-amber-800/60" />
+            <div id="gallery-controls-console" className={`p-5 rounded-xl shadow-2xs space-y-4 border transition-all duration-300 ${
+              theme === 'dark' 
+                ? 'bg-[#121110] border-stone-850/80 text-stone-100' 
+                : 'bg-white border-stone-200/80 text-stone-900'
+            }`}>
+              <div className={`flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b ${
+                theme === 'dark' ? 'border-stone-800' : 'border-stone-150'
+              }`}>
+                <h3 className="font-serif text-lg font-semibold flex items-center gap-2">
+                  <Sliders className={`w-4 h-4 ${theme === 'dark' ? 'text-amber-400' : 'text-amber-800/60'}`} />
                   <span>The Curatorial Collection ({filteredPaintings.length} works)</span>
                 </h3>
 
@@ -250,7 +321,9 @@ export default function App() {
                 {(searchQuery || mediumFilter !== 'All' || statusFilter !== 'All') && (
                   <button
                     onClick={handleResetFilters}
-                    className="text-[11px] font-sans font-semibold text-amber-800 hover:text-amber-950 underline self-start md:self-auto cursor-pointer"
+                    className={`text-[11px] font-sans font-semibold underline self-start md:self-auto cursor-pointer ${
+                      theme === 'dark' ? 'text-amber-450 hover:text-amber-350' : 'text-amber-800 hover:text-amber-950'
+                    }`}
                   >
                     Clear Catalog Filters
                   </button>
@@ -267,7 +340,11 @@ export default function App() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search by title, medium, details..."
-                    className="w-full font-sans text-xs pl-9 pr-4 py-2.5 bg-stone-50 border border-stone-200/60 focus:bg-white focus:border-amber-800 focus:outline-hidden rounded-md shadow-2xs transition-all"
+                    className={`w-full font-sans text-xs pl-9 pr-4 py-2.5 border focus:outline-hidden rounded-md shadow-2xs transition-all ${
+                      theme === 'dark' 
+                        ? 'bg-stone-900 border-stone-800 text-stone-100 focus:bg-stone-950 focus:border-amber-500' 
+                        : 'bg-stone-50 border-stone-200/60 text-stone-900 focus:bg-white focus:border-amber-800'
+                    }`}
                   />
                 </div>
 
@@ -275,7 +352,7 @@ export default function App() {
                 <div className="flex flex-col gap-3">
                   {/* Medium Filter Pills */}
                   <div className="flex flex-col gap-1.5">
-                    <span className="text-[10px] font-sans font-bold text-stone-400 uppercase tracking-widest">Medium / Material</span>
+                    <span className="text-[10px] font-sans font-bold text-stone-450 uppercase tracking-widest">Medium / Material</span>
                     <div className="flex flex-wrap gap-1.5">
                       {availableMediums.map((med) => {
                         const isActive = mediumFilter === med;
@@ -285,8 +362,12 @@ export default function App() {
                             onClick={() => setMediumFilter(med)}
                             className={`px-3 py-1 rounded-full font-sans text-xs font-medium cursor-pointer transition-all duration-200 border ${
                               isActive
-                                ? 'bg-stone-900 border-stone-900 text-amber-500 shadow-xs'
-                                : 'bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100 hover:text-stone-900'
+                                ? theme === 'dark'
+                                  ? 'bg-amber-500 border-amber-500 text-stone-950 font-semibold shadow-xs'
+                                  : 'bg-stone-900 border-stone-900 text-amber-500 shadow-xs'
+                                : theme === 'dark'
+                                  ? 'bg-stone-900 border-stone-800 text-stone-300 hover:bg-stone-800 hover:text-stone-100'
+                                  : 'bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100 hover:text-stone-900'
                             }`}
                           >
                             {med}
@@ -298,7 +379,7 @@ export default function App() {
 
                   {/* Status Filter Pills */}
                   <div className="flex flex-col gap-1.5">
-                    <span className="text-[10px] font-sans font-bold text-stone-400 uppercase tracking-widest">Availability Status</span>
+                    <span className="text-[10px] font-sans font-bold text-stone-450 uppercase tracking-widest">Availability Status</span>
                     <div className="flex flex-wrap gap-1.5">
                       {[
                         { value: 'All', label: 'All Works' },
@@ -313,8 +394,12 @@ export default function App() {
                             onClick={() => setStatusFilter(status.value)}
                             className={`px-3 py-1 rounded-full font-sans text-xs font-medium cursor-pointer transition-all duration-200 border ${
                               isActive
-                                ? 'bg-stone-900 border-stone-900 text-amber-500 shadow-xs'
-                                : 'bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100 hover:text-stone-900'
+                                ? theme === 'dark'
+                                  ? 'bg-amber-500 border-amber-500 text-stone-950 font-semibold shadow-xs'
+                                  : 'bg-stone-900 border-stone-900 text-amber-500 shadow-xs'
+                                : theme === 'dark'
+                                  ? 'bg-stone-900 border-stone-800 text-stone-300 hover:bg-stone-800 hover:text-stone-100'
+                                  : 'bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100 hover:text-stone-900'
                             }`}
                           >
                             {status.label}
@@ -327,7 +412,9 @@ export default function App() {
               </div>
 
               {/* Sorting & Order Controller */}
-              <div className="pt-2 flex items-center justify-between text-xs text-stone-500 border-t border-stone-100">
+              <div className={`pt-2 flex items-center justify-between text-xs border-t ${
+                theme === 'dark' ? 'border-stone-800 text-stone-400' : 'border-stone-100 text-stone-500'
+              }`}>
                 <span className="font-sans text-[11px]">
                   Viewing {filteredPaintings.length} of {paintings.length} archived canvases
                 </span>
@@ -338,12 +425,14 @@ export default function App() {
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="font-sans text-xs bg-transparent border-0 text-stone-700 font-medium hover:text-amber-800 cursor-pointer focus:outline-hidden"
+                    className={`font-sans text-xs bg-transparent border-0 font-medium cursor-pointer focus:outline-hidden ${
+                      theme === 'dark' ? 'text-stone-350 hover:text-amber-400' : 'text-stone-700 hover:text-amber-800'
+                    }`}
                   >
-                    <option value="newest">Recent Paintings</option>
-                    <option value="oldest">Historical First</option>
-                    <option value="price-asc">Price: Low to High</option>
-                    <option value="price-desc">Price: High to Low</option>
+                    <option value="newest" className={theme === 'dark' ? 'bg-stone-900 text-stone-150' : ''}>Recent Paintings</option>
+                    <option value="oldest" className={theme === 'dark' ? 'bg-stone-900 text-stone-150' : ''}>Historical First</option>
+                    <option value="price-asc" className={theme === 'dark' ? 'bg-stone-900 text-stone-150' : ''}>Price: Low to High</option>
+                    <option value="price-desc" className={theme === 'dark' ? 'bg-stone-900 text-stone-150' : ''}>Price: High to Low</option>
                   </select>
                 </div>
               </div>
@@ -360,6 +449,7 @@ export default function App() {
                     key={painting.id}
                     painting={painting}
                     onViewDetails={setSelectedPainting}
+                    theme={theme}
                   />
                 ))}
               </AnimatePresence>
@@ -370,18 +460,24 @@ export default function App() {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="bg-white border border-stone-200 p-12 text-center rounded-xl shadow-2xs space-y-4"
+                className={`border p-12 text-center rounded-xl shadow-2xs space-y-4 ${
+                  theme === 'dark' ? 'bg-[#121110] border-stone-850' : 'bg-white border-stone-250'
+                }`}
               >
-                <div className="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center mx-auto text-stone-400">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto ${
+                  theme === 'dark' ? 'bg-stone-900 text-stone-400' : 'bg-stone-100 text-stone-400'
+                }`}>
                   <Search className="w-6 h-6" />
                 </div>
-                <h4 className="font-serif text-lg font-semibold text-stone-900">No Painting Matches Found</h4>
+                <h4 className={`font-serif text-lg font-semibold ${theme === 'dark' ? 'text-stone-150' : 'text-stone-900'}`}>No Painting Matches Found</h4>
                 <p className="font-sans text-xs text-stone-500 max-w-md mx-auto leading-relaxed">
                   There are no archived works in our gallery matching query "{searchQuery || mediumFilter}". Try clearing your active filters or typing other materials.
                 </p>
                 <button
                   onClick={handleResetFilters}
-                  className="px-5 py-2 bg-stone-900 hover:bg-amber-900 text-white font-sans text-xs uppercase tracking-wider rounded-md cursor-pointer transition-colors shadow-2xs"
+                  className={`px-5 py-2 font-sans text-xs uppercase tracking-wider rounded-md cursor-pointer transition-colors shadow-2xs ${
+                    theme === 'dark' ? 'bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold' : 'bg-stone-900 hover:bg-amber-900 text-white'
+                  }`}
                 >
                   See Full Catalogue
                 </button>
@@ -392,9 +488,11 @@ export default function App() {
       </div>
 
       {/* Footer copyright */}
-      <footer className="mt-20 border-t border-stone-200 bg-stone-50 py-10 text-center font-sans text-xs text-stone-500">
+      <footer className={`mt-20 border-t py-10 text-center font-sans text-xs transition-colors duration-300 ${
+        theme === 'dark' ? 'border-stone-850 bg-[#0A0909] text-stone-450' : 'border-stone-200 bg-stone-50 text-stone-505'
+      }`}>
         <p>© 2026 {artistProfile.name}. All rights reserved.</p>
-        <p className="text-[10px] text-stone-400 mt-1">
+        <p className={`text-[10px] mt-1 ${theme === 'dark' ? 'text-stone-500' : 'text-stone-400'}`}>
           The Morphiq • A collection of messages from the unknown, waiting to find their meaning in you.
         </p>
       </footer>
@@ -404,6 +502,7 @@ export default function App() {
         <PaintingDetailModal
           painting={selectedPainting}
           onClose={() => setSelectedPainting(null)}
+          theme={theme}
         />
       )}
 
@@ -412,6 +511,7 @@ export default function App() {
         <PostWorkModal
           onClose={() => setIsPostModalOpen(false)}
           onPost={handlePostPainting}
+          theme={theme}
         />
       )}
     </div>

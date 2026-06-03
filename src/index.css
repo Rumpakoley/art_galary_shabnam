@@ -16,7 +16,7 @@
 
 /* Custom design styles for the Artistic Flair Theme */
 .outline-text {
-  -webkit-text-stroke: 1.5px var(--color-artist-ink, #121212);
+  -webkit-text-stroke: 1.5px currentColor;
   color: transparent;
 }
 
@@ -25,8 +25,51 @@
   transform: rotate(180deg);
 }
 
-.frame-shadow {
-  box-shadow: 20px 20px 60px rgba(0,0,0,0.08);
+/* Luxury 3D Frame Shadows for the simulator */
+.frame-shadow-oak {
+  box-shadow: 
+    0 10px 25px -5px rgba(0, 0, 0, 0.3), 
+    0 8px 10px -6px rgba(0, 0, 0, 0.3),
+    inset 0 0 10px rgba(0, 0, 0, 0.1),
+    10px 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.frame-shadow-black {
+  box-shadow: 
+    0 15px 35px -5px rgba(0, 0, 0, 0.5), 
+    0 10px 15px -10px rgba(0, 0, 0, 0.5),
+    inset 0 0 15px rgba(255, 255, 255, 0.05),
+    12px 18px 35px rgba(0, 0, 0, 0.35);
+}
+
+.frame-shadow-gold {
+  box-shadow: 
+    0 15px 35px -5px rgba(0, 0, 0, 0.4), 
+    0 10px 15px -10px rgba(0, 0, 0, 0.4),
+    inset 0 0 12px rgba(255, 255, 255, 0.2),
+    15px 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.frame-shadow-canvas {
+  box-shadow: 
+    0 8px 16px -4px rgba(0, 0, 0, 0.25),
+    4px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Spotlights and Ambient Lighting */
+.museum-spotlight {
+  background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.15) 0%, rgba(0,0,0,0) 70%);
+}
+
+.wall-spotlight {
+  background: radial-gradient(circle at 50% 15%, rgba(255, 248, 220, 0.2) 0%, rgba(255, 248, 220, 0.03) 40%, rgba(0, 0, 0, 0) 70%);
+}
+
+/* Canvas texture overlay */
+.canvas-grain {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 0), radial-gradient(rgba(0, 0, 0, 0.15) 1px, transparent 0);
+  background-size: 4px 4px;
+  background-position: 0 0, 2px 2px;
 }
 
 /* Smooth custom scrollbars for our elegant galleries */
