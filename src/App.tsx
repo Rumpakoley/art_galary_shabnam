@@ -180,11 +180,22 @@ export default function App() {
   }, [paintings]);
 
   return (
-    <div id="gallery-app-root" className={`min-h-screen transition-colors duration-300 selection:bg-amber-500/20 selection:text-amber-350 ${
-      theme === 'dark' ? 'bg-[#0D0C0B] text-stone-200' : 
+    <div id="gallery-app-root" className={`min-h-screen transition-colors duration-300 selection:bg-amber-500/20 selection:text-amber-350 relative overflow-hidden ${
+      theme === 'dark' ? 'reference-dark-bg text-stone-200' : 
       theme === 'funky' ? 'bg-[#0a0418] text-purple-200' : 
       'bg-artist-bg text-stone-900'
     }`}>
+      
+      {/* Slow animated background glowing fluid leaks for Dark mode */}
+      {theme === 'dark' && (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-[8%] left-[10%] w-[380px] h-[380px] rounded-full bg-cyan-500/12 blur-[110px] animate-fluid-blob" style={{ animationDelay: '0s' }} />
+          <div className="absolute top-[28%] right-[8%] w-[450px] h-[450px] rounded-full bg-purple-600/10 blur-[130px] animate-fluid-blob" style={{ animationDelay: '3s' }} />
+          <div className="absolute bottom-[25%] left-[18%] w-[500px] h-[500px] rounded-full bg-amber-500/6 blur-[120px] animate-fluid-blob" style={{ animationDelay: '6s' }} />
+          <div className="absolute bottom-[5%] right-[20%] w-[350px] h-[350px] rounded-full bg-cyan-500/8 blur-[100px] animate-fluid-blob" style={{ animationDelay: '9s' }} />
+        </div>
+      )}
+
       
       {/* Toast Notification */}
       <AnimatePresence>
@@ -218,54 +229,88 @@ export default function App() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         
         {/* Curatorial Header of Artistic Flair Theme */}
-        <header id="gallery-masthead" className={`flex flex-col md:flex-row justify-between items-start md:items-end mb-12 border-b pb-8 mt-2 transition-colors duration-300 ${
-          theme === 'dark' ? 'border-stone-850 text-stone-100' : 
-          theme === 'funky' ? 'border-purple-950/60 text-purple-100' : 
+        <header id="gallery-masthead" className={`relative z-10 flex flex-col md:flex-row justify-between items-center mb-12 border-b pb-6 mt-2 transition-colors duration-300 ${
+          theme === 'dark' ? 'border-white/10 text-stone-100' : 
+          theme === 'funky' ? 'border-purple-955/60 text-purple-100' : 
           'border-stone-200/60 text-stone-900'
         }`}>
-          <div className="flex flex-col">
-            <span className={`text-[10px] uppercase tracking-[0.3em] font-semibold mb-2 ${
-              theme === 'dark' ? 'text-stone-400' : 
-              theme === 'funky' ? 'text-fuchsia-400 text-glow-neon font-bold' : 
-              'text-stone-505'
-            }`}>Studio Gallery / Est. 2026</span>
-            <h1 className="serif text-5xl md:text-7xl lg:text-8xl font-black leading-none tracking-tighter uppercase flex flex-wrap items-baseline gap-x-4">
-              {nameParts[0]} <span className="outline-text">{nameParts.slice(1).join(' ')}</span>
-            </h1>
-          </div>
-          <nav className={`flex flex-wrap gap-x-6 gap-y-2 text-[11px] uppercase tracking-widest font-semibold mt-4 md:mt-0 ${
+          {theme === 'dark' ? (
+            /* Premium Header matching the reference */
+            <div className="flex items-center gap-3 w-full md:w-auto justify-center md:justify-start">
+              {/* Abstract logo emblem SVG */}
+              <div className="w-9 h-9 shrink-0 relative">
+                <svg viewBox="0 0 100 100" className="w-full h-full">
+                  <defs>
+                    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#22d3ee" />
+                      <stop offset="50%" stopColor="#8b5cf6" />
+                      <stop offset="100%" stopColor="#f59e0b" />
+                    </linearGradient>
+                  </defs>
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="url(#logoGrad)" strokeWidth="6" className="opacity-40" />
+                  <path d="M30,50 Q45,25 55,75 T80,50" fill="none" stroke="url(#logoGrad)" strokeWidth="8" strokeLinecap="round" />
+                  <circle cx="50" cy="50" r="15" fill="url(#logoGrad)" className="opacity-80" />
+                </svg>
+              </div>
+              <div className="flex flex-col text-left">
+                <span className="font-serif text-lg font-black tracking-widest leading-none uppercase">
+                  {artistProfile.name}
+                </span>
+                <span className="text-[8px] font-sans font-bold tracking-[0.35em] text-stone-400 mt-1 uppercase">
+                  {artistProfile.title}
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col">
+              <span className={`text-[10px] uppercase tracking-[0.3em] font-semibold mb-2 ${
+                theme === 'funky' ? 'text-fuchsia-400 text-glow-neon font-bold' : 
+                'text-stone-505'
+              }`}>Studio Gallery / Est. 2026</span>
+              <h1 className="serif text-5xl md:text-7xl lg:text-8xl font-black leading-none tracking-tighter uppercase flex flex-wrap items-baseline gap-x-4">
+                {nameParts[0]} <span className="outline-text">{nameParts.slice(1).join(' ')}</span>
+              </h1>
+            </div>
+          )}
+          <nav className={`flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[10px] sm:text-[11px] uppercase tracking-widest font-semibold mt-4 md:mt-0 ${
             theme === 'dark' ? 'text-stone-300' : 
             theme === 'funky' ? 'text-purple-305' : 
             'text-stone-805'
           }`}>
-            <a href="#gallery-controls-console" className={`border-b pb-1 transition-colors ${
-              theme === 'dark' ? 'border-amber-550 text-amber-405 hover:text-amber-300' : 
-              theme === 'funky' ? 'border-fuchsia-500 text-fuchsia-400 hover:text-fuchsia-300' : 
-              'border-black text-stone-900 hover:text-amber-800'
-            }`}>Works</a>
+            <a href="#gallery-controls-console" className={`pb-1 transition-colors ${
+              theme === 'dark' ? 'border-b border-amber-500 text-stone-100 hover:text-amber-400' : 
+              theme === 'funky' ? 'border-b border-fuchsia-500 text-fuchsia-400 hover:text-fuchsia-300' : 
+              'border-b border-black text-stone-900 hover:text-amber-800'
+            }`}>Gallery</a>
+            <a href="#upcoming-exhibitions-section" className={`opacity-70 hover:opacity-100 transition-colors ${
+              theme === 'dark' ? 'hover:text-amber-400' : 
+              theme === 'funky' ? 'hover:text-fuchsia-400 text-glow-neon' : 
+              'hover:text-amber-805'
+            }`}>Exhibitions</a>
             <a href="#artist-profile-panel" className={`opacity-70 hover:opacity-100 transition-colors ${
               theme === 'dark' ? 'hover:text-amber-400' : 
               theme === 'funky' ? 'hover:text-fuchsia-400 text-glow-neon' : 
               'hover:text-amber-800'
-            }`}>Studio</a>
+            }`}>Biography</a>
             <button 
               onClick={() => setTheme(t => t === 'dark' ? 'funky' : t === 'funky' ? 'light' : 'dark')}
-              className="opacity-70 hover:opacity-100 uppercase text-[11px] font-semibold tracking-widest hover:text-amber-400 transition-colors cursor-pointer"
+              className="opacity-70 hover:opacity-100 uppercase text-[10px] sm:text-[11px] font-semibold tracking-widest hover:text-amber-400 transition-colors cursor-pointer"
             >
-              {theme === 'dark' ? '🌙 Obsidian Dark' : theme === 'funky' ? '👾 Neon Funky' : '☀️ Linen Light'}
+              {theme === 'dark' ? '🌙 Obsidian' : theme === 'funky' ? '👾 Funky' : '☀️ Linen'}
             </button>
             <button 
               onClick={handleToggleAdmin} 
-              className="opacity-70 hover:opacity-100 uppercase text-[11px] font-semibold tracking-widest hover:text-amber-400 transition-colors cursor-pointer"
+              className="opacity-70 hover:opacity-100 uppercase text-[10px] sm:text-[11px] font-semibold tracking-widest hover:text-amber-400 transition-colors cursor-pointer"
             >
-              {isAdmin ? '🔒 Lock Registry' : '🔓 Unlock Registry'}
+              {isAdmin ? '🔒 Lock' : '🔓 Unlock'}
             </button>
           </nav>
         </header>
-             {/* Immersive Typographic Exhibition Banner */}
-        <section className={`relative overflow-hidden mb-12 py-12 px-6 md:px-12 rounded-2xl border transition-all duration-300 shadow-xl ${
+        
+        {/* Immersive Typographic Exhibition Banner */}
+        <section className={`relative overflow-hidden mb-12 py-12 px-6 md:px-12 rounded-3xl border transition-all duration-300 shadow-xl ${
           theme === 'dark' 
-            ? 'bg-gradient-to-b from-[#161513] to-[#0F0E0D] border-stone-850 text-stone-100' :
+            ? 'glass-panel text-stone-100 border-white/10' :
           theme === 'funky'
             ? 'bg-gradient-to-br from-[#1b0840] via-[#10032c] to-[#060017] border-purple-900/50 text-purple-100 shadow-[0_10px_40px_rgba(127,0,255,0.2)]'
             : 'bg-white border-stone-200/80 text-stone-900'
@@ -276,142 +321,138 @@ export default function App() {
             theme === 'funky' ? 'opacity-100 scanlines bg-gradient-to-r from-purple-800/10 via-fuchsia-700/10 to-cyan-500/10' : 
             'opacity-20'
           }`} />
+          
+          {theme === 'dark' && (
+            /* Subtle decorative circles or gradient shapes inside the banner (similar to mockup background) */
+            <div className="absolute top-[-10%] right-[-5%] w-60 h-60 rounded-full bg-cyan-400/10 filter blur-2xl pointer-events-none" />
+          )}
+
           <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/canvas-paper.png')] canvas-grain" />
           
           <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             {/* Left Content column */}
-            <div className="md:col-span-7 flex flex-col items-center md:items-start text-center md:text-left">
-              <span className={`text-[10px] uppercase tracking-[0.45em] font-bold mb-4 ${
-                theme === 'dark' ? 'text-amber-400' : 
-                theme === 'funky' ? 'text-fuchsia-400 text-glow-neon' : 
+            <div className="md:col-span-7 flex flex-col items-center md:items-start text-center md:text-left space-y-5">
+              <span className={`text-[9px] uppercase tracking-[0.45em] font-bold ${
+                theme === 'dark' ? 'text-amber-400' :
+                theme === 'funky' ? 'text-fuchsia-400 text-glow-neon' :
                 'text-amber-805'
               }`}>
-                Now Exhibiting
+                Featured Exhibition
               </span>
-              <h2 className="serif text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight uppercase leading-tight">
-                THE <span className={
-                  theme === 'dark' ? 'text-amber-500 animate-pulse' : 
-                  theme === 'funky' ? 'text-[#00ffff] text-glow-cyan' : 
-                  'text-amber-800'
-                }>MORPHIQ</span>
+              <h2 className={`font-serif text-4xl sm:text-5xl md:text-6xl font-black tracking-wide uppercase leading-tight ${
+                theme === 'dark' ? 'text-stone-105' :
+                theme === 'funky' ? 'text-white text-glow-cyan' :
+                'text-stone-900'
+              }`}>
+                EXPLORE THE <br/>SUBCONSCIOUS CANVAS
               </h2>
-              <p className={`font-serif italic text-sm sm:text-base md:text-lg mt-3 max-w-xl ${
-                theme === 'dark' ? 'text-stone-300' : 
-                theme === 'funky' ? 'text-purple-300 font-medium' : 
+              <p className={`font-serif italic text-sm sm:text-base max-w-xl leading-relaxed ${
+                theme === 'dark' ? 'text-stone-300' :
+                theme === 'funky' ? 'text-purple-200' :
                 'text-stone-605'
               }`}>
-                "A collection of messages from the unknown, waiting to find their meaning in you."
+                A collection of contemporary surrealist abstract works. Welcome to the visual world of {artistProfile.name}.
               </p>
-              <div className={`w-16 h-[1px] my-6 ${
-                theme === 'dark' ? 'bg-amber-500/30' : 
-                theme === 'funky' ? 'bg-fuchsia-500/40 shadow-xs' : 
-                'bg-amber-800/20'
-              }`} />
-              
-              <div className="font-sans text-[10px] sm:text-xs uppercase tracking-[0.25em] font-semibold flex flex-wrap items-center justify-center md:justify-start gap-x-3 gap-y-1.5 opacity-80 mb-6">
-                <span>Husne Shabnam</span>
-                <span className={theme === 'funky' ? 'text-fuchsia-500' : 'text-amber-500'}>•</span>
-                <span>Surrealist Abstract Canvases</span>
-                <span className={theme === 'funky' ? 'text-fuchsia-500' : 'text-amber-500'}>•</span>
-                <span>Est. 2026</span>
+              <div className="pt-3">
+                <a 
+                  href="#gallery-controls-console" 
+                  className={`px-6 py-2.5 text-[9px] font-bold uppercase tracking-[0.2em] rounded-full transition-all duration-350 cursor-pointer shadow-md inline-block ${
+                    theme === 'dark' 
+                      ? 'btn-glow-amber text-amber-400 hover:text-white' :
+                    theme === 'funky'
+                      ? 'border border-fuchsia-500/50 bg-fuchsia-500/10 text-fuchsia-400 hover:text-white hover:bg-fuchsia-500/20 shadow-[0_0_15px_rgba(236,72,153,0.3)]'
+                      : 'border border-stone-800 bg-stone-900 text-white hover:bg-stone-850'
+                  }`}
+                >
+                  View Gallery
+                </a>
               </div>
-              
-              <a 
-                href="#gallery-controls-console" 
-                className={`px-6 py-2.5 border text-[10px] font-bold uppercase tracking-widest rounded-full transition-all duration-300 cursor-pointer shadow-xs ${
-                  theme === 'dark' 
-                    ? 'border-amber-500/30 hover:border-amber-400 text-amber-400 hover:text-stone-955 hover:bg-amber-400' :
-                  theme === 'funky'
-                    ? 'border-fuchsia-500/40 hover:border-fuchsia-400 text-fuchsia-400 hover:text-stone-955 hover:bg-fuchsia-400 shadow-[0_0_15px_rgba(236,72,153,0.25)]'
-                    : 'border-amber-850/30 hover:border-amber-850 text-amber-850 hover:text-white hover:bg-amber-850'
-                }`}
-              >
-                Enter Gallery Catalog ({paintings.length} works)
-              </a>
             </div>
 
             {/* Right Image column */}
-            <div className="md:col-span-5 flex justify-center items-center w-full">
+            <div className="md:col-span-5 flex flex-col justify-center items-center w-full">
               {featuredPainting && (
-                <div 
-                  className={`relative group p-3 border rounded-md transition-transform duration-500 hover:scale-[1.02] cursor-pointer shadow-lg w-full max-w-[280px] sm:max-w-[320px] aspect-3/4 flex items-center justify-center ${
-                    theme === 'dark' ? 'bg-[#EFECE6] border-stone-950/80 shadow-[inset_0_2px_8px_rgba(0,0,0,0.15)] shadow-black/40' :
-                    theme === 'funky' ? 'holo-mount border-purple-955 shadow-[inset_0_2px_12px_rgba(255,255,255,0.4)] shadow-purple-955/30' :
-                    'bg-[#FCFAF5] border-stone-200 shadow-[inset_0_2px_6px_rgba(0,0,0,0.06)]'
-                  }`}
-                  onClick={() => setSelectedPainting(featuredPainting)}
-                >
-                  {/* Beveled edge cut of the mat board */}
-                  <div className={`absolute inset-[10px] border pointer-events-none transition-colors duration-300 ${
-                    theme === 'dark' ? 'border-stone-400/20' : 
-                    theme === 'funky' ? 'border-white/20' : 
-                    'border-stone-300/20'
-                  }`} />
-                  
-                  <img 
-                    src={featuredPainting.imageUrl} 
-                    alt={featuredPainting.title} 
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover shadow-xs" 
-                  />
+                <div className="flex flex-col items-center gap-3 w-full">
+                  <div 
+                    className={`relative group p-2 border rounded-2xl transition-all duration-500 hover:scale-[1.02] cursor-pointer shadow-2xl w-full max-w-[280px] sm:max-w-[320px] aspect-3/4 flex items-center justify-center ${
+                      theme === 'dark' ? 'bg-black/30 border-white/10 shadow-black/60' :
+                      theme === 'funky' ? 'holo-mount border-purple-955 shadow-[inset_0_2px_12px_rgba(255,255,255,0.4)] shadow-purple-955/30' :
+                      'bg-[#FCFAF5] border-stone-200 shadow-[inset_0_2px_6px_rgba(0,0,0,0.06)] p-3 rounded-md'
+                    }`}
+                    onClick={() => setSelectedPainting(featuredPainting)}
+                  >
+                    {/* Beveled edge cut of the mat board */}
+                    {theme !== 'dark' && (
+                      <div className={`absolute inset-[10px] border pointer-events-none transition-colors duration-300 ${
+                        theme === 'funky' ? 'border-white/20' : 'border-stone-300/20'
+                      }`} />
+                    )}
+                    
+                    <img 
+                      src={featuredPainting.imageUrl} 
+                      alt={featuredPainting.title} 
+                      referrerPolicy="no-referrer"
+                      className={`w-full h-full object-cover shadow-md ${theme === 'dark' ? 'rounded-xl' : ''}`} 
+                    />
 
-                  {/* Badge showing it's the featured piece */}
-                  <span className={`absolute -top-2.5 -right-2.5 px-3 py-1 text-[8px] font-sans font-bold uppercase tracking-wider rounded-md border shadow-md ${
-                    theme === 'funky'
-                      ? 'bg-fuchsia-600 border-fuchsia-500 text-white shadow-[0_0_10px_rgba(236,72,153,0.5)]'
-                      : 'bg-amber-600 border-amber-500 text-white'
+                    {/* Badge showing it's the featured piece */}
+                    <span className={`absolute -top-2.5 -right-2.5 px-3 py-1 text-[8px] font-sans font-bold uppercase tracking-wider rounded-md border shadow-md ${
+                      theme === 'funky'
+                        ? 'bg-fuchsia-600 border-fuchsia-500 text-white shadow-[0_0_10px_rgba(236,72,153,0.5)]'
+                        : 'bg-amber-600 border-amber-500 text-white'
+                    }`}>
+                      Featured
+                    </span>
+                  </div>
+                  <span className={`font-serif text-[10px] tracking-[0.25em] uppercase select-none mt-1 ${
+                    theme === 'dark' ? 'text-stone-400' :
+                    theme === 'funky' ? 'text-fuchsia-400 text-glow-neon font-bold' :
+                    'text-stone-505'
                   }`}>
-                    Featured Painting
+                    {featuredPainting.title}
                   </span>
                 </div>
               )}
             </div>
           </div>
+          
+          {/* Slides/Carousel navigation dots indicators at the bottom */}
+          <div className="flex justify-center items-center gap-1.5 mt-8 z-10 relative">
+            <span className={`w-1.5 h-1.5 rounded-full cursor-pointer ${theme === 'dark' ? 'bg-stone-500/30' : theme === 'funky' ? 'bg-purple-900/40' : 'bg-stone-350'}`} />
+            <span className={`w-1.5 h-1.5 rounded-full cursor-pointer ${theme === 'dark' ? 'bg-stone-500/30' : theme === 'funky' ? 'bg-purple-900/40' : 'bg-stone-350'}`} />
+            <span className={`w-1.5 h-1.5 rounded-full cursor-pointer ${theme === 'dark' ? 'bg-stone-100' : theme === 'funky' ? 'bg-fuchsia-500' : 'bg-stone-700'}`} />
+            <span className={`w-1.5 h-1.5 rounded-full cursor-pointer ${theme === 'dark' ? 'bg-stone-500/30' : theme === 'funky' ? 'bg-purple-900/40' : 'bg-stone-350'}`} />
+          </div>
         </section>
 
-        {/* Content columns */}
-        <main className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6">
+        {/* Main Content Area */}
+        <main className="relative z-10 space-y-12">
           
-          {/* Column 1: Artist Bio & Ledger Stats (3 cols on lg) */}
-          <section className="lg:col-span-3 lg:order-1 order-2">
-            <ArtistProfileSection
-              profile={artistProfile}
-              paintings={paintings}
-              onOpenPostModal={() => setIsPostModalOpen(true)}
-              isAdmin={isAdmin}
-              onToggleAdmin={handleToggleAdmin}
-              theme={theme}
-            />
-          </section>
-
-          {/* Column 2: Elegant Decor Vertical Accent (1 col on lg only) */}
-          <div className={`lg:col-span-1 relative hidden lg:flex items-center justify-center border-r border-l py-12 select-none transition-colors duration-300 ${
-            theme === 'dark' ? 'border-stone-850/50 text-stone-400' : 
-            theme === 'funky' ? 'border-purple-900/25 text-purple-400' : 
-            'border-stone-200/50 text-stone-400'
-          }`}>
-            <div className={`vertical-text text-[10px] uppercase tracking-[0.55em] font-semibold font-sans whitespace-nowrap ${
-              theme === 'funky' ? 'text-glow-neon text-fuchsia-400 font-bold' : ''
-            }`}>
-              CURRENT EXHIBITION — THE MORPHIQ
-            </div>
-          </div>
-
-          {/* Column 3: Gallery Works & Curation Panel (8 cols on lg) */}
-          <section className="lg:col-span-8 lg:order-2 order-1 space-y-6">
+          {/* Section: Gallery Works & Curation Panel */}
+          <section className="space-y-8">
             
+            {/* Center-aligned section header for dark mode */}
+            {theme === 'dark' && (
+              <div className="text-center py-4">
+                <h2 className="font-serif text-2xl md:text-3xl font-black uppercase tracking-[0.25em] text-stone-100">
+                  Featured Works
+                </h2>
+                <div className="w-16 h-[2px] bg-amber-500/50 mx-auto mt-3" />
+              </div>
+            )}
+
             {/* Elegant Filtering Console */}
-            <div id="gallery-controls-console" className={`p-5 rounded-xl shadow-2xs space-y-4 border transition-all duration-300 ${
-              theme === 'dark' ? 'bg-[#121110] border-stone-850/80 text-stone-100' : 
+            <div id="gallery-controls-console" className={`p-5 rounded-2xl shadow-2xs space-y-4 border transition-all duration-300 ${
+              theme === 'dark' ? 'glass-card border-white/10 text-stone-100' : 
               theme === 'funky' ? 'bg-[#150d2c] border-purple-900/65 text-purple-100 shadow-[0_4px_20px_rgba(127,0,255,0.05)]' : 
               'bg-white border-stone-200/80 text-stone-900'
             }`}>
               <div className={`flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b ${
-                theme === 'dark' ? 'border-stone-800' : 
+                theme === 'dark' ? 'border-white/10' : 
                 theme === 'funky' ? 'border-purple-900/50' : 
                 'border-stone-150'
               }`}>
-                <h3 className="font-serif text-lg font-semibold flex items-center gap-2">
+                <h3 className="font-serif text-base font-semibold flex items-center gap-2">
                   <Sliders className={`w-4 h-4 ${
                     theme === 'dark' ? 'text-amber-400' : 
                     theme === 'funky' ? 'text-fuchsia-400 font-bold' : 
@@ -425,7 +466,7 @@ export default function App() {
                   <button
                     onClick={handleResetFilters}
                     className={`text-[11px] font-sans font-semibold underline self-start md:self-auto cursor-pointer ${
-                      theme === 'dark' ? 'text-amber-450 hover:text-amber-350' : 'text-amber-800 hover:text-amber-950'
+                      theme === 'dark' ? 'text-amber-400 hover:text-amber-350' : 'text-amber-805 hover:text-amber-950'
                     }`}
                   >
                     Clear Catalog Filters
@@ -445,7 +486,7 @@ export default function App() {
                     placeholder="Search by title, medium, details..."
                     className={`w-full font-sans text-xs pl-9 pr-4 py-2.5 border focus:outline-hidden rounded-md shadow-2xs transition-all ${
                       theme === 'dark' 
-                        ? 'bg-stone-900 border-stone-800 text-stone-100 focus:bg-stone-950 focus:border-amber-500' 
+                        ? 'bg-black/20 border-white/10 text-stone-100 focus:bg-black/40 focus:border-amber-500/50' 
                         : 'bg-stone-50 border-stone-200/60 text-stone-900 focus:bg-white focus:border-amber-800'
                     }`}
                   />
@@ -466,10 +507,10 @@ export default function App() {
                             className={`px-3 py-1 rounded-full font-sans text-xs font-medium cursor-pointer transition-all duration-200 border ${
                               isActive
                                 ? theme === 'dark'
-                                  ? 'bg-amber-500 border-amber-500 text-stone-950 font-semibold shadow-xs'
-                                  : 'bg-stone-900 border-stone-900 text-amber-500 shadow-xs'
+                                  ? 'bg-amber-500 border-amber-500 text-stone-955 font-semibold shadow-xs'
+                                  : 'bg-stone-900 border-stone-900 text-amber-550 shadow-xs'
                                 : theme === 'dark'
-                                  ? 'bg-stone-900 border-stone-800 text-stone-300 hover:bg-stone-800 hover:text-stone-100'
+                                  ? 'bg-black/25 border-white/5 text-stone-300 hover:bg-white/5 hover:text-stone-100'
                                   : 'bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100 hover:text-stone-900'
                             }`}
                           >
@@ -498,10 +539,10 @@ export default function App() {
                             className={`px-3 py-1 rounded-full font-sans text-xs font-medium cursor-pointer transition-all duration-200 border ${
                               isActive
                                 ? theme === 'dark'
-                                  ? 'bg-amber-500 border-amber-500 text-stone-950 font-semibold shadow-xs'
-                                  : 'bg-stone-900 border-stone-900 text-amber-500 shadow-xs'
+                                  ? 'bg-amber-500 border-amber-500 text-stone-955 font-semibold shadow-xs'
+                                  : 'bg-stone-900 border-stone-900 text-amber-550 shadow-xs'
                                 : theme === 'dark'
-                                  ? 'bg-stone-900 border-stone-800 text-stone-300 hover:bg-stone-800 hover:text-stone-100'
+                                  ? 'bg-black/25 border-white/5 text-stone-300 hover:bg-white/5 hover:text-stone-100'
                                   : 'bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100 hover:text-stone-900'
                             }`}
                           >
@@ -516,7 +557,7 @@ export default function App() {
 
               {/* Sorting & Order Controller */}
               <div className={`pt-2 flex items-center justify-between text-xs border-t ${
-                theme === 'dark' ? 'border-stone-800 text-stone-400' : 'border-stone-100 text-stone-500'
+                theme === 'dark' ? 'border-white/10 text-stone-400' : 'border-stone-100 text-stone-500'
               }`}>
                 <span className="font-sans text-[11px]">
                   Viewing {filteredPaintings.length} of {paintings.length} archived canvases
@@ -529,13 +570,13 @@ export default function App() {
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
                     className={`font-sans text-xs bg-transparent border-0 font-medium cursor-pointer focus:outline-hidden ${
-                      theme === 'dark' ? 'text-stone-350 hover:text-amber-400' : 'text-stone-700 hover:text-amber-800'
+                      theme === 'dark' ? 'text-stone-300 hover:text-amber-400' : 'text-stone-700 hover:text-amber-800'
                     }`}
                   >
-                    <option value="newest" className={theme === 'dark' ? 'bg-stone-900 text-stone-150' : ''}>Recent Paintings</option>
-                    <option value="oldest" className={theme === 'dark' ? 'bg-stone-900 text-stone-150' : ''}>Historical First</option>
-                    <option value="price-asc" className={theme === 'dark' ? 'bg-stone-900 text-stone-150' : ''}>Price: Low to High</option>
-                    <option value="price-desc" className={theme === 'dark' ? 'bg-stone-900 text-stone-150' : ''}>Price: High to Low</option>
+                    <option value="newest" className={theme === 'dark' ? 'bg-[#0E0D0C] text-stone-100' : ''}>Recent Paintings</option>
+                    <option value="oldest" className={theme === 'dark' ? 'bg-[#0E0D0C] text-stone-100' : ''}>Historical First</option>
+                    <option value="price-asc" className={theme === 'dark' ? 'bg-[#0E0D0C] text-stone-100' : ''}>Price: Low to High</option>
+                    <option value="price-desc" className={theme === 'dark' ? 'bg-[#0E0D0C] text-stone-100' : ''}>Price: High to Low</option>
                   </select>
                 </div>
               </div>
@@ -544,7 +585,7 @@ export default function App() {
             {/* Gallery Paintings Grid list */}
             <motion.div 
               layout
-              className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
             >
               <AnimatePresence mode="popLayout">
                 {filteredPaintings.map((painting) => (
@@ -563,8 +604,8 @@ export default function App() {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className={`border p-12 text-center rounded-xl shadow-2xs space-y-4 ${
-                  theme === 'dark' ? 'bg-[#121110] border-stone-850' : 'bg-white border-stone-250'
+                className={`border p-12 text-center rounded-2xl shadow-2xs space-y-4 ${
+                  theme === 'dark' ? 'bg-black/20 border-white/10' : 'bg-white border-stone-250'
                 }`}
               >
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto ${
@@ -579,7 +620,7 @@ export default function App() {
                 <button
                   onClick={handleResetFilters}
                   className={`px-5 py-2 font-sans text-xs uppercase tracking-wider rounded-md cursor-pointer transition-colors shadow-2xs ${
-                    theme === 'dark' ? 'bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold' : 'bg-stone-900 hover:bg-amber-900 text-white'
+                    theme === 'dark' ? 'bg-amber-500 hover:bg-amber-400 text-stone-955 font-bold' : 'bg-stone-900 hover:bg-amber-900 text-white'
                   }`}
                 >
                   See Full Catalogue
@@ -587,17 +628,72 @@ export default function App() {
               </motion.div>
             )}
           </section>
+
+          {/* Bottom Section: Exhibitions & Profile */}
+          <section id="upcoming-exhibitions-section" className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8">
+            {/* Left Column: Upcoming Exhibitions (4 cols on lg) */}
+            <div className={`lg:col-span-4 p-6 rounded-2xl border transition-colors ${
+              theme === 'dark' ? 'glass-card text-stone-200' : 
+              theme === 'funky' ? 'bg-[#150d2c] border-purple-900/40 text-purple-200 shadow-lg' : 
+              'bg-stone-50 border-stone-200/60 text-stone-900 shadow-xs'
+            }`}>
+              <h3 className={`font-serif text-lg font-bold uppercase tracking-wider mb-6 ${theme === 'dark' ? 'text-stone-100' : ''}`}>
+                Upcoming Exhibitions
+              </h3>
+              <div className="space-y-6 text-left">
+                <div className={`pb-4 border-b ${theme === 'dark' ? 'border-white/10' : theme === 'funky' ? 'border-purple-900/30' : 'border-stone-200'}`}>
+                  <h4 className="font-serif font-black text-sm uppercase tracking-wide text-amber-500">Mindscapes</h4>
+                  <p className="font-sans text-xs text-stone-400 mt-1">NYC GALLERY</p>
+                  <p className="font-sans text-[10px] tracking-wider text-stone-500 uppercase mt-0.5">Oct 15 - Nov 10</p>
+                </div>
+                <div className={`pb-4 border-b ${theme === 'dark' ? 'border-white/10' : theme === 'funky' ? 'border-purple-900/30' : 'border-stone-200'}`}>
+                  <h4 className="font-serif font-black text-sm uppercase tracking-wide text-amber-500">Transformations</h4>
+                  <p className="font-sans text-xs text-stone-400 mt-1">PARIS GALLERY</p>
+                  <p className="font-sans text-[10px] tracking-wider text-stone-500 uppercase mt-0.5">Dec 01 - Dec 15</p>
+                </div>
+                <div>
+                  <h4 className="font-serif font-black text-sm uppercase tracking-wide text-amber-500">Subconscious Waves</h4>
+                  <p className="font-sans text-xs text-stone-400 mt-1">TOKYO ART CENTER</p>
+                  <p className="font-sans text-[10px] tracking-wider text-stone-500 uppercase mt-0.5">Jan 20 - Feb 10</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Artist Bio / Profile (8 cols on lg) */}
+            <div className="lg:col-span-8">
+              <ArtistProfileSection
+                profile={artistProfile}
+                paintings={paintings}
+                onOpenPostModal={() => setIsPostModalOpen(true)}
+                isAdmin={isAdmin}
+                onToggleAdmin={handleToggleAdmin}
+                theme={theme}
+              />
+            </div>
+          </section>
         </main>
       </div>
 
       {/* Footer copyright */}
-      <footer className={`mt-20 border-t py-10 text-center font-sans text-xs transition-colors duration-300 ${
-        theme === 'dark' ? 'border-stone-850 bg-[#0A0909] text-stone-450' : 'border-stone-200 bg-stone-50 text-stone-505'
+      <footer className={`mt-20 border-t py-8 px-4 sm:px-6 lg:px-8 font-sans text-xs transition-colors duration-300 ${
+        theme === 'dark' ? 'border-white/10 bg-[#05060A]/80 text-stone-400' : 
+        theme === 'funky' ? 'border-purple-955 bg-[#060017] text-purple-400' : 
+        'border-stone-200 bg-stone-50 text-stone-505'
       }`}>
-        <p>© 2026 {artistProfile.name}. All rights reserved.</p>
-        <p className={`text-[10px] mt-1 ${theme === 'dark' ? 'text-stone-500' : 'text-stone-400'}`}>
-          The Morphiq • A collection of messages from the unknown, waiting to find their meaning in you.
-        </p>
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+          <nav className="flex flex-wrap gap-x-6 gap-y-2 uppercase tracking-wider font-semibold text-[10px]">
+            <a href="#gallery-controls-console" className="hover:text-amber-500 transition-colors">Gallery</a>
+            <a href="#upcoming-exhibitions-section" className="hover:text-amber-500 transition-colors">Exhibitions</a>
+            <a href="#artist-profile-panel" className="hover:text-amber-500 transition-colors">Biography</a>
+            <a href="mailto:husneshabnam@gmail.com" className="hover:text-amber-500 transition-colors">Contact</a>
+          </nav>
+          <div className="flex flex-col md:items-end text-center md:text-right gap-1">
+            <p>© 2026 {artistProfile.name}. All rights reserved.</p>
+            <p className="text-[9px] opacity-75">
+              The Morphiq • A collection of messages from the unknown.
+            </p>
+          </div>
+        </div>
       </footer>
 
       {/* Detail Overlay Painting Modal */}
