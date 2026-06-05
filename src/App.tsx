@@ -491,8 +491,8 @@ export default function App() {
             }`}>
               <div className="flex flex-wrap items-center justify-between gap-4">
                 
-                {/* Left: Icon, Title & Reset */}
-                <div className="flex items-center gap-3 shrink-0">
+                {/* Left: Icon, Title, Reset & Search */}
+                <div className="flex flex-wrap items-center gap-3 shrink-0">
                   <h5 className="font-serif text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap">
                     <Sliders className={`w-3.5 h-3.5 ${
                       theme === 'dark' ? 'text-amber-400' : 
@@ -514,11 +514,7 @@ export default function App() {
                       Clear
                     </button>
                   )}
-                </div>
 
-                {/* Right side horizontal group for Search, Medium, Status, and Sort */}
-                <div className="flex flex-wrap items-center gap-x-5 gap-y-3 flex-grow justify-end w-auto">
-                  
                   {/* Search query input */}
                   <div className="relative w-28 sm:w-32 shrink-0">
                     <Search className="absolute left-2 top-2 w-3 h-3 text-stone-400" />
@@ -534,6 +530,10 @@ export default function App() {
                       }`}
                     />
                   </div>
+                </div>
+
+                {/* Right side horizontal group for Medium, Status, and Sort */}
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-3 flex-grow justify-end w-auto">
 
                   {/* Medium Filter Pills */}
                   <div className="flex items-center gap-2">
