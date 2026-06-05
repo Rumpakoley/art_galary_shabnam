@@ -328,7 +328,7 @@ export default function App() {
               }`}>
                 Featured Exhibition
               </span>
-              <h2 className={`font-unique text-4xl sm:text-5xl md:text-6xl font-black tracking-wide uppercase leading-tight ${
+              <h2 className={`font-unique text-3xl sm:text-4xl md:text-5xl font-medium tracking-[0.08em] uppercase leading-tight ${
                 theme === 'dark' ? 'text-stone-105' :
                 theme === 'funky' ? 'text-white text-glow-cyan' :
                 'text-stone-900'
