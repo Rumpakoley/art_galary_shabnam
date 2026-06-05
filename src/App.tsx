@@ -497,12 +497,12 @@ export default function App() {
               <div className="flex flex-wrap items-center justify-between gap-4">
                 
                 {/* Left: Reset & Search */}
-                <div className="flex flex-wrap items-center gap-3 shrink-0">
+                <div className="flex items-center gap-3 flex-grow max-w-xs sm:max-w-sm md:max-w-md">
                   {/* Reset button if filters are active */}
                   {(searchQuery || mediumFilter !== 'All' || statusFilter !== 'All') && (
                     <button
                       onClick={handleResetFilters}
-                      className={`text-[11px] font-sans font-semibold underline cursor-pointer ${
+                      className={`text-[11px] font-sans font-semibold underline cursor-pointer shrink-0 ${
                         theme === 'dark' ? 'text-amber-400 hover:text-amber-350' : 'text-amber-805 hover:text-amber-955'
                       }`}
                     >
@@ -511,14 +511,14 @@ export default function App() {
                   )}
 
                   {/* Search query input */}
-                  <div className="relative w-28 sm:w-32 shrink-0">
-                    <Search className="absolute left-2 top-2 w-3 h-3 text-stone-400" />
+                  <div className="relative flex-grow">
+                    <Search className="absolute left-2.5 top-2 w-3.5 h-3.5 text-stone-400" />
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Search..."
-                      className={`w-full font-sans text-xs pl-7 pr-2 py-1 border focus:outline-hidden rounded-md transition-all ${
+                      className={`w-full font-sans text-xs pl-8 pr-2.5 py-1.5 border focus:outline-hidden rounded-md transition-all ${
                         theme === 'dark' 
                           ? 'bg-black/20 border-white/10 text-stone-100 focus:bg-black/40 focus:border-amber-500/50' 
                           : 'bg-stone-50 border-stone-200 text-stone-900 focus:bg-white focus:border-amber-805'
