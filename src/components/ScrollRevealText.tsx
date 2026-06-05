@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
+import React from 'react';
+import { motion } from 'motion/react';
 
 interface ScrollRevealTextProps {
   text: string;
@@ -12,24 +12,45 @@ interface ScrollRevealTextProps {
 }
 
 export default function ScrollRevealText({ text, className = '' }: ScrollRevealTextProps): React.JSX.Element | null {
-  const containerRef = useRef<HTMLSpanElement>(null);
-
   // Defensive check to avoid runtime crashes if text is undefined/null or not a string
   if (typeof text !== 'string' || !text.trim()) {
     return null;
   }
-  
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start 90%", "end 50%"]
-  });
 
   const tokens = text.split(/(\s+)/).filter(Boolean);
-  const wordsCount = tokens.filter(t => !/^\s+$/.test(t)).length;
-  let wordIndex = 0;
+
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.025,
+      }
+    }
+  };
+
+  const wordVariants = {
+    hidden: { 
+      opacity: 0.15,
+      y: 2,
+    },
+    visible: { 
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.35,
+        ease: [0.215, 0.610, 0.355, 1.0], // easeOutCubic
+      }
+    }
+  };
 
   return (
-    <span ref={containerRef} className={`inline ${className}`}>
+    <motion.span 
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-8% 0px" }}
+      variants={containerVariants}
+      className={`inline ${className}`}
+    >
       {tokens.map((token, i) => {
         if (/^\s+$/.test(token)) {
           if (token.includes('\n')) {
@@ -38,37 +59,21 @@ export default function ScrollRevealText({ text, className = '' }: ScrollRevealT
           return <span key={i} className="inline">&nbsp;</span>;
         }
 
-        const start = wordIndex / Math.max(wordsCount, 1);
-        const end = (wordIndex + 1.8) / Math.max(wordsCount, 1);
-        wordIndex++;
-
         return (
-          <Word key={i} progress={scrollYProgress} range={[start, Math.min(end, 1)]}>
-            {token}
-          </Word>
+          <span key={i} className="relative inline-block select-none">
+            {/* Ghost background word for the scroll-reveal style */}
+            <span className="absolute opacity-15" aria-hidden="true">
+              {token}
+            </span>
+            <motion.span 
+              variants={wordVariants} 
+              className="relative z-10 inline-block"
+            >
+              {token}
+            </motion.span>
+          </span>
         );
       })}
-    </span>
-  );
-}
-
-interface WordProps {
-  children: string;
-  progress: any;
-  range: [number, number];
-}
-
-function Word({ children, progress, range }: WordProps) {
-  const opacity = useTransform(progress, range, [0.15, 1]);
-  return (
-    <span className="relative inline-block select-none">
-      {/* Ghost background word for the scroll-reveal style */}
-      <span className="absolute opacity-15" aria-hidden="true">
-        {children}
-      </span>
-      <motion.span style={{ opacity }} className="relative z-10">
-        {children}
-      </motion.span>
-    </span>
+    </motion.span>
   );
 }
