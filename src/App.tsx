@@ -249,32 +249,7 @@ export default function App() {
           }`}
         >
           {/* Unified Logo & Artist Title */}
-          <div className="flex items-center gap-3 w-full md:w-auto justify-center md:justify-start">
-            {/* Abstract logo emblem SVG */}
-            <div className="w-11 h-11 md:w-12 md:h-12 shrink-0 relative">
-              <svg viewBox="0 0 100 100" className="w-full h-full">
-                <defs>
-                  <linearGradient id="logoGradHeader" x1="0%" y1="0%" x2="100%" y2="100%">
-                    {theme === 'funky' ? (
-                      <>
-                        <stop offset="0%" stopColor="#ec4899" />
-                        <stop offset="50%" stopColor="#8b5cf6" />
-                        <stop offset="100%" stopColor="#06b6d4" />
-                      </>
-                    ) : (
-                      <>
-                        <stop offset="0%" stopColor="#22d3ee" />
-                        <stop offset="50%" stopColor="#8b5cf6" />
-                        <stop offset="100%" stopColor="#f59e0b" />
-                      </>
-                    )}
-                  </linearGradient>
-                </defs>
-                <circle cx="50" cy="50" r="45" fill="none" stroke="url(#logoGradHeader)" strokeWidth="6" className="opacity-40" />
-                <path d="M30,50 Q45,25 55,75 T80,50" fill="none" stroke="url(#logoGradHeader)" strokeWidth="8" strokeLinecap="round" />
-                <circle cx="50" cy="50" r="15" fill="url(#logoGradHeader)" className="opacity-80" />
-              </svg>
-            </div>
+          <div className="flex items-center w-full md:w-auto justify-center md:justify-start">
              <div className="flex flex-col text-left">
               <span className={`font-serif text-2xl sm:text-3xl md:text-4xl font-black tracking-widest leading-none uppercase ${
                 theme === 'funky' ? 'text-white text-glow-cyan' : ''
@@ -353,7 +328,7 @@ export default function App() {
               }`}>
                 Featured Exhibition
               </span>
-              <h2 className={`font-serif text-4xl sm:text-5xl md:text-6xl font-black tracking-wide uppercase leading-tight ${
+              <h2 className={`font-unique text-4xl sm:text-5xl md:text-6xl font-black tracking-wide uppercase leading-tight ${
                 theme === 'dark' ? 'text-stone-105' :
                 theme === 'funky' ? 'text-white text-glow-cyan' :
                 'text-stone-900'
