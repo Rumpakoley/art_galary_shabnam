@@ -55,19 +55,6 @@ export default function App() {
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [featuredIndex, setFeaturedIndex] = useState(0);
   
-  const profileContainerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: rawProfileScrollProgress } = useScroll({
-    target: profileContainerRef,
-    offset: ["start end", "end start"]
-  });
-
-  const profileScrollProgress = useTransform(
-    rawProfileScrollProgress,
-    [0.2, 0.72],
-    [0, 1]
-  );
-  
-  // Success notification banner state (when a new work is posted)
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Filter and Sorting states
@@ -483,24 +470,19 @@ export default function App() {
         {/* Main Content Area */}
         <main className="relative z-10 space-y-12">
 
-          {/* Section: Artist Biography & Statement Profile Panel (Pinned Scrollytelling track) */}
-          <div ref={profileContainerRef} className="relative w-full h-[175vh] mb-8">
-            <div className="sticky top-[12vh] w-full">
-              <motion.section
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full"
-              >
-                <ArtistProfileSection
-                  profile={artistProfile}
-                  theme={theme}
-                  scrollYProgress={profileScrollProgress}
-                />
-              </motion.section>
-            </div>
-          </div>
+          {/* Section: Artist Biography & Statement Profile Panel */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full"
+          >
+            <ArtistProfileSection
+              profile={artistProfile}
+              theme={theme}
+            />
+          </motion.section>
           
           {/* Section: Gallery Works & Curation Panel */}
           <motion.section

@@ -1,23 +1,17 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-import { motion, MotionValue } from 'motion/react';
+import { motion } from 'motion/react';
 import { ArtistProfile } from '../types';
-import ScrollRevealText from './ScrollRevealText';
-import ScrollPinnedText from './ScrollPinnedText';
 
 interface ArtistProfileSectionProps {
   profile: ArtistProfile;
   theme?: 'light' | 'dark' | 'funky';
-  scrollYProgress?: MotionValue<number>;
 }
 
 export default function ArtistProfileSection({
   profile,
-  theme = 'light',
-  scrollYProgress
+  theme = 'light'
 }: ArtistProfileSectionProps) {
+  const paragraphs = profile.statement.split('\n\n').filter(Boolean);
+
   return (
     <div id="artist-profile-panel" className={`p-6 md:p-8 rounded-2xl h-fit border transition-colors duration-300 ${
       theme === 'dark'
@@ -58,16 +52,23 @@ export default function ArtistProfileSection({
             }`}>
               Artist Statement
             </div>
-            <div className={`font-serif italic text-xs md:text-sm leading-relaxed text-justify ${
+            <div className={`font-serif italic text-xs md:text-sm leading-relaxed text-justify space-y-4 ${
               theme === 'dark' ? 'text-stone-300' :
               theme === 'funky' ? 'text-purple-200/80' :
-              'text-black'
+              'text-stone-900'
             }`}>
-              {scrollYProgress ? (
-                <ScrollPinnedText text={profile.statement} scrollYProgress={scrollYProgress} />
-              ) : (
-                <ScrollRevealText text={profile.statement} />
-              )}
+              {paragraphs.map((para, idx) => (
+                <motion.p
+                  key={idx}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-8% 0px" }}
+                  transition={{ duration: 0.6, delay: idx * 0.12, ease: [0.16, 1, 0.3, 1] }}
+                  className="whitespace-pre-line"
+                >
+                  {para}
+                </motion.p>
+              ))}
             </div>
           </div>
         </div>
