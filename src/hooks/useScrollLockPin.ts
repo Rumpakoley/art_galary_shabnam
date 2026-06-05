@@ -16,9 +16,9 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
 } {
   const rawProgress = useMotionValue(0);
   const progress = useSpring(rawProgress, {
-    stiffness: 85,
-    damping: 24,
-    mass: 0.5
+    stiffness: 45,
+    damping: 22,
+    mass: 0.6
   });
 
   const [isLocked, setIsLocked] = useState(false);
@@ -30,7 +30,7 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
 
   // Constants for the transition phases
   const LOCK_START_PROGRESS = 0.3; // 30% of the text is revealed before locking
-  const SENSITIVITY = 600; // Pixels of scroll gestures to complete the remaining 70% of reveal
+  const SENSITIVITY = 1200; // Pixels of scroll gestures to complete the remaining 70% of reveal
 
   useEffect(() => {
     lastScrollYRef.current = window.scrollY;
