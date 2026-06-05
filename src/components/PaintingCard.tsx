@@ -24,17 +24,17 @@ export default function PaintingCard({ painting, onViewDetails, theme = 'dark' }
     <motion.div
       id={`painting-card-${painting.id}`}
       layout
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
+      initial={{ opacity: 0, y: 45, scale: 0.96 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: false, amount: 0.08 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       className={`group relative flex flex-col p-3 transition-all duration-500 border ${
         theme === 'dark' 
           ? 'glass-card rounded-[1.25rem] text-stone-100 hover:-translate-y-1.5' :
         theme === 'funky'
           ? 'bg-[#150c2c] border-purple-900/40 text-purple-100 hover:border-fuchsia-500/80 hover:shadow-[0_0_25px_rgba(236,72,153,0.35)] hover:-translate-y-1.5 hover:rotate-1 rounded-lg'
-          : 'bg-stone-50 border-stone-200/60 text-stone-900 hover:border-stone-300 hover:shadow-lg hover:-translate-y-0.5 shadow-2xs rounded-lg'
+          : 'bg-stone-50 border-stone-200/60 text-stone-900 hover:border-stone-300 hover:shadow-md hover:-translate-y-1.5 shadow-2xs rounded-lg'
       }`}
     >
       {/* Decorative Vector Curve in Dark Mode */}
