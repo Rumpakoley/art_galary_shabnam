@@ -251,7 +251,7 @@ export default function App() {
           {/* Unified Logo & Artist Title */}
           <div className="flex items-center gap-3 w-full md:w-auto justify-center md:justify-start">
             {/* Abstract logo emblem SVG */}
-            <div className="w-9 h-9 shrink-0 relative">
+            <div className="w-11 h-11 md:w-12 md:h-12 shrink-0 relative">
               <svg viewBox="0 0 100 100" className="w-full h-full">
                 <defs>
                   <linearGradient id="logoGradHeader" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -276,7 +276,7 @@ export default function App() {
               </svg>
             </div>
              <div className="flex flex-col text-left">
-              <span className={`font-serif text-xl font-black tracking-widest leading-none uppercase ${
+              <span className={`font-serif text-2xl sm:text-3xl md:text-4xl font-black tracking-widest leading-none uppercase ${
                 theme === 'funky' ? 'text-white text-glow-cyan' : ''
               }`}>
                 {artistProfile.name}
