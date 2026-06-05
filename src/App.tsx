@@ -8,6 +8,7 @@ import { motion, AnimatePresence, useScroll } from 'motion/react';
 import { Painting, ArtistProfile } from './types';
 import { INITIAL_PAINTINGS, INITIAL_PROFILE } from './data';
 import ArtistProfileSection from './components/ArtistProfileSection';
+import StudioRegistryPanel from './components/StudioRegistryPanel';
 import PaintingCard from './components/PaintingCard';
 import PaintingDetailModal from './components/PaintingDetailModal';
 import PostWorkModal from './components/PostWorkModal';
@@ -488,10 +489,6 @@ export default function App() {
               >
                 <ArtistProfileSection
                   profile={artistProfile}
-                  paintings={paintings}
-                  onOpenPostModal={() => setIsPostModalOpen(true)}
-                  isAdmin={isAdmin}
-                  onToggleAdmin={handleToggleAdmin}
                   theme={theme}
                   scrollYProgress={profileScrollProgress}
                 />
@@ -685,6 +682,24 @@ export default function App() {
                 </button>
               </motion.div>
             )}
+          </motion.section>
+
+          {/* Section: Studio Registry Ledger & Contacts */}
+          <motion.section
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full"
+          >
+            <StudioRegistryPanel
+              profile={artistProfile}
+              paintings={paintings}
+              onOpenPostModal={() => setIsPostModalOpen(true)}
+              isAdmin={isAdmin}
+              onToggleAdmin={handleToggleAdmin}
+              theme={theme}
+            />
           </motion.section>
 
           {/* Bottom Section: Upcoming Exhibitions */}
