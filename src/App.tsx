@@ -469,6 +469,23 @@ export default function App() {
 
         {/* Main Content Area */}
         <main className="relative z-10 space-y-12">
+
+          {/* Section: Artist Biography & Statement Profile Panel */}
+          <motion.section
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <ArtistProfileSection
+              profile={artistProfile}
+              paintings={paintings}
+              onOpenPostModal={() => setIsPostModalOpen(true)}
+              isAdmin={isAdmin}
+              onToggleAdmin={handleToggleAdmin}
+              theme={theme}
+            />
+          </motion.section>
           
           {/* Section: Gallery Works & Curation Panel */}
           <motion.section
@@ -658,71 +675,56 @@ export default function App() {
             )}
           </motion.section>
 
-          {/* Bottom Section: Exhibitions & Profile */}
+          {/* Bottom Section: Upcoming Exhibitions */}
           <motion.section
             id="upcoming-exhibitions-section"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8"
-          >
-            {/* Left Column: Upcoming Exhibitions (4 cols on lg) */}
-            <div className={`lg:col-span-4 p-6 rounded-2xl border transition-colors ${
+            className={`p-6 md:p-8 rounded-2xl border transition-colors ${
               theme === 'dark' ? 'glass-card text-stone-200' : 
               theme === 'funky' ? 'bg-[#150d2c] border-purple-900/40 text-purple-200 shadow-lg' : 
               'bg-stone-50 border-stone-200/60 text-stone-900 shadow-xs'
-            }`}>
-              <h3 className={`font-serif text-lg font-bold uppercase tracking-wider mb-6 ${theme === 'dark' ? 'text-stone-100' : ''}`}>
-                <ScrollRevealText text="Upcoming Exhibitions" />
-              </h3>
-              <div className="space-y-6 text-left">
-                <div className={`pb-4 border-b ${theme === 'dark' ? 'border-white/10' : theme === 'funky' ? 'border-purple-900/30' : 'border-stone-200'}`}>
-                  <h4 className="font-serif font-black text-sm uppercase tracking-wide text-amber-500">
-                    <ScrollRevealText text="Mindscapes" />
-                  </h4>
-                  <p className="font-sans text-xs text-stone-400 mt-1">
-                    <ScrollRevealText text="NYC GALLERY" />
-                  </p>
-                  <p className="font-sans text-[10px] tracking-wider text-stone-500 uppercase mt-0.5">
-                    <ScrollRevealText text="Oct 15 - Nov 10" />
-                  </p>
-                </div>
-                <div className={`pb-4 border-b ${theme === 'dark' ? 'border-white/10' : theme === 'funky' ? 'border-purple-900/30' : 'border-stone-200'}`}>
-                  <h4 className="font-serif font-black text-sm uppercase tracking-wide text-amber-500">
-                    <ScrollRevealText text="Transformations" />
-                  </h4>
-                  <p className="font-sans text-xs text-stone-400 mt-1">
-                    <ScrollRevealText text="PARIS GALLERY" />
-                  </p>
-                  <p className="font-sans text-[10px] tracking-wider text-stone-500 uppercase mt-0.5">
-                    <ScrollRevealText text="Dec 01 - Dec 15" />
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-serif font-black text-sm uppercase tracking-wide text-amber-500">
-                    <ScrollRevealText text="Subconscious Waves" />
-                  </h4>
-                  <p className="font-sans text-xs text-stone-400 mt-1">
-                    <ScrollRevealText text="TOKYO ART CENTER" />
-                  </p>
-                  <p className="font-sans text-[10px] tracking-wider text-stone-500 uppercase mt-0.5">
-                    <ScrollRevealText text="Jan 20 - Feb 10" />
-                  </p>
-                </div>
+            }`}
+          >
+            <h3 className={`font-serif text-lg font-bold uppercase tracking-wider mb-6 ${theme === 'dark' ? 'text-stone-105' : ''}`}>
+              <ScrollRevealText text="Upcoming Exhibitions" />
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+              <div className={`pb-4 md:pb-0 md:pr-4 border-b md:border-b-0 md:border-r ${theme === 'dark' ? 'border-white/10' : theme === 'funky' ? 'border-purple-900/30' : 'border-stone-200'}`}>
+                <h4 className="font-serif font-black text-sm uppercase tracking-wide text-amber-500">
+                  <ScrollRevealText text="Mindscapes" />
+                </h4>
+                <p className="font-sans text-xs text-stone-400 mt-1">
+                  <ScrollRevealText text="NYC GALLERY" />
+                </p>
+                <p className="font-sans text-[10px] tracking-wider text-stone-500 uppercase mt-0.5">
+                  <ScrollRevealText text="Oct 15 - Nov 10" />
+                </p>
               </div>
-            </div>
-
-            {/* Right Column: Artist Bio / Profile (8 cols on lg) */}
-            <div className="lg:col-span-8">
-              <ArtistProfileSection
-                profile={artistProfile}
-                paintings={paintings}
-                onOpenPostModal={() => setIsPostModalOpen(true)}
-                isAdmin={isAdmin}
-                onToggleAdmin={handleToggleAdmin}
-                theme={theme}
-              />
+              <div className={`pb-4 md:pb-0 md:px-4 border-b md:border-b-0 md:border-r ${theme === 'dark' ? 'border-white/10' : theme === 'funky' ? 'border-purple-900/30' : 'border-stone-200'}`}>
+                <h4 className="font-serif font-black text-sm uppercase tracking-wide text-amber-500">
+                  <ScrollRevealText text="Transformations" />
+                </h4>
+                <p className="font-sans text-xs text-stone-400 mt-1">
+                  <ScrollRevealText text="PARIS GALLERY" />
+                </p>
+                <p className="font-sans text-[10px] tracking-wider text-stone-505 uppercase mt-0.5">
+                  <ScrollRevealText text="Dec 01 - Dec 15" />
+                </p>
+              </div>
+              <div className="md:pl-4">
+                <h4 className="font-serif font-black text-sm uppercase tracking-wide text-amber-500">
+                  <ScrollRevealText text="Subconscious Waves" />
+                </h4>
+                <p className="font-sans text-xs text-stone-400 mt-1">
+                  <ScrollRevealText text="TOKYO ART CENTER" />
+                </p>
+                <p className="font-sans text-[10px] tracking-wider text-stone-500 uppercase mt-0.5">
+                  <ScrollRevealText text="Jan 20 - Feb 10" />
+                </p>
+              </div>
             </div>
           </motion.section>
         </main>
