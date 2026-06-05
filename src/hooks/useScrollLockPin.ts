@@ -4,7 +4,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { useMotionValue, MotionValue } from 'motion/react';
+import { useMotionValue, useSpring, useMotionValueEvent, MotionValue } from 'motion/react';
 
 interface UseScrollLockPinProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
@@ -14,7 +14,13 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
   progress: MotionValue<number>;
   isLocked: boolean;
 } {
-  const progress = useMotionValue(0);
+  const rawProgress = useMotionValue(0);
+  const progress = useSpring(rawProgress, {
+    stiffness: 85,
+    damping: 24,
+    mass: 0.5
+  });
+
   const [isLocked, setIsLocked] = useState(false);
   const isLockedRef = useRef(false);
 
@@ -54,6 +60,20 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
     };
   };
 
+  // React to spring progress values to unlock the scrollbar only after the animation is finished
+  useMotionValueEvent(progress, 'change', (latest) => {
+    if (!isLockedRef.current) return;
+
+    const targetVal = rawProgress.get();
+    if (targetVal >= 1.0 && latest >= 0.98) {
+      setIsLocked(false);
+      isLockedRef.current = false;
+    } else if (targetVal <= LOCK_START_PROGRESS && latest <= LOCK_START_PROGRESS + 0.02) {
+      setIsLocked(false);
+      isLockedRef.current = false;
+    }
+  });
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -66,7 +86,7 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
       const goingDown = currentScrollY > lastScrollY;
       const goingUp = currentScrollY < lastScrollY;
 
-      // Case A: Scroll is currently locked
+      // 1. Case A: Enforce scroll position if currently locked
       if (isLockedRef.current) {
         if (Math.abs(currentScrollY - lockScrollY) > 1) {
           isProgrammaticScrollRef.current = true;
@@ -78,47 +98,49 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
         return;
       }
 
-      // Case B: Scroll is NOT locked (Native scroll phase)
-      if (currentScrollY < startScrollY) {
-        progress.set(0);
-      } else if (currentScrollY >= startScrollY && currentScrollY < lockScrollY) {
-        // Linearly map native scroll to progress [0, LOCK_START_PROGRESS]
-        const range = lockScrollY - startScrollY;
-        const currentDiff = currentScrollY - startScrollY;
-        const calculatedProgress = (currentDiff / range) * LOCK_START_PROGRESS;
-        progress.set(calculatedProgress);
-      } else {
-        // Past the lock point
-        progress.set(1.0);
-      }
-
-      // Detect Lock Activation
-      // 1. Lock going DOWN
-      if (goingDown && progress.get() < 1) {
+      // 2. Case B: Detect and trigger Lock Activation (Checked before native scroll overrides progress)
+      // Lock going DOWN
+      if (goingDown && rawProgress.get() < 1) {
         if (currentScrollY >= lockScrollY && lastScrollY < lockScrollY) {
           isProgrammaticScrollRef.current = true;
           window.scrollTo(0, lockScrollY);
           setTimeout(() => {
             isProgrammaticScrollRef.current = false;
           }, 50);
-          progress.set(LOCK_START_PROGRESS);
+          rawProgress.set(LOCK_START_PROGRESS);
           setIsLocked(true);
           isLockedRef.current = true;
+          return; // Stop execution to avoid Case C native override
         }
       }
 
-      // 2. Lock going UP
-      if (goingUp && progress.get() > LOCK_START_PROGRESS) {
+      // Lock going UP
+      if (goingUp && rawProgress.get() > LOCK_START_PROGRESS) {
         if (currentScrollY <= lockScrollY && lastScrollY > lockScrollY) {
           isProgrammaticScrollRef.current = true;
           window.scrollTo(0, lockScrollY);
           setTimeout(() => {
             isProgrammaticScrollRef.current = false;
           }, 50);
-          progress.set(1.0);
+          rawProgress.set(1.0);
           setIsLocked(true);
           isLockedRef.current = true;
+          return; // Stop execution to avoid Case C native override
         }
+      }
+
+      // 3. Case C: Native scroll phase (Only runs when scroll is unlocked and not transitioning lock states)
+      if (currentScrollY < startScrollY) {
+        rawProgress.set(0);
+      } else if (currentScrollY >= startScrollY && currentScrollY < lockScrollY) {
+        // Linearly map native scroll to progress [0, LOCK_START_PROGRESS]
+        const range = lockScrollY - startScrollY;
+        const currentDiff = currentScrollY - startScrollY;
+        const calculatedProgress = (currentDiff / range) * LOCK_START_PROGRESS;
+        rawProgress.set(calculatedProgress);
+      } else {
+        // Past the lock point
+        rawProgress.set(1.0);
       }
     };
 
@@ -129,20 +151,12 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
       e.preventDefault();
 
       const delta = e.deltaY;
-      const currentVal = progress.get();
+      const currentVal = rawProgress.get();
       // Map sensitivity to remaining 70% range of progress
       const step = (delta / SENSITIVITY) * (1 - LOCK_START_PROGRESS);
-      const newVal = Math.min(Math.max(currentVal + step, LOCK_START_PROGRESS), 1);
+      const newVal = Math.min(Math.max(currentVal + step, LOCK_START_PROGRESS), 1.0);
 
-      progress.set(newVal);
-
-      if (newVal >= 1 && delta > 0) {
-        setIsLocked(false);
-        isLockedRef.current = false;
-      } else if (newVal <= LOCK_START_PROGRESS && delta < 0) {
-        setIsLocked(false);
-        isLockedRef.current = false;
-      }
+      rawProgress.set(newVal);
     };
 
     const handleTouchStart = (e: TouchEvent) => {
@@ -161,19 +175,11 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
         const delta = touchStartYRef.current - touchY;
         touchStartYRef.current = touchY;
 
-        const currentVal = progress.get();
+        const currentVal = rawProgress.get();
         const step = (delta / SENSITIVITY) * (1 - LOCK_START_PROGRESS);
-        const newVal = Math.min(Math.max(currentVal + step, LOCK_START_PROGRESS), 1);
+        const newVal = Math.min(Math.max(currentVal + step, LOCK_START_PROGRESS), 1.0);
 
-        progress.set(newVal);
-
-        if (newVal >= 1 && delta > 0) {
-          setIsLocked(false);
-          isLockedRef.current = false;
-        } else if (newVal <= LOCK_START_PROGRESS && delta < 0) {
-          setIsLocked(false);
-          isLockedRef.current = false;
-        }
+        rawProgress.set(newVal);
       }
     };
 
@@ -199,19 +205,11 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
           delta = -SENSITIVITY;
         }
 
-        const currentVal = progress.get();
+        const currentVal = rawProgress.get();
         const step = (delta / SENSITIVITY) * (1 - LOCK_START_PROGRESS);
-        const newVal = Math.min(Math.max(currentVal + step, LOCK_START_PROGRESS), 1);
+        const newVal = Math.min(Math.max(currentVal + step, LOCK_START_PROGRESS), 1.0);
 
-        progress.set(newVal);
-
-        if (newVal >= 1 && delta > 0) {
-          setIsLocked(false);
-          isLockedRef.current = false;
-        } else if (newVal <= LOCK_START_PROGRESS && delta < 0) {
-          setIsLocked(false);
-          isLockedRef.current = false;
-        }
+        rawProgress.set(newVal);
       }
     };
 
