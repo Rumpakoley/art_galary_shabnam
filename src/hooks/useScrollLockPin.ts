@@ -18,7 +18,6 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
   const [isLocked, setIsLocked] = useState(false);
   const isLockedRef = useRef(false);
 
-  const progressRef = useRef(0);
   const lastScrollYRef = useRef(0);
   const touchStartYRef = useRef(0);
   const isProgrammaticScrollRef = useRef(false);
@@ -26,13 +25,6 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
   // Constants for the transition phases
   const LOCK_START_PROGRESS = 0.3; // 30% of the text is revealed before locking
   const SENSITIVITY = 600; // Pixels of scroll gestures to complete the remaining 70% of reveal
-
-  useEffect(() => {
-    const unsubscribe = progress.on('change', (val) => {
-      progressRef.current = val;
-    });
-    return () => unsubscribe();
-  }, [progress]);
 
   useEffect(() => {
     lastScrollYRef.current = window.scrollY;
@@ -101,7 +93,7 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
 
       // Detect Lock Activation
       // 1. Lock going DOWN
-      if (goingDown && progressRef.current < 1) {
+      if (goingDown && progress.get() < 1) {
         if (currentScrollY >= lockScrollY && lastScrollY < lockScrollY) {
           isProgrammaticScrollRef.current = true;
           window.scrollTo(0, lockScrollY);
@@ -115,7 +107,7 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
       }
 
       // 2. Lock going UP
-      if (goingUp && progressRef.current > LOCK_START_PROGRESS) {
+      if (goingUp && progress.get() > LOCK_START_PROGRESS) {
         if (currentScrollY <= lockScrollY && lastScrollY > lockScrollY) {
           isProgrammaticScrollRef.current = true;
           window.scrollTo(0, lockScrollY);
@@ -135,7 +127,7 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
       e.preventDefault();
 
       const delta = e.deltaY;
-      const currentVal = progressRef.current;
+      const currentVal = progress.get();
       // Map sensitivity to remaining 70% range of progress
       const step = (delta / SENSITIVITY) * (1 - LOCK_START_PROGRESS);
       const newVal = Math.min(Math.max(currentVal + step, LOCK_START_PROGRESS), 1);
@@ -167,7 +159,7 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
         const delta = touchStartYRef.current - touchY;
         touchStartYRef.current = touchY;
 
-        const currentVal = progressRef.current;
+        const currentVal = progress.get();
         const step = (delta / SENSITIVITY) * (1 - LOCK_START_PROGRESS);
         const newVal = Math.min(Math.max(currentVal + step, LOCK_START_PROGRESS), 1);
 
@@ -205,7 +197,7 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
           delta = -SENSITIVITY;
         }
 
-        const currentVal = progressRef.current;
+        const currentVal = progress.get();
         const step = (delta / SENSITIVITY) * (1 - LOCK_START_PROGRESS);
         const newVal = Math.min(Math.max(currentVal + step, LOCK_START_PROGRESS), 1);
 
