@@ -484,37 +484,56 @@ export default function App() {
               </div>
             )}
 
-            {/* Elegant Filtering Console */}
             <div id="gallery-controls-console" className={`p-5 rounded-2xl shadow-2xs space-y-4 border transition-all duration-300 ${
               theme === 'dark' ? 'glass-card border-white/10 text-stone-100' : 
               theme === 'funky' ? 'bg-[#150d2c] border-purple-900/65 text-purple-100 shadow-[0_4px_20px_rgba(127,0,255,0.05)]' : 
               'bg-white border-stone-200/80 text-stone-900'
             }`}>
-              <div className={`flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b ${
+              <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b ${
                 theme === 'dark' ? 'border-white/10' : 
                 theme === 'funky' ? 'border-purple-900/50' : 
                 'border-stone-150'
               }`}>
-                <h3 className="font-serif text-base font-semibold flex items-center gap-2">
-                  <Sliders className={`w-4 h-4 ${
-                    theme === 'dark' ? 'text-amber-400' : 
-                    theme === 'funky' ? 'text-fuchsia-400 font-bold' : 
-                    'text-amber-800/60'
-                  }`} />
-                  <span>The Curatorial Collection ({filteredPaintings.length} works)</span>
-                </h3>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <h3 className="font-serif text-base font-semibold flex items-center gap-2">
+                    <Sliders className={`w-4 h-4 ${
+                      theme === 'dark' ? 'text-amber-400' : 
+                      theme === 'funky' ? 'text-fuchsia-400 font-bold' : 
+                      'text-amber-800/60'
+                    }`} />
+                    <span>The Curatorial Collection ({filteredPaintings.length} works)</span>
+                  </h3>
 
-                {/* Reset button if filters are active */}
-                {(searchQuery || mediumFilter !== 'All' || statusFilter !== 'All') && (
-                  <button
-                    onClick={handleResetFilters}
-                    className={`text-[11px] font-sans font-semibold underline self-start md:self-auto cursor-pointer ${
-                      theme === 'dark' ? 'text-amber-400 hover:text-amber-350' : 'text-amber-805 hover:text-amber-950'
+                  {/* Reset button if filters are active */}
+                  {(searchQuery || mediumFilter !== 'All' || statusFilter !== 'All') && (
+                    <button
+                      onClick={handleResetFilters}
+                      className={`text-[11px] font-sans font-semibold underline cursor-pointer ${
+                        theme === 'dark' ? 'text-amber-400 hover:text-amber-350' : 'text-amber-805 hover:text-amber-955'
+                      }`}
+                    >
+                      Clear Filters
+                    </button>
+                  )}
+                </div>
+
+                {/* Sorting & Order Controller */}
+                <div className="flex items-center gap-1.5 shrink-0 self-start sm:self-auto">
+                  <ArrowUpDown className="w-3.5 h-3.5 text-stone-400" />
+                  <span className="font-sans text-[10px] font-semibold text-stone-400 uppercase tracking-wider">Sort by</span>
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className={`font-sans text-xs bg-transparent border-0 font-medium cursor-pointer focus:outline-hidden ${
+                      theme === 'dark' ? 'text-stone-300 hover:text-amber-400' : 'text-stone-700 hover:text-amber-800'
                     }`}
                   >
-                    Clear Catalog Filters
-                  </button>
-                )}
+                    <option value="newest" className={theme === 'dark' ? 'bg-[#0E0D0C] text-stone-100' : ''}>Recent Paintings</option>
+                    <option value="oldest" className={theme === 'dark' ? 'bg-[#0E0D0C] text-stone-100' : ''}>Historical First</option>
+                    <option value="price-asc" className={theme === 'dark' ? 'bg-[#0E0D0C] text-stone-100' : ''}>Price: Low to High</option>
+                    <option value="price-desc" className={theme === 'dark' ? 'bg-[#0E0D0C] text-stone-100' : ''}>Price: High to Low</option>
+                  </select>
+                </div>
               </div>
 
               {/* Filtering Controls Row */}
@@ -535,8 +554,8 @@ export default function App() {
                   />
                 </div>
 
-                {/* Pill-based filters */}
-                <div className="flex flex-col gap-3">
+                {/* Pill-based filters side-by-side */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
                   {/* Medium Filter Pills */}
                   <div className="flex flex-col gap-1.5">
                     <span className="text-[10px] font-sans font-bold text-stone-450 uppercase tracking-widest">Medium / Material</span>
@@ -598,30 +617,13 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Sorting & Order Controller */}
-              <div className={`pt-2 flex items-center justify-between text-xs border-t ${
+              {/* Status footer line */}
+              <div className={`pt-2 text-xs border-t text-left ${
                 theme === 'dark' ? 'border-white/10 text-stone-400' : 'border-stone-100 text-stone-500'
               }`}>
                 <span className="font-sans text-[11px]">
                   Viewing {filteredPaintings.length} of {paintings.length} archived canvases
                 </span>
-                
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <ArrowUpDown className="w-3.5 h-3.5 text-stone-400" />
-                  <span className="font-sans text-[10px] font-semibold text-stone-400 uppercase tracking-wider">Sort by</span>
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className={`font-sans text-xs bg-transparent border-0 font-medium cursor-pointer focus:outline-hidden ${
-                      theme === 'dark' ? 'text-stone-300 hover:text-amber-400' : 'text-stone-700 hover:text-amber-800'
-                    }`}
-                  >
-                    <option value="newest" className={theme === 'dark' ? 'bg-[#0E0D0C] text-stone-100' : ''}>Recent Paintings</option>
-                    <option value="oldest" className={theme === 'dark' ? 'bg-[#0E0D0C] text-stone-100' : ''}>Historical First</option>
-                    <option value="price-asc" className={theme === 'dark' ? 'bg-[#0E0D0C] text-stone-100' : ''}>Price: Low to High</option>
-                    <option value="price-desc" className={theme === 'dark' ? 'bg-[#0E0D0C] text-stone-100' : ''}>Price: High to Low</option>
-                  </select>
-                </div>
               </div>
             </div>
 
