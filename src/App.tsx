@@ -275,18 +275,11 @@ export default function App() {
                 <circle cx="50" cy="50" r="15" fill="url(#logoGradHeader)" className="opacity-80" />
               </svg>
             </div>
-            <div className="flex flex-col text-left">
+             <div className="flex flex-col text-left">
               <span className={`font-serif text-lg font-black tracking-widest leading-none uppercase ${
                 theme === 'funky' ? 'text-white text-glow-cyan' : ''
               }`}>
                 {artistProfile.name}
-              </span>
-              <span className={`text-[8px] font-sans font-bold tracking-[0.35em] mt-1 uppercase ${
-                theme === 'dark' ? 'text-stone-400' :
-                theme === 'funky' ? 'text-fuchsia-400 text-glow-neon' :
-                'text-stone-500'
-              }`}>
-                {artistProfile.title}
               </span>
             </div>
           </div>
