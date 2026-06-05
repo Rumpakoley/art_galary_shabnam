@@ -478,20 +478,22 @@ export default function App() {
         <main className="relative z-10 space-y-12">
 
           {/* Section: Artist Biography & Statement Profile Panel (Pinned Scrollytelling track) */}
-          <div ref={profileContainerRef} className="w-full">
-            <motion.section
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full"
-            >
-              <ArtistProfileSection
-                profile={artistProfile}
-                theme={theme}
-                scrollYProgress={profileScrollProgress}
-              />
-            </motion.section>
+          <div ref={profileContainerRef} className="relative h-[145vh] lg:h-[135vh] w-full">
+            <div className="sticky top-[10vh] lg:top-[12vh] h-fit w-full">
+              <motion.section
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full"
+              >
+                <ArtistProfileSection
+                  profile={artistProfile}
+                  theme={theme}
+                  scrollYProgress={profileScrollProgress}
+                />
+              </motion.section>
+            </div>
           </div>
           
           {/* Section: Gallery Works & Curation Panel */}
