@@ -491,18 +491,8 @@ export default function App() {
             }`}>
               <div className="flex flex-wrap items-center justify-between gap-4">
                 
-                {/* Left: Icon, Title, Reset & Search */}
+                {/* Left: Reset & Search */}
                 <div className="flex flex-wrap items-center gap-3 shrink-0">
-                  <h5 className="font-serif text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap">
-                    <Sliders className={`w-3.5 h-3.5 ${
-                      theme === 'dark' ? 'text-amber-400' : 
-                      theme === 'funky' ? 'text-fuchsia-400 font-bold' : 
-                      'text-amber-805/60'
-                    }`} />
-                    <span className="hidden sm:inline">The Curatorial Collection ({filteredPaintings.length} works)</span>
-                    <span className="sm:hidden">Collection ({filteredPaintings.length})</span>
-                  </h5>
-
                   {/* Reset button if filters are active */}
                   {(searchQuery || mediumFilter !== 'All' || statusFilter !== 'All') && (
                     <button
