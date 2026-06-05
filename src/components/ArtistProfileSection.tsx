@@ -77,7 +77,7 @@ export default function ArtistProfileSection({
             <p className={`font-serif italic text-xs md:text-sm leading-relaxed text-justify ${
               theme === 'dark' ? 'text-stone-300' :
               theme === 'funky' ? 'text-purple-200/80' :
-              'text-stone-705'
+              'text-black'
             }`}>
               {scrollYProgress ? (
                 <ScrollPinnedText text={profile.statement} scrollYProgress={scrollYProgress} />

@@ -13,6 +13,7 @@ import PaintingDetailModal from './components/PaintingDetailModal';
 import PostWorkModal from './components/PostWorkModal';
 import { Search, SlidersHorizontal, Sliders, Sparkles, CheckCircle2, Paintbrush, ArrowUpDown, X } from 'lucide-react';
 import ScrollRevealText from './components/ScrollRevealText';
+import { useScrollLockPin } from './hooks/useScrollLockPin';
 
 export default function App() {
   // Load paintings & profile from localStorage or fallback
@@ -55,9 +56,8 @@ export default function App() {
   const [featuredIndex, setFeaturedIndex] = useState(0);
   
   const profileContainerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: profileScrollProgress } = useScroll({
-    target: profileContainerRef,
-    offset: ["start start", "end end"]
+  const { progress: profileScrollProgress } = useScrollLockPin({
+    containerRef: profileContainerRef
   });
   
   // Success notification banner state (when a new work is posted)

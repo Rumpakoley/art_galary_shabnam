@@ -1,0 +1,65 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React from 'react';
+import { motion, MotionValue, useTransform } from 'motion/react';
+
+interface ScrollPinnedTextProps {
+  text: string;
+  scrollYProgress: MotionValue<number>;
+  className?: string;
+}
+
+export default function ScrollPinnedText({ text, scrollYProgress, className = '' }: ScrollPinnedTextProps): React.JSX.Element | null {
+  if (typeof text !== 'string' || !text.trim()) {
+    return null;
+  }
+
+  const tokens = text.split(/(\s+)/).filter(Boolean);
+  
+  // Count words to calculate stagger steps
+  const wordTokens = tokens.filter(token => !/^\s+$/.test(token));
+  const totalWords = wordTokens.length;
+
+  let wordIndex = 0;
+
+  return (
+    <span className={className}>
+      {tokens.map((token, index) => {
+        if (/^\s+$/.test(token)) {
+          if (token.includes('\n')) {
+            return <br key={index} />;
+          }
+          return <span key={index}>&nbsp;</span>;
+        }
+
+        // Stagger words from 5% to 95% of scroll progress
+        const startProgress = 0.05 + (wordIndex / totalWords) * 0.85;
+        const endProgress = startProgress + 0.06; // overlap fade duration
+        
+        const clampedStart = Math.min(Math.max(startProgress, 0), 0.99);
+        const clampedEnd = Math.min(Math.max(endProgress, clampedStart + 0.01), 1.0);
+
+                const opacity = useTransform(
+          scrollYProgress,
+          [clampedStart, clampedEnd],
+          [0.1, 1.0]
+        );
+
+        wordIndex++;
+
+        return (
+          <motion.span
+            key={index}
+            style={{ opacity }}
+            className="inline-block"
+          >
+            {token}
+          </motion.span>
+        );
+      })}
+    </span>
+  );
+}
