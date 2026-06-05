@@ -99,14 +99,18 @@ export default function PaintingCard({ painting, onViewDetails, theme = 'dark' }
                 ? 'bg-cyan-950/90 text-cyan-400 border-cyan-800/40 text-glow-cyan'
                 : theme === 'dark'
                   ? 'bg-amber-950/80 text-amber-400 border-amber-900/30'
-                  : 'bg-emerald-950/90 text-emerald-450 border-emerald-900/30' 
+                  : 'bg-emerald-100 text-emerald-800 border-emerald-200' 
               : isReserved
                 ? theme === 'funky'
                   ? 'bg-fuchsia-950/90 text-fuchsia-400 border-fuchsia-800/40 text-glow-neon'
                   : theme === 'dark'
-                    ? 'bg-amber-950/80 text-amber-505 border-amber-900/30'
-                    : 'bg-amber-950/90 text-amber-450 border-amber-900/30' 
-                : 'bg-stone-800/90 text-stone-400 border-stone-700/35 line-through'
+                    ? 'bg-amber-950/80 text-amber-400 border-amber-900/30'
+                    : 'bg-amber-100 text-amber-800 border-amber-200' 
+                : theme === 'funky'
+                  ? 'bg-purple-950/60 text-purple-400 border-purple-900/30 line-through'
+                  : theme === 'dark'
+                    ? 'bg-stone-800/90 text-stone-400 border-stone-700/35 line-through'
+                    : 'bg-stone-200 text-stone-600 border-stone-300 line-through'
           }`}
         >
           {painting.status}
