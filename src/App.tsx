@@ -350,12 +350,27 @@ export default function App() {
                   </motion.span>
                 ))}
               </h2>
-              <p className={`font-serif italic text-sm sm:text-base max-w-xl leading-relaxed ${
+              <p className={`font-serif italic text-sm sm:text-base max-w-xl leading-relaxed flex flex-wrap justify-center md:justify-start gap-x-[0.22em] gap-y-[0.1em] ${
                 theme === 'dark' ? 'text-stone-300' :
                 theme === 'funky' ? 'text-purple-200' :
                 'text-stone-605'
               }`}>
-                A collection of contemporary surrealist abstract works. Welcome to the visual world of {artistProfile.name}.
+                {`A collection of contemporary surrealist abstract works. Welcome to the visual world of ${artistProfile.name}.`.split(" ").map((word, i) => (
+                  <motion.span
+                    key={i}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      duration: 0.6,
+                      delay: 0.3 + i * 0.03,
+                      ease: [0.16, 1, 0.3, 1]
+                    }}
+                    className="inline-block"
+                  >
+                    {word}
+                  </motion.span>
+                ))}
               </p>
               <div className="pt-3">
                 <a 
