@@ -760,7 +760,7 @@ export default function App() {
             <a href="#gallery-controls-console" className="hover:text-amber-500 transition-colors">Gallery</a>
             <a href="#upcoming-exhibitions-section" className="hover:text-amber-500 transition-colors">Exhibitions</a>
             <a href="#artist-profile-panel" className="hover:text-amber-500 transition-colors">Biography</a>
-            <a href="mailto:husneshabnam@gmail.com" className="hover:text-amber-500 transition-colors">Contact</a>
+            <a href={`mailto:${artistProfile.email}`} className="hover:text-amber-500 transition-colors">Contact</a>
           </nav>
           <div className="flex flex-col md:items-end text-center md:text-right gap-1">
             <p>© 2026 {artistProfile.name}. All rights reserved.</p>

@@ -16,13 +16,13 @@ import painting7 from './assets/images/painting_7.jpg';
 import painting8 from './assets/images/painting_8.jpg';
 
 export const INITIAL_PROFILE: ArtistProfile = {
-  name: "Husne Shabnam",
+  name: "Morphiq",
   title: "Surrealist Abstract Artist",
   bio: "I am a surrealist abstract artist.\n\nI do not sketch before I begin.\nI do not plan what will emerge.\nI do not start with a destination.\n\nMy work arrives as a conversation with the unknown. Every line, form, and texture appears through intuition rather than intention. I often discover the artwork at the same time as the viewer. The process feels less like creating and more like receiving—a message, a memory, a symbol, or a fragment from a place beyond language.\n\nMy hand moves freely, but something deeper guides it. The worlds that emerge in my work are surreal, abstract, and open-ended. They are not meant to provide answers. They are invitations into reflection.\n\nIn a time that demands speed, certainty, and immediate understanding, my art asks for something different:\nPause.\nSilence.\nPatience.\n\nMany of my works reveal themselves slowly. They are not designed to be consumed in a glance. They ask the viewer to stay, to observe, and to listen.\n\nBecause art speaks differently to every person. What you see is often a reflection of what already exists within you:\nA shape that feels familiar.\nA forgotten memory.\nA hidden fear.\nA longing.\nA dream.\nA question.\n\nThe same artwork may tell entirely different stories to different people, because each viewer brings their own subconscious to the encounter.\n\nI believe that art is not complete when it leaves the artist’s hand. It becomes complete when it meets the inner world of another human being.\n\nThis website is a home for those conversations. A collection of messages from the unknown, waiting to find their meaning in you.",
-  statement: "If you find yourself here, take your time.\nLook closely.\nLook slowly.\nAllow the work to speak in its own language.\n\nAnd if a piece reminds you of a forgotten memory, an unfinished dream, a place you’ve never been, or a version of yourself you haven’t met yet, then the artwork has already fulfilled its purpose.\n\nWelcome to my world.\n— Husne Shabnam",
+  statement: "If you find yourself here, take your time.\nLook closely.\nLook slowly.\nAllow the work to speak in its own language.\n\nAnd if a piece reminds you of a forgotten memory, an unfinished dream, a place you’ve never been, or a version of yourself you haven’t met yet, then the artwork has already fulfilled its purpose.\n\nWelcome to my world.\n— Morphiq",
   avatarUrl: artistPortrait,
-  instagram: "@husne.shabnam",
-  email: "husneshabnam@gmail.com",
+  instagram: "@morphiq.art",
+  email: "contact@morphiq.art",
 };
 
 export const INITIAL_PAINTINGS: Painting[] = [

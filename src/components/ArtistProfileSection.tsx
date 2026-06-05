@@ -199,7 +199,7 @@ export default function ArtistProfileSection({
                   'bg-stone-100/60 border-stone-200/40'
                 }`}>
                   <p className="font-sans text-[10px] text-stone-500 italic leading-relaxed">
-                    Are you the creator, <strong>Shabnam</strong>? Unlock the studio registry to upload and post new paintings.
+                    Are you the creator, <strong>{profile.name}</strong>? Unlock the studio registry to upload and post new paintings.
                   </p>
                   <button
                     onClick={onToggleAdmin}
