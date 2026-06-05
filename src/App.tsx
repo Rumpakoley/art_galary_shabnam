@@ -276,7 +276,7 @@ export default function App() {
               </svg>
             </div>
              <div className="flex flex-col text-left">
-              <span className={`font-serif text-lg font-black tracking-widest leading-none uppercase ${
+              <span className={`font-serif text-xl font-black tracking-widest leading-none uppercase ${
                 theme === 'funky' ? 'text-white text-glow-cyan' : ''
               }`}>
                 {artistProfile.name}
