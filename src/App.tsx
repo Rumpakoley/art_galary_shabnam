@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useMemo, useRef } from 'react';
-import { motion, AnimatePresence, useScroll } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { Painting, ArtistProfile } from './types';
 import { INITIAL_PAINTINGS, INITIAL_PROFILE } from './data';
 import ArtistProfileSection from './components/ArtistProfileSection';
@@ -14,7 +14,6 @@ import PaintingDetailModal from './components/PaintingDetailModal';
 import PostWorkModal from './components/PostWorkModal';
 import { Search, SlidersHorizontal, Sliders, Sparkles, CheckCircle2, Paintbrush, ArrowUpDown, X } from 'lucide-react';
 import ScrollRevealText from './components/ScrollRevealText';
-import { useScrollLockPin } from './hooks/useScrollLockPin';
 
 export default function App() {
   // Load paintings & profile from localStorage or fallback
@@ -57,9 +56,16 @@ export default function App() {
   const [featuredIndex, setFeaturedIndex] = useState(0);
   
   const profileContainerRef = useRef<HTMLDivElement>(null);
-  const { progress: profileScrollProgress } = useScrollLockPin({
-    containerRef: profileContainerRef
+  const { scrollYProgress: rawProfileScrollProgress } = useScroll({
+    target: profileContainerRef,
+    offset: ["start end", "end start"]
   });
+
+  const profileScrollProgress = useTransform(
+    rawProfileScrollProgress,
+    [0.2, 0.72],
+    [0, 1]
+  );
   
   // Success notification banner state (when a new work is posted)
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -478,20 +484,22 @@ export default function App() {
         <main className="relative z-10 space-y-12">
 
           {/* Section: Artist Biography & Statement Profile Panel (Pinned Scrollytelling track) */}
-          <div ref={profileContainerRef} className="w-full">
-            <motion.section
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full"
-            >
-              <ArtistProfileSection
-                profile={artistProfile}
-                theme={theme}
-                scrollYProgress={profileScrollProgress}
-              />
-            </motion.section>
+          <div ref={profileContainerRef} className="relative w-full h-[175vh] mb-8">
+            <div className="sticky top-[12vh] w-full">
+              <motion.section
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full"
+              >
+                <ArtistProfileSection
+                  profile={artistProfile}
+                  theme={theme}
+                  scrollYProgress={profileScrollProgress}
+                />
+              </motion.section>
+            </div>
           </div>
           
           {/* Section: Gallery Works & Curation Panel */}

@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React from 'react';
 import { motion, MotionValue, useTransform } from 'motion/react';
 
@@ -12,17 +7,18 @@ interface ScrollPinnedTextProps {
   className?: string;
 }
 
-interface WordProps {
-  word: string;
-  wordIndex: number;
-  totalWords: number;
+interface LineProps {
+  line: string;
+  lineIndex: number;
+  totalLines: number;
   scrollYProgress: MotionValue<number>;
 }
 
-function Word({ word, wordIndex, totalWords, scrollYProgress }: WordProps): React.JSX.Element {
-  // Stagger words from 5% to 95% of scroll progress
-  const startProgress = 0.05 + (wordIndex / totalWords) * 0.85;
-  const endProgress = startProgress + 0.06; // overlap fade duration
+function Line({ line, lineIndex, totalLines, scrollYProgress }: LineProps): React.JSX.Element {
+  // Stagger lines across progress
+  // Distribute start positions from 5% to 85% of scroll progress
+  const startProgress = 0.05 + (lineIndex / totalLines) * 0.78;
+  const endProgress = startProgress + 0.16; // overlap fade duration per line
   
   const clampedStart = Math.min(Math.max(startProgress, 0), 0.99);
   const clampedEnd = Math.min(Math.max(endProgress, clampedStart + 0.01), 1.0);
@@ -30,15 +26,21 @@ function Word({ word, wordIndex, totalWords, scrollYProgress }: WordProps): Reac
   const opacity = useTransform(
     scrollYProgress,
     [clampedStart, clampedEnd],
-    [0.1, 1.0]
+    [0.12, 1.0]
+  );
+
+  const y = useTransform(
+    scrollYProgress,
+    [clampedStart, clampedEnd],
+    [10, 0]
   );
 
   return (
     <motion.span
-      style={{ opacity }}
-      className="inline-block animate-none"
+      style={{ opacity, y }}
+      className="block w-full transition-all duration-75 origin-left"
     >
-      {word}
+      {line}
     </motion.span>
   );
 }
@@ -48,37 +50,36 @@ export default function ScrollPinnedText({ text, scrollYProgress, className = ''
     return null;
   }
 
-  const tokens = text.split(/(\s+)/).filter(Boolean);
+  // Split into paragraphs by double newline
+  const paragraphs = text.split('\n\n').filter(Boolean);
   
-  // Count words to calculate stagger steps
-  const wordTokens = tokens.filter(token => !/^\s+$/.test(token));
-  const totalWords = wordTokens.length;
-
-  let wordIndex = 0;
+  // Count total lines to calculate stagger steps
+  let totalLines = 0;
+  const structuredParagraphs = paragraphs.map((para) => {
+    const lines = para.split('\n').filter(Boolean);
+    const startIndex = totalLines;
+    totalLines += lines.length;
+    return { lines, startIndex };
+  });
 
   return (
-    <span className={className}>
-      {tokens.map((token, index) => {
-        if (/^\s+$/.test(token)) {
-          if (token.includes('\n')) {
-            return <br key={index} />;
-          }
-          return <span key={index}>&nbsp;</span>;
-        }
-
-        const currentWordIndex = wordIndex;
-        wordIndex++;
-
-        return (
-          <Word
-            key={index}
-            word={token}
-            wordIndex={currentWordIndex}
-            totalWords={totalWords}
-            scrollYProgress={scrollYProgress}
-          />
-        );
-      })}
+    <span className={`${className} flex flex-col gap-5`}>
+      {structuredParagraphs.map((para, paraIndex) => (
+        <span key={paraIndex} className="block">
+          {para.lines.map((line, lineIndex) => {
+            const globalLineIndex = para.startIndex + lineIndex;
+            return (
+              <Line
+                key={lineIndex}
+                line={line}
+                lineIndex={globalLineIndex}
+                totalLines={totalLines}
+                scrollYProgress={scrollYProgress}
+              />
+            );
+          })}
+        </span>
+      ))}
     </span>
   );
 }

@@ -58,7 +58,7 @@ export default function ArtistProfileSection({
             }`}>
               Artist Statement
             </div>
-            <p className={`font-serif italic text-xs md:text-sm leading-relaxed text-justify ${
+            <div className={`font-serif italic text-xs md:text-sm leading-relaxed text-justify ${
               theme === 'dark' ? 'text-stone-300' :
               theme === 'funky' ? 'text-purple-200/80' :
               'text-black'
@@ -68,7 +68,7 @@ export default function ArtistProfileSection({
               ) : (
                 <ScrollRevealText text={profile.statement} />
               )}
-            </p>
+            </div>
           </div>
         </div>
       </div>
