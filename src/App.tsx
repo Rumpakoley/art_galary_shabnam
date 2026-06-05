@@ -328,12 +328,27 @@ export default function App() {
               }`}>
                 Featured Exhibition
               </span>
-              <h2 className={`font-unique text-3xl sm:text-4xl md:text-5xl font-medium tracking-[0.08em] uppercase leading-tight ${
-                theme === 'dark' ? 'text-stone-105' :
-                theme === 'funky' ? 'text-white text-glow-cyan' :
-                'text-stone-900'
-              }`}>
-                EXPLORE THE SUBCONSCIOUS CANVAS
+              <h2 className="flex flex-wrap justify-center md:justify-start gap-x-[0.25em] gap-y-[0.1em]">
+                {"EXPLORE THE SUBCONSCIOUS CANVAS".split(" ").map((word, i) => (
+                  <motion.span
+                    key={i}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      duration: 0.8,
+                      delay: i * 0.12,
+                      ease: [0.16, 1, 0.3, 1]
+                    }}
+                    className={`font-unique text-3xl sm:text-4xl md:text-5xl font-medium tracking-[0.08em] uppercase leading-tight transition-all duration-700 ease-out hover:tracking-[0.14em] cursor-default ${
+                      theme === 'dark' ? 'text-stone-105' :
+                      theme === 'funky' ? 'text-white text-glow-cyan' :
+                      'text-stone-900'
+                    }`}
+                  >
+                    {word}
+                  </motion.span>
+                ))}
               </h2>
               <p className={`font-serif italic text-sm sm:text-base max-w-xl leading-relaxed ${
                 theme === 'dark' ? 'text-stone-300' :
