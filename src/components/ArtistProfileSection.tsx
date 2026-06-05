@@ -39,8 +39,8 @@ export default function ArtistProfileSection({
         : 'bg-stone-50 border-stone-200/60 text-stone-900 shadow-xs'
     }`}>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Column: Portrait & Bio description (7 cols on lg) */}
-        <div className="lg:col-span-7 flex flex-col md:flex-row gap-6 items-center md:items-start text-center md:text-left">
+        {/* Left Column: Portrait (3 cols on lg) */}
+        <div className="lg:col-span-3 flex justify-center lg:justify-start">
           {/* Sketch Portrait frame representing luxury framing */}
           <div className={`relative group p-1.5 border shadow-md rounded-xl overflow-hidden aspect-square w-36 h-36 md:w-44 md:h-44 shrink-0 transition-transform duration-500 hover:scale-[1.02] ${
             theme === 'dark' ? 'bg-black/20 border-white/10 shadow-lg' :
@@ -55,39 +55,10 @@ export default function ArtistProfileSection({
               className={`w-full h-full object-cover filter contrast-[1.02] ${theme === 'dark' ? 'rounded-lg' : ''}`}
             />
           </div>
-
-          <div className="flex-grow flex flex-col items-center md:items-start">
-            <h2 className={`font-serif text-2xl md:text-3xl font-bold tracking-tight leading-none ${
-              theme === 'dark' ? 'text-stone-105' :
-              theme === 'funky' ? 'text-cyan-400 text-glow-cyan font-bold' :
-              'text-stone-900'
-            }`}>
-              About {profile.name}
-            </h2>
-            <p className={`font-serif italic text-xs sm:text-sm mt-1.5 ${
-              theme === 'dark' ? 'text-stone-400' :
-              theme === 'funky' ? 'text-purple-300' :
-              'text-stone-500'
-            }`}>{profile.title}</p>
-            
-            <div className={`w-12 h-[1px] my-4 ${
-              theme === 'dark' ? 'bg-cyan-500/20' :
-              theme === 'funky' ? 'bg-fuchsia-500/30' :
-              'bg-amber-800/30'
-            }`} />
-            
-            <p className={`font-sans text-xs md:text-sm leading-relaxed text-justify ${
-              theme === 'dark' ? 'text-stone-300/90' :
-              theme === 'funky' ? 'text-purple-200/90' :
-              'text-stone-605'
-            }`}>
-              <ScrollRevealText text={profile.bio} />
-            </p>
-          </div>
         </div>
 
-        {/* Right Column: Statement, stats, registry gateway, and contacts (5 cols on lg) */}
-        <div className="lg:col-span-5 space-y-6 w-full">
+        {/* Right Column: Statement, stats, registry gateway, and contacts (9 cols on lg) */}
+        <div className="lg:col-span-9 space-y-6 w-full">
           {/* Artist Statement Section */}
           <div className={`relative p-5 border rounded-lg shadow-2xs transition-colors duration-300 ${
             theme === 'dark' ? 'bg-[#0f111e]/40 border-white/10 shadow-[inset_0_2px_8px_rgba(0,0,0,0.4)]' :
