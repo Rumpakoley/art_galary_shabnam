@@ -45,8 +45,8 @@ export default function App() {
 
   const [artistProfile, setArtistProfile] = useState<ArtistProfile>(INITIAL_PROFILE);
   
-  // Gallery Theme: Locked to 'dark' for premium museum spotlight look
-  const theme = 'dark';
+  // Gallery Theme: Locked to 'light' for premium linen aesthetic
+  const theme = 'light';
   
   // Dashboard & UX Controls
   const [isAdmin, setIsAdmin] = useState(false);
