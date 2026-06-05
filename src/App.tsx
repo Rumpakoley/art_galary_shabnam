@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { useState, useEffect, useMemo, useRef } from 'react';
+import { motion, AnimatePresence, useScroll } from 'motion/react';
 import { Painting, ArtistProfile } from './types';
 import { INITIAL_PAINTINGS, INITIAL_PROFILE } from './data';
 import ArtistProfileSection from './components/ArtistProfileSection';
@@ -53,6 +53,12 @@ export default function App() {
   const [selectedPainting, setSelectedPainting] = useState<Painting | null>(null);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [featuredIndex, setFeaturedIndex] = useState(0);
+  
+  const profileContainerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: profileScrollProgress } = useScroll({
+    target: profileContainerRef,
+    offset: ["start start", "end end"]
+  });
   
   // Success notification banner state (when a new work is posted)
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -470,22 +476,28 @@ export default function App() {
         {/* Main Content Area */}
         <main className="relative z-10 space-y-12">
 
-          {/* Section: Artist Biography & Statement Profile Panel */}
-          <motion.section
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <ArtistProfileSection
-              profile={artistProfile}
-              paintings={paintings}
-              onOpenPostModal={() => setIsPostModalOpen(true)}
-              isAdmin={isAdmin}
-              onToggleAdmin={handleToggleAdmin}
-              theme={theme}
-            />
-          </motion.section>
+          {/* Section: Artist Biography & Statement Profile Panel (Pinned Scrollytelling track) */}
+          <div ref={profileContainerRef} className="relative h-[180vh] w-full">
+            <div className="sticky top-[10vh] lg:top-[12vh] h-fit w-full">
+              <motion.section
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full"
+              >
+                <ArtistProfileSection
+                  profile={artistProfile}
+                  paintings={paintings}
+                  onOpenPostModal={() => setIsPostModalOpen(true)}
+                  isAdmin={isAdmin}
+                  onToggleAdmin={handleToggleAdmin}
+                  theme={theme}
+                  scrollYProgress={profileScrollProgress}
+                />
+              </motion.section>
+            </div>
+          </div>
           
           {/* Section: Gallery Works & Curation Panel */}
           <motion.section

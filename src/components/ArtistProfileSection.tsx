@@ -2,11 +2,11 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-
-import { motion } from 'motion/react';
+import { motion, MotionValue } from 'motion/react';
 import { ArtistProfile, Painting } from '../types';
 import { Mail, Instagram, FileText, Lock, Sparkles, AlertCircle } from 'lucide-react';
 import ScrollRevealText from './ScrollRevealText';
+import ScrollPinnedText from './ScrollPinnedText';
 
 interface ArtistProfileSectionProps {
   profile: ArtistProfile;
@@ -15,6 +15,7 @@ interface ArtistProfileSectionProps {
   isAdmin: boolean;
   onToggleAdmin: () => void;
   theme?: 'light' | 'dark' | 'funky';
+  scrollYProgress?: MotionValue<number>;
 }
 
 export default function ArtistProfileSection({
@@ -23,7 +24,8 @@ export default function ArtistProfileSection({
   onOpenPostModal,
   isAdmin,
   onToggleAdmin,
-  theme = 'dark'
+  theme = 'dark',
+  scrollYProgress
 }: ArtistProfileSectionProps) {
   // Compute some real, fun analytics
   const totalWorks = paintings.length;
@@ -77,7 +79,11 @@ export default function ArtistProfileSection({
               theme === 'funky' ? 'text-purple-200/80' :
               'text-stone-705'
             }`}>
-              <ScrollRevealText text={profile.statement} />
+              {scrollYProgress ? (
+                <ScrollPinnedText text={profile.statement} scrollYProgress={scrollYProgress} />
+              ) : (
+                <ScrollRevealText text={profile.statement} />
+              )}
             </p>
           </div>
 
