@@ -14,6 +14,7 @@ import PaintingDetailModal from './components/PaintingDetailModal';
 import PostWorkModal from './components/PostWorkModal';
 import { Search, SlidersHorizontal, Sliders, Sparkles, CheckCircle2, Paintbrush, ArrowUpDown, X } from 'lucide-react';
 import ScrollRevealText from './components/ScrollRevealText';
+import AdminAuthModal from './components/AdminAuthModal';
 
 export default function App() {
   // Load paintings & profile from localStorage or fallback
@@ -50,7 +51,10 @@ export default function App() {
   const theme = 'light';
   
   // Dashboard & UX Controls
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(() => {
+    return sessionStorage.getItem('morphiq_admin_authorized') === 'true';
+  });
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [selectedPainting, setSelectedPainting] = useState<Painting | null>(null);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [featuredIndex, setFeaturedIndex] = useState(0);
@@ -104,7 +108,20 @@ export default function App() {
   };
 
   const handleToggleAdmin = () => {
-    setIsAdmin((prev) => !prev);
+    if (isAdmin) {
+      setIsAdmin(false);
+      sessionStorage.removeItem('morphiq_admin_authorized');
+      setToastMessage("Admin dashboard locked.");
+    } else {
+      setIsAuthModalOpen(true);
+    }
+  };
+
+  const handleAuthorizeSuccess = () => {
+    setIsAdmin(true);
+    sessionStorage.setItem('morphiq_admin_authorized', 'true');
+    setIsAuthModalOpen(false);
+    setToastMessage("Admin authorization successful. Welcome, Morphiq!");
   };
 
   // Extract unique categories and mediums for filter listing dynamically
@@ -784,6 +801,14 @@ export default function App() {
           theme={theme}
         />
       )}
+
+      {/* Admin Authorization Access Code Modal */}
+      <AdminAuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onAuthorize={handleAuthorizeSuccess}
+        theme={theme}
+      />
     </div>
   );
 }
