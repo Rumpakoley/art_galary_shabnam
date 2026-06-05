@@ -23,6 +23,10 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
   const touchStartYRef = useRef(0);
   const isProgrammaticScrollRef = useRef(false);
 
+  // Constants for the transition phases
+  const LOCK_START_PROGRESS = 0.3; // 30% of the text is revealed before locking
+  const SENSITIVITY = 600; // Pixels of scroll gestures to complete the remaining 70% of reveal
+
   useEffect(() => {
     const unsubscribe = progress.on('change', (val) => {
       progressRef.current = val;
@@ -34,11 +38,8 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
     lastScrollYRef.current = window.scrollY;
   }, []);
 
-  // Total scroll distance (in pixels) required to complete the fade animation
-  const SENSITIVITY = 800;
-
-  const getTargetScrollY = () => {
-    if (!containerRef.current) return 0;
+  const getLayoutPositions = () => {
+    if (!containerRef.current) return { startScrollY: 0, lockScrollY: 0 };
 
     let offsetTop = 0;
     let el: HTMLElement | null = containerRef.current;
@@ -47,12 +48,17 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
       el = el.offsetParent as HTMLElement | null;
     }
 
-    // Sticky offset calculation matching App.tsx classes:
-    // top-[10vh] (mobile) or top-[12vh] (lg)
     const isLg = window.innerWidth >= 1024;
     const stickyOffset = window.innerHeight * (isLg ? 0.12 : 0.10);
 
-    return Math.max(0, offsetTop - stickyOffset);
+    const lockScrollY = Math.max(0, offsetTop - stickyOffset);
+    // Start the transition when the section is partially visible (e.g. enters the viewport by 150px)
+    const startScrollY = Math.max(0, offsetTop - window.innerHeight + 150);
+
+    return {
+      startScrollY: Math.min(startScrollY, lockScrollY - 50),
+      lockScrollY
+    };
   };
 
   useEffect(() => {
@@ -63,15 +69,15 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
 
       if (isProgrammaticScrollRef.current) return;
 
-      const targetScrollY = getTargetScrollY();
+      const { startScrollY, lockScrollY } = getLayoutPositions();
       const goingDown = currentScrollY > lastScrollY;
       const goingUp = currentScrollY < lastScrollY;
 
-      // If we are currently locked, enforce the scroll position (e.g. against scrollbar drag)
+      // Case A: Scroll is currently locked
       if (isLockedRef.current) {
-        if (Math.abs(currentScrollY - targetScrollY) > 1) {
+        if (Math.abs(currentScrollY - lockScrollY) > 1) {
           isProgrammaticScrollRef.current = true;
-          window.scrollTo(0, targetScrollY);
+          window.scrollTo(0, lockScrollY);
           setTimeout(() => {
             isProgrammaticScrollRef.current = false;
           }, 50);
@@ -79,27 +85,44 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
         return;
       }
 
-      // 1. Lock when scrolling DOWN and crossing the threshold
+      // Case B: Scroll is NOT locked (Native scroll phase)
+      if (currentScrollY < startScrollY) {
+        progress.set(0);
+      } else if (currentScrollY >= startScrollY && currentScrollY < lockScrollY) {
+        // Linearly map native scroll to progress [0, LOCK_START_PROGRESS]
+        const range = lockScrollY - startScrollY;
+        const currentDiff = currentScrollY - startScrollY;
+        const calculatedProgress = (currentDiff / range) * LOCK_START_PROGRESS;
+        progress.set(calculatedProgress);
+      } else {
+        // Past the lock point
+        progress.set(1.0);
+      }
+
+      // Detect Lock Activation
+      // 1. Lock going DOWN
       if (goingDown && progressRef.current < 1) {
-        if (currentScrollY >= targetScrollY && lastScrollY < targetScrollY) {
+        if (currentScrollY >= lockScrollY && lastScrollY < lockScrollY) {
           isProgrammaticScrollRef.current = true;
-          window.scrollTo(0, targetScrollY);
+          window.scrollTo(0, lockScrollY);
           setTimeout(() => {
             isProgrammaticScrollRef.current = false;
           }, 50);
+          progress.set(LOCK_START_PROGRESS);
           setIsLocked(true);
           isLockedRef.current = true;
         }
       }
 
-      // 2. Lock when scrolling UP and crossing the threshold
-      if (goingUp && progressRef.current > 0) {
-        if (currentScrollY <= targetScrollY && lastScrollY > targetScrollY) {
+      // 2. Lock going UP
+      if (goingUp && progressRef.current > LOCK_START_PROGRESS) {
+        if (currentScrollY <= lockScrollY && lastScrollY > lockScrollY) {
           isProgrammaticScrollRef.current = true;
-          window.scrollTo(0, targetScrollY);
+          window.scrollTo(0, lockScrollY);
           setTimeout(() => {
             isProgrammaticScrollRef.current = false;
           }, 50);
+          progress.set(1.0);
           setIsLocked(true);
           isLockedRef.current = true;
         }
@@ -109,21 +132,20 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
     const handleWheel = (e: WheelEvent) => {
       if (!isLockedRef.current) return;
 
-      // Intercept and prevent page scrolling
       e.preventDefault();
 
       const delta = e.deltaY;
       const currentVal = progressRef.current;
-      const step = delta / SENSITIVITY;
-      const newVal = Math.min(Math.max(currentVal + step, 0), 1);
+      // Map sensitivity to remaining 70% range of progress
+      const step = (delta / SENSITIVITY) * (1 - LOCK_START_PROGRESS);
+      const newVal = Math.min(Math.max(currentVal + step, LOCK_START_PROGRESS), 1);
 
       progress.set(newVal);
 
-      // Release lock if scroll boundaries are met
       if (newVal >= 1 && delta > 0) {
         setIsLocked(false);
         isLockedRef.current = false;
-      } else if (newVal <= 0 && delta < 0) {
+      } else if (newVal <= LOCK_START_PROGRESS && delta < 0) {
         setIsLocked(false);
         isLockedRef.current = false;
       }
@@ -138,24 +160,23 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
     const handleTouchMove = (e: TouchEvent) => {
       if (!isLockedRef.current) return;
 
-      // Intercept and prevent page scrolling
       e.preventDefault();
 
       if (e.touches.length > 0) {
         const touchY = e.touches[0].clientY;
-        const delta = touchStartYRef.current - touchY; // Positive delta: scroll down
+        const delta = touchStartYRef.current - touchY;
         touchStartYRef.current = touchY;
 
         const currentVal = progressRef.current;
-        const step = delta / SENSITIVITY;
-        const newVal = Math.min(Math.max(currentVal + step, 0), 1);
+        const step = (delta / SENSITIVITY) * (1 - LOCK_START_PROGRESS);
+        const newVal = Math.min(Math.max(currentVal + step, LOCK_START_PROGRESS), 1);
 
         progress.set(newVal);
 
         if (newVal >= 1 && delta > 0) {
           setIsLocked(false);
           isLockedRef.current = false;
-        } else if (newVal <= 0 && delta < 0) {
+        } else if (newVal <= LOCK_START_PROGRESS && delta < 0) {
           setIsLocked(false);
           isLockedRef.current = false;
         }
@@ -185,15 +206,15 @@ export function useScrollLockPin({ containerRef }: UseScrollLockPinProps): {
         }
 
         const currentVal = progressRef.current;
-        const step = delta / SENSITIVITY;
-        const newVal = Math.min(Math.max(currentVal + step, 0), 1);
+        const step = (delta / SENSITIVITY) * (1 - LOCK_START_PROGRESS);
+        const newVal = Math.min(Math.max(currentVal + step, LOCK_START_PROGRESS), 1);
 
         progress.set(newVal);
 
         if (newVal >= 1 && delta > 0) {
           setIsLocked(false);
           isLockedRef.current = false;
-        } else if (newVal <= 0 && delta < 0) {
+        } else if (newVal <= LOCK_START_PROGRESS && delta < 0) {
           setIsLocked(false);
           isLockedRef.current = false;
         }
