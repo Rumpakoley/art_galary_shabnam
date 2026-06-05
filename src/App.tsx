@@ -493,11 +493,11 @@ export default function App() {
                 
                 {/* Left: Icon, Title & Reset */}
                 <div className="flex items-center gap-3 shrink-0">
-                  <h3 className="font-serif text-sm font-semibold flex items-center gap-1.5 whitespace-nowrap">
+                  <h3 className="font-serif text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap">
                     <Sliders className={`w-3.5 h-3.5 ${
                       theme === 'dark' ? 'text-amber-400' : 
                       theme === 'funky' ? 'text-fuchsia-400 font-bold' : 
-                      'text-amber-800/60'
+                      'text-amber-805/60'
                     }`} />
                     <span className="hidden sm:inline">The Curatorial Collection ({filteredPaintings.length} works)</span>
                     <span className="sm:hidden">Collection ({filteredPaintings.length})</span>
@@ -517,7 +517,7 @@ export default function App() {
                 </div>
 
                 {/* Right side horizontal group for Search, Medium, Status, and Sort */}
-                <div className="flex flex-wrap items-center gap-x-5 gap-y-3 flex-grow justify-end w-full lg:w-auto">
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-3 flex-grow justify-end w-auto">
                   
                   {/* Search query input */}
                   <div className="relative w-full sm:w-44 lg:w-52 shrink-0">
