@@ -539,7 +539,7 @@ export default function App() {
                               isActive
                                 ? theme === 'dark'
                                   ? 'bg-amber-500 border-amber-500 text-stone-955 font-semibold shadow-xs'
-                                  : 'bg-stone-900 border-stone-900 text-amber-550 shadow-xs'
+                                  : 'bg-stone-900 border-stone-900 text-white font-semibold shadow-xs'
                                 : theme === 'dark'
                                   ? 'bg-black/25 border-white/5 text-stone-300 hover:bg-white/5 hover:text-stone-100'
                                   : 'bg-stone-50 border-stone-205 text-stone-605 hover:bg-stone-100 hover:text-stone-900'
@@ -571,7 +571,7 @@ export default function App() {
                               isActive
                                 ? theme === 'dark'
                                   ? 'bg-amber-500 border-amber-500 text-stone-955 font-semibold shadow-xs'
-                                  : 'bg-stone-900 border-stone-900 text-amber-550 shadow-xs'
+                                  : 'bg-stone-900 border-stone-900 text-white font-semibold shadow-xs'
                                 : theme === 'dark'
                                   ? 'bg-black/25 border-white/5 text-stone-300 hover:bg-white/5 hover:text-stone-100'
                                   : 'bg-stone-50 border-stone-205 text-stone-605 hover:bg-stone-100 hover:text-stone-900'
