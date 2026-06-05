@@ -358,14 +358,14 @@ export default function App() {
                 theme === 'funky' ? 'text-white text-glow-cyan' :
                 'text-stone-900'
               }`}>
-                <ScrollRevealText text="EXPLORE THE SUBCONSCIOUS CANVAS" />
+                EXPLORE THE SUBCONSCIOUS CANVAS
               </h2>
               <p className={`font-serif italic text-sm sm:text-base max-w-xl leading-relaxed ${
                 theme === 'dark' ? 'text-stone-300' :
                 theme === 'funky' ? 'text-purple-200' :
                 'text-stone-605'
               }`}>
-                <ScrollRevealText text={`A collection of contemporary surrealist abstract works. Welcome to the visual world of ${artistProfile.name}.`} />
+                A collection of contemporary surrealist abstract works. Welcome to the visual world of {artistProfile.name}.
               </p>
               <div className="pt-3">
                 <a 
