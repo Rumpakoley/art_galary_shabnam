@@ -14,7 +14,6 @@ import PaintingDetailModal from './components/PaintingDetailModal';
 import PostWorkModal from './components/PostWorkModal';
 import { Search, SlidersHorizontal, Sliders, Sparkles, CheckCircle2, Paintbrush, ArrowUpDown, X } from 'lucide-react';
 import ScrollRevealText from './components/ScrollRevealText';
-import AdminAuthModal from './components/AdminAuthModal';
 
 export default function App() {
   // Load paintings & profile from localStorage or fallback
@@ -54,7 +53,12 @@ export default function App() {
   const [isAdmin, setIsAdmin] = useState(() => {
     return sessionStorage.getItem('morphiq_admin_authorized') === 'true';
   });
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(() => {
+    return localStorage.getItem('morphiq_viewer_authorized') === 'true';
+  });
+  const [authPassword, setAuthPassword] = useState('');
+  const [authError, setAuthError] = useState(false);
+  
   const [selectedPainting, setSelectedPainting] = useState<Painting | null>(null);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [featuredIndex, setFeaturedIndex] = useState(0);
@@ -113,15 +117,25 @@ export default function App() {
       sessionStorage.removeItem('morphiq_admin_authorized');
       setToastMessage("Admin dashboard locked.");
     } else {
-      setIsAuthModalOpen(true);
+      setIsAdmin(true);
+      sessionStorage.setItem('morphiq_admin_authorized', 'true');
+      setToastMessage("Admin dashboard unlocked. Welcome!");
     }
   };
 
-  const handleAuthorizeSuccess = () => {
-    setIsAdmin(true);
-    sessionStorage.setItem('morphiq_admin_authorized', 'true');
-    setIsAuthModalOpen(false);
-    setToastMessage("Admin authorization successful. Welcome, Morphiq!");
+  const handleAuthSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const encoded = btoa(authPassword);
+    // Developer access: "dev@morphiq" -> "ZGV2QG1vcnBoaXE="
+    // Artist access: "morphiq@2026" -> "bW9ycGhpcUAyMDI2"
+    if (encoded === 'ZGV2QG1vcnBoaXE=' || encoded === 'bW9ycGhpcUAyMDI2') {
+      localStorage.setItem('morphiq_viewer_authorized', 'true');
+      setIsAuthorized(true);
+      setAuthError(false);
+      setToastMessage("Private archive unlocked. Welcome back!");
+    } else {
+      setAuthError(true);
+    }
   };
 
   // Extract unique categories and mediums for filter listing dynamically
@@ -202,7 +216,79 @@ export default function App() {
     setSortBy('newest');
   };
 
-  const nameParts = artistProfile.name.split(' ');
+  if (!isAuthorized) {
+    return (
+      <div className="min-h-screen flex flex-col justify-center items-center bg-artist-bg text-stone-900 px-4 relative overflow-hidden">
+        {/* Linen texture background */}
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/canvas-paper.png')] bg-repeat" />
+        
+        {/* Subtle decorative glow */}
+        <div className="absolute top-[20%] left-[30%] w-[300px] h-[300px] rounded-full bg-amber-500/5 blur-[90px] pointer-events-none" />
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96, y: 15 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="w-full max-w-sm p-8 md:p-10 bg-white border border-stone-200/80 rounded-3xl shadow-xs text-center space-y-6 relative z-10"
+        >
+          {/* Header branding */}
+          <div className="space-y-4">
+            <h1 className="font-serif text-3xl font-black tracking-[0.25em] uppercase text-stone-900 leading-none">
+              {artistProfile.name}
+            </h1>
+            <div className="w-10 h-[1.5px] bg-amber-700/35 mx-auto" />
+            <p className="font-serif italic text-xs text-stone-500 max-w-[240px] mx-auto leading-relaxed">
+              This archive is private. Enter your secure access code to view the collection.
+            </p>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleAuthSubmit} className="space-y-4">
+            <div className="relative">
+              <input
+                type="password"
+                value={authPassword}
+                onChange={(e) => {
+                  setAuthPassword(e.target.value);
+                  setAuthError(false);
+                }}
+                placeholder="Access Code"
+                autoFocus
+                className={`w-full font-sans text-xs px-4 py-3 border rounded-lg focus:outline-hidden text-center tracking-widest transition-all ${
+                  authError
+                    ? 'border-red-500 bg-red-50/15 focus:border-red-655'
+                    : 'bg-stone-50 border-stone-200 text-stone-900 focus:bg-white focus:border-amber-805'
+                }`}
+              />
+            </div>
+
+            {/* Error message */}
+            {authError && (
+              <motion.div
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-1.5 justify-center text-red-500 font-sans text-[10px] font-semibold"
+              >
+                <span>Invalid access code. Access Denied.</span>
+              </motion.div>
+            )}
+
+            <button
+              type="submit"
+              className="w-full px-4 py-2.5 bg-stone-900 hover:bg-stone-850 text-white rounded-lg font-sans text-xs font-bold uppercase tracking-wider transition-all shadow-xs cursor-pointer"
+            >
+              Enter Archive
+            </button>
+          </form>
+        </motion.div>
+
+        {/* Small copyright footer */}
+        <p className="mt-8 text-[9px] tracking-wider text-stone-400 font-sans">
+          © 2026 {artistProfile.name}. Private Collection.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div id="gallery-app-root" className={`min-h-screen transition-colors duration-300 selection:bg-amber-500/20 selection:text-amber-350 relative overflow-hidden ${
@@ -801,14 +887,6 @@ export default function App() {
           theme={theme}
         />
       )}
-
-      {/* Admin Authorization Access Code Modal */}
-      <AdminAuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        onAuthorize={handleAuthorizeSuccess}
-        theme={theme}
-      />
     </div>
   );
 }
