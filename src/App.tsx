@@ -115,15 +115,21 @@ export default function App() {
       sessionStorage.removeItem('morphiq_admin_authorized');
       setToastMessage("Admin dashboard locked.");
     } else {
-      const code = prompt("Enter secure access code to unlock admin dashboard:");
-      if (code) {
-        const encoded = btoa(code);
-        if (encoded === 'ZGV2QG1vcnBoaXE=' || encoded === 'bW9ycGhpcUAyMDI2') {
+      const email = prompt("Enter your authorized email address to unlock the studio registry:");
+      if (email) {
+        const cleanedEmail = email.trim().toLowerCase();
+        const allowedEmails = [
+          'rumpakoley255@gamil.com',
+          'rumpakoley255@gmail.com',
+          'mrinmoy4u4ever@gmail.com',
+          'husneshabnam.connect@gmail.com'
+        ];
+        if (allowedEmails.includes(cleanedEmail)) {
           setIsAdmin(true);
           sessionStorage.setItem('morphiq_admin_authorized', 'true');
           setToastMessage("Admin dashboard unlocked. Welcome!");
         } else {
-          alert("Invalid access code.");
+          alert("Access Denied: This email address is not authorized.");
         }
       }
     }
