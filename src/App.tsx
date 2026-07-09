@@ -53,9 +53,7 @@ export default function App() {
   const [isAdmin, setIsAdmin] = useState(() => {
     return sessionStorage.getItem('morphiq_admin_authorized') === 'true';
   });
-  const [isAuthorized, setIsAuthorized] = useState(() => {
-    return localStorage.getItem('morphiq_viewer_authorized') === 'true';
-  });
+  const [isAuthorized, setIsAuthorized] = useState(true);
   const [authPassword, setAuthPassword] = useState('');
   const [authError, setAuthError] = useState(false);
   
