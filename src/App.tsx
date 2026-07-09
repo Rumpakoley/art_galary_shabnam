@@ -115,11 +115,30 @@ export default function App() {
       sessionStorage.removeItem('morphiq_admin_authorized');
       setToastMessage("Admin dashboard locked.");
     } else {
-      setIsAdmin(true);
-      sessionStorage.setItem('morphiq_admin_authorized', 'true');
-      setToastMessage("Admin dashboard unlocked. Welcome!");
+      const code = prompt("Enter secure access code to unlock admin dashboard:");
+      if (code) {
+        const encoded = btoa(code);
+        if (encoded === 'ZGV2QG1vcnBoaXE=' || encoded === 'bW9ycGhpcUAyMDI2') {
+          setIsAdmin(true);
+          sessionStorage.setItem('morphiq_admin_authorized', 'true');
+          setToastMessage("Admin dashboard unlocked. Welcome!");
+        } else {
+          alert("Invalid access code.");
+        }
+      }
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
+        e.preventDefault();
+        handleToggleAdmin();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isAdmin]);
 
   const handleAuthSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -382,12 +401,14 @@ export default function App() {
               'hover:text-amber-800'
             }`}>Biography</a>
 
-            <button 
-              onClick={handleToggleAdmin} 
-              className="opacity-70 hover:opacity-100 uppercase text-[10px] sm:text-[11px] font-semibold tracking-widest hover:text-amber-400 transition-colors cursor-pointer"
-            >
-              {isAdmin ? '🔒 Lock' : '🔓 Unlock'}
-            </button>
+            {isAdmin && (
+              <button 
+                onClick={handleToggleAdmin} 
+                className="opacity-70 hover:opacity-100 uppercase text-[10px] sm:text-[11px] font-semibold tracking-widest hover:text-amber-400 transition-colors cursor-pointer"
+              >
+                🔒 Lock
+              </button>
+            )}
           </nav>
         </motion.header>
         
@@ -860,7 +881,7 @@ export default function App() {
             <a href={`mailto:${artistProfile.email}`} className="hover:text-amber-500 transition-colors">Contact</a>
           </nav>
           <div className="flex flex-col md:items-end text-center md:text-right gap-1">
-            <p>© 2026 {artistProfile.name}. All rights reserved.</p>
+            <p onDoubleClick={handleToggleAdmin} className="cursor-pointer select-none">© 2026 {artistProfile.name}. All rights reserved.</p>
             <p className="text-[9px] opacity-75">
               The Morphiq • A collection of messages from the unknown.
             </p>

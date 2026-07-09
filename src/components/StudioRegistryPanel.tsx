@@ -91,16 +91,16 @@ export default function StudioRegistryPanel({
           </div>
 
           {/* Registry Admin controls */}
-          <div className={`pt-4 border-t ${
-            theme === 'dark' ? 'border-white/10' :
-            theme === 'funky' ? 'border-purple-900/30' :
-            'border-stone-200/50'
-          }`}>
-            {isAdmin ? (
+          {isAdmin && (
+            <div className={`pt-4 border-t ${
+              theme === 'dark' ? 'border-white/10' :
+              theme === 'funky' ? 'border-purple-900/30' :
+              'border-stone-200/50'
+            }`}>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className={`inline-flex items-center gap-1 font-sans text-[10px] font-bold uppercase tracking-wider border px-2.5 py-0.5 rounded-sm ${
-                    theme === 'dark' ? 'bg-cyan-950/30 border-cyan-900/30 text-cyan-400' :
+                    theme === 'dark' ? 'bg-cyan-955/30 border-cyan-900/30 text-cyan-400' :
                     theme === 'funky' ? 'bg-purple-955/30 border-purple-800/40 text-fuchsia-400 text-glow-neon' :
                     'bg-amber-50 border-amber-200 text-amber-805'
                   }`}>
@@ -130,31 +130,8 @@ export default function StudioRegistryPanel({
                   <span>+ Post New Work</span>
                 </button>
               </div>
-            ) : (
-              <div className={`p-4 rounded-lg border text-center space-y-2.5 ${
-                theme === 'dark' ? 'bg-black/20 border-white/5' :
-                theme === 'funky' ? 'bg-purple-955/20 border-purple-900/40 text-purple-300' :
-                'bg-white border-stone-200 text-stone-700 shadow-2xs'
-              }`}>
-                <p className="font-sans text-[10px] text-stone-500 italic leading-relaxed">
-                  Are you the creator, <strong>{profile.name}</strong>? Unlock the studio registry to upload and post new paintings.
-                </p>
-                <button
-                  onClick={onToggleAdmin}
-                  className={`inline-flex items-center gap-1.5 font-sans text-[10px] font-bold tracking-widest uppercase px-4 py-2 border rounded-md shadow-xs transition-all cursor-pointer ${
-                    theme === 'dark' 
-                      ? 'bg-stone-900 border-white/10 text-cyan-400 hover:text-cyan-205 hover:bg-stone-850' :
-                    theme === 'funky'
-                      ? 'bg-[#150d2c] border-purple-850 text-purple-200 hover:text-fuchsia-400 hover:bg-purple-955/60 hover:shadow-[0_0_10px_rgba(236,72,153,0.3)]'
-                      : 'bg-white border-stone-200 text-stone-800 hover:text-amber-850 hover:bg-stone-50 hover:border-stone-300'
-                  }`}
-                >
-                  <Lock className={`w-3 h-3 ${theme === 'dark' ? 'text-cyan-400' : theme === 'funky' ? 'text-fuchsia-500' : 'text-amber-600'}`} />
-                  <span>Unlock Artist Studio</span>
-                </button>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Right Section: Collector Contacts (4 cols on md) */}
