@@ -158,7 +158,7 @@ export default function StudioRegistryPanel({
               </a>
               
               <a
-                href={`https://instagram.com`}
+                href={`https://www.instagram.com/${profile.instagram.replace('@', '')}`}
                 target="_blank"
                 rel="noreferrer"
                 className={`flex items-center gap-2.5 transition-colors py-1 cursor-pointer ${
